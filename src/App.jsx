@@ -3,7 +3,7 @@ import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import AppRoutes from "./AppRoutes";
-import Navbar from "./components/NavBar/Navbar"; // 👈 Impor navbar
+import Navbar from "./components/NavBar/Navbar"; 
 import Footer  from "./components/Footer/Footer"
 import "react-toastify/dist/ReactToastify.css";
 

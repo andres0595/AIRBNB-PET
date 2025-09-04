@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Search, User } from "lucide-react"; // íconos
+import LanguageSelector from "./LanguageSelector";
 
 function Navbar() {
   return (
@@ -33,8 +34,8 @@ function Navbar() {
             <span>Iniciar sesión</span>
           </Link>
           <div className="flex items-center space-x-1 cursor-pointer hover:text-gray-900">
-            <span>Español</span>
-            <span>▼</span>
+            {/* Idioma */}
+            <LanguageSelector />
           </div>
           <button className="p-2 hover:bg-gray-100 rounded-full">
             <Search size={20} />
