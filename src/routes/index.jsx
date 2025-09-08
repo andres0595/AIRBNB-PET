@@ -9,27 +9,29 @@ import StudentSubjects from "../components/StudentSubjects";
 import AssignSubjects from "../components/AssignSubjects";
 import ClassmatesList from "../components/ClassmatesList";
 import StudentHistory from "../components/StudentHistory";
-
+import TabServices from "../components/Dashboard/TabsServices";
+import ChangePassword from "../components/Login/ChangePassword";
 export const routes = [
   { path: "/", element: <LoginPage /> },
   {
-    element: <ProtectedRoute />,
+    //element: <ProtectedRoute />,
     children: [
       { path: "/dashboard", element: <DashboardPage /> },
       {
-        path: "/estudiantes",
-        element: (
-          <ProtectedRoute adminOnly>
-            <StudentList />
-          </ProtectedRoute>
-        ),
+        path: "/TabServices",
+        element: <TabServices />,
+        // element: (
+        //   <ProtectedRoute adminOnly>
+        //     <StudentList />
+        //   </ProtectedRoute>
+        // ),
       },
       {
-        path: "/estudiantes/registrar",
+        path: "/ChangePassword",
         element: (
-          <ProtectedRoute adminOnly>
-            <StudentRegistration />
-          </ProtectedRoute>
+          // <ProtectedRoute adminOnly>
+          <ChangePassword />
+          // </ProtectedRoute>
         ),
       },
 
