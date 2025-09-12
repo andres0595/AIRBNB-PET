@@ -17,11 +17,14 @@ function Navbar() {
           <Link to="/cuidador" className="hover:text-gray-900">
             {t("caregiver")}
           </Link>
-          <Link to="/servicios" className="hover:text-gray-900">
+          <Link to="/OurService" className="hover:text-gray-900">
             {t("services")}
           </Link>
-          <Link to="/Dashboard" className="hover:text-gray-900">
+          <Link to="/Blog" className="hover:text-gray-900">
             {t("blog")}
+          </Link>
+          <Link to="/Support" className="hover:text-gray-900">
+            {t("soporte")}
           </Link>
         </div>
 

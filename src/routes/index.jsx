@@ -2,73 +2,99 @@ import { Navigate } from "react-router-dom";
 import { ProtectedRoute } from "../components/ProtectedRoute";
 import LoginPage from "../pages/LoginPage";
 import DashboardPage from "../pages/DashboardPage";
-import StudentRegistration from "../components/StudentRegistration";
-import StudentList from "../components/StudentList";
-import StudentUpdate from "../components/StudentUpdate";
-import StudentSubjects from "../components/StudentSubjects";
-import AssignSubjects from "../components/AssignSubjects";
-import ClassmatesList from "../components/ClassmatesList";
-import StudentHistory from "../components/StudentHistory";
-import TabServices from "../components/Dashboard/TabsServices";
-import ChangePassword from "../components/Login/ChangePassword";
+import ChangePasswordPage from "../pages/ChangePasswordPage";
+import Blog from "../components/Dashboard/Blog";
+import Support from "../components/Support/Support";
+import RegisterPage from "../pages/RegisterPage";
+import OurServicesPage from "../pages/OurServicesPage";
+// import AssignSubjects from "../components/AssignSubjects";
+// import ClassmatesList from "../components/ClassmatesList";
+// import StudentHistory from "../components/StudentHistory";
+
 export const routes = [
   { path: "/", element: <LoginPage /> },
   {
     //element: <ProtectedRoute />,
     children: [
       { path: "/dashboard", element: <DashboardPage /> },
-      {
-        path: "/TabServices",
-        element: <TabServices />,
-        // element: (
-        //   <ProtectedRoute adminOnly>
-        //     <StudentList />
-        //   </ProtectedRoute>
-        // ),
-      },
+
       {
         path: "/ChangePassword",
         element: (
           // <ProtectedRoute adminOnly>
-          <ChangePassword />
+          <ChangePasswordPage />
+          // </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/Blog",
+        element: (
+          // <ProtectedRoute adminOnly>
+          <Blog />
+          // </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/Support",
+        element: (
+          // <ProtectedRoute adminOnly>
+          <Support />
           // </ProtectedRoute>
         ),
       },
 
       {
-        path: "/estudiantes/actualizar/:id",
+        path: "/Register",
         element: (
-          <ProtectedRoute adminOnly>
-            <StudentUpdate />
-          </ProtectedRoute>
+          // <ProtectedRoute adminOnly>
+          <RegisterPage />
+          // </ProtectedRoute>
         ),
       },
 
       {
-        path: "/estudiantes/:EstudianteId/materias",
+        path: "/OurService",
         element: (
-          <ProtectedRoute>
-            <StudentSubjects />
-          </ProtectedRoute>
+          // <ProtectedRoute adminOnly>
+          <OurServicesPage />
+          // </ProtectedRoute>
         ),
       },
-      {
-        path: "/estudiantes/:EstudianteId/historial",
-        element: (
-          <ProtectedRoute adminOnly>
-            <StudentHistory />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "/materias/asignar",
-        element: (
-          <ProtectedRoute>
-            <AssignSubjects />
-          </ProtectedRoute>
-        ),
-      },
-      { path: "/compañeros", element: <ClassmatesList /> },
+
+      // {
+      //   path: "/estudiantes/actualizar/:id",
+      //   element: (
+      //     <ProtectedRoute adminOnly>
+      //       <StudentUpdate />
+      //     </ProtectedRoute>
+      //   ),
+      // },
+
+      // {
+      //   path: "/estudiantes/:EstudianteId/materias",
+      //   element: (
+      //     <ProtectedRoute>
+      //       <StudentSubjects />
+      //     </ProtectedRoute>
+      //   ),
+      // },
+      // {
+      //   path: "/estudiantes/:EstudianteId/historial",
+      //   element: (
+      //     <ProtectedRoute adminOnly>
+      //       <StudentHistory />
+      //     </ProtectedRoute>
+      //   ),
+      // },
+      // {
+      //   path: "/materias/asignar",
+      //   element: (
+      //     <ProtectedRoute>
+      //       <AssignSubjects />
+      //     </ProtectedRoute>
+      //   ),
+      // },
+      // { path: "/compañeros", element: <ClassmatesList /> },
     ],
   },
   {

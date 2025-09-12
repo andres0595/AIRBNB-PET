@@ -11,6 +11,7 @@ i18n.use(initReactI18next).init({
         blog: "Blog",
         services: "Conoce nuestros servicios",
         caregiver: "Conviértete en cuidador",
+        soporte: "Soporte",
       },
     },
     en: {
@@ -21,6 +22,7 @@ i18n.use(initReactI18next).init({
         blog: "Blog",
         services: "Discover our services",
         caregiver: "Become a caregiver",
+        soporte: "Support",
       },
     },
     fr: {
@@ -31,6 +33,7 @@ i18n.use(initReactI18next).init({
         blog: "Blog",
         services: "Découvrez nos services",
         caregiver: "Devenez gardien",
+        soporte: "Support",
       },
     },
   },
