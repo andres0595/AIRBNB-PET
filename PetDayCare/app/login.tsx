@@ -9,11 +9,69 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useRouter } from "expo-router";
+import { login } from "../app/Service/authService";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "./(Store)/authSlice";
+import Toast from "react-native-toast-message";
+import { useGoogleAuth } from "@/hooks/useSocialAuth";
 
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  const validateEmail = (email: string) => {
+    if (!email) return false;
+    const emailTrimmed = email.trim();
+    const emailRegex =
+      /^[A-Za-z0-9._%+-]+@(?:(?!-)[A-Za-z0-9-]{1,63}(?<!-)\.)+[A-Za-z]{2,63}$/;
+    return emailRegex.test(emailTrimmed);
+  };
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Toast.show({
+        type: "info",
+        text1: "Faltan datos",
+        text2: "Ingresa correo y contraseña",
+      });
+      return;
+    }
+    if (!validateEmail(email)) {
+      Toast.show({
+        type: "error",
+        text1: "Correo inválido",
+        text2: "Por favor ingresa un correo válido",
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const data = await login(email, password);
+      // Guardar en Redux
+      dispatch(setCredentials({ token: data.token, user: data.user }));
+      router.replace("/(tabs)/explore"); // redirige al home
+    } catch (error: any) {
+      Toast.show({
+        type: "error",
+        text1: "Error al iniciar sesión",
+        text2: error?.message ?? "Por favor verifica tus credenciales",
+        position: "top",
+        topOffset: 60,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const googleAuth = useGoogleAuth(async (token) => {
+    const data = await login("google", token);
+    console.log("Usuario Google:", data);
+    router.replace("/(tabs)/explore");
+  });
 
   return (
     <View style={styles.container}>
@@ -54,9 +112,16 @@ export default function Login() {
       </TouchableOpacity>
 
       {/* Botón ingresar con icono */}
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        disabled={loading}
+        onPress={handleLogin}
+      >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Text style={styles.buttonText}>Ingresar</Text>
+          <Text style={styles.buttonText}>
+            {" "}
+            {loading ? "Ingresando..." : "Ingresar"}
+          </Text>
         </View>
       </TouchableOpacity>
 
@@ -74,7 +139,10 @@ export default function Login() {
       <TouchableOpacity style={styles.socialButton}>
         <Text style={styles.socialText}>Continuar con Facebook</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.socialButton}>
+      <TouchableOpacity
+        style={styles.socialButton}
+        onPress={() => googleAuth.promptAsync()}
+      >
         <Text style={styles.socialText}>Continuar con Google</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.socialButton}>
@@ -134,3 +202,6 @@ const styles = StyleSheet.create({
   },
   socialText: { color: "#333", fontSize: 15 },
 });
+function setLoading(arg0: boolean) {
+  throw new Error("Function not implemented.");
+}

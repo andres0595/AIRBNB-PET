@@ -42,15 +42,6 @@
     ],
     "experiments": {
       "typedRoutes": true
-    },
-    "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "3bce2738-e5e4-40cf-bfde-3142c8cc9f5f"
-      },
-      "apiUrl": "https://tu-api.com/api",
-      "androidClientId": "195740328135-m86g67bd24toeu4b2dpb913tt9lb1qp0.apps.googleusercontent.com",
-      "webClientId": "195740328135-zzzzzzz.apps.googleusercontent.com"
     }
   }
 }
