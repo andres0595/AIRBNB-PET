@@ -1,17 +1,23 @@
 {
   "expo": {
     "name": "Puppy Po",
-    "slug": "Puppy Po",
+    "slug": "puppy-po",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/images/Icono_Puppy.png",
     "scheme": "petdaycare",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": false,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.puppypo.ios",
+      "newArchEnabled": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
+      "package": "com.puppypo.android",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -19,7 +25,9 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "softwareKeyboardLayoutMode": "resize",
+      "newArchEnabled": true
     },
     "web": {
       "output": "static",
@@ -50,7 +58,8 @@
       },
       "apiUrl": "https://tu-api.com/api",
       "androidClientId": "195740328135-m86g67bd24toeu4b2dpb913tt9lb1qp0.apps.googleusercontent.com",
-      "webClientId": "195740328135-zzzzzzz.apps.googleusercontent.com"
+      "webClientId": "195740328135-mibbpe3cbvdmefrcmdd548mk0aedsli9.apps.googleusercontent.com",
+      "iosClientId": "195740328135-sbu195prmfg68gr7t1k88ugfr0hbo5bf.apps.googleusercontent.com"
     }
   }
 }

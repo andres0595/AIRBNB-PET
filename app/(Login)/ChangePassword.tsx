@@ -5,14 +5,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  KeyboardAvoidingView,
-  ScrollView,
-  Platform,
 } from "react-native";
 import React, { useState } from "react";
 import Toast from "react-native-toast-message";
 import { useRouter } from "expo-router";
 import { changePassword } from "../Service/authService";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import AuthLayout from "../../components/AuthLayout";
 
 export default function ChangePassword() {
   const router = useRouter();
@@ -63,24 +62,23 @@ export default function ChangePassword() {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <ScrollView
+    <AuthLayout>
+      <KeyboardAwareScrollView
         contentContainerStyle={styles.container}
+        enableOnAndroid={true}
+        extraScrollHeight={20}
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
-        <Image
-          source={require("../../assets/images/Icono_Puppy.png")}
-          style={{
-            width: 120,
-            height: 50,
-            alignSelf: "center",
-            marginBottom: 5,
-          }}
-        />
-        <Text style={styles.title}>¿Has olvidado tu contraseña?</Text>
+        <View style={styles.header}>
+          <Image
+            source={require("../../assets/images/Icono_Puppy.png")}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+          <Text style={styles.title}>¿Has olvidado tu contraseña?</Text>
+        </View>
+
         <Text style={styles.description}>
           Para restablecer tu contraseña, escribe la dirección de correo
           electrónico completa que usaste para registrarte en PuppyPo.com y te
@@ -89,17 +87,21 @@ export default function ChangePassword() {
         </Text>
 
         <Text style={styles.label}>Correo electrónico</Text>
-
         <TextInput
           placeholder="Email"
           value={email}
           onChangeText={setEmail}
           style={[
             styles.input,
-            !validateEmail(email) && email.length > 0 && styles.inputError, // 👈 borde rojo si email inválido
+            !validateEmail(email) && email.length > 0 && styles.inputError,
           ]}
           keyboardType="email-address"
           autoCapitalize="none"
+          autoCorrect={false}
+          autoComplete="off"
+          textContentType="none"
+          returnKeyType="next"
+          importantForAutofill="no"
         />
 
         <TouchableOpacity
@@ -111,23 +113,29 @@ export default function ChangePassword() {
             {loading ? "Enviando..." : "Enviar"}
           </Text>
         </TouchableOpacity>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
+    </AuthLayout>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: "center",
     padding: 25,
-    backgroundColor: "#ffffff",
+  },
+  header: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  logo: {
+    width: 120,
+    height: 50,
+    marginBottom: 10,
   },
   title: {
     fontSize: 20,
     fontWeight: "600",
     textAlign: "center",
-    marginBottom: 15,
     color: "#333",
   },
   description: {
@@ -149,6 +157,10 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     marginBottom: 20,
     backgroundColor: "#fafafa",
+    color: "#000",
+  },
+  inputError: {
+    borderColor: "red",
   },
   button: {
     backgroundColor: "#555",
@@ -160,8 +172,5 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
-  },
-  inputError: {
-    borderColor: "red",
   },
 });

@@ -1,18 +1,17 @@
-import { Drawer } from "expo-router/drawer";
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import { Ionicons } from "@expo/vector-icons";
 import {
-  ThemeProvider,
   DarkTheme,
   DefaultTheme,
+  ThemeProvider,
 } from "@react-navigation/native";
+import { Drawer } from "expo-router/drawer";
 import { StatusBar } from "expo-status-bar";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Ionicons } from "@expo/vector-icons";
-import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Text } from "react-native";
-import type { DrawerNavigationOptions } from "@react-navigation/drawer";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Toast from "react-native-toast-message";
 import { Provider } from "react-redux";
 import { store } from "./(Store)/store";
-import Toast from "react-native-toast-message";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -139,6 +138,12 @@ export default function RootLayout() {
             />
             <Drawer.Screen
               name="(Store)/authSlice"
+              options={{
+                drawerItemStyle: { display: "none" }, // lo oculta del Drawer
+              }}
+            />
+            <Drawer.Screen
+              name="(Users)/Users"
               options={{
                 drawerItemStyle: { display: "none" }, // lo oculta del Drawer
               }}
