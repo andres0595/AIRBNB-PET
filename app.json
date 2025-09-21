@@ -56,7 +56,7 @@
       "eas": {
         "projectId": "3bce2738-e5e4-40cf-bfde-3142c8cc9f5f"
       },
-      "apiUrl": "https://tu-api.com/api",
+      "apiUrl": "http://localhost:4590/",
       "androidClientId": "195740328135-m86g67bd24toeu4b2dpb913tt9lb1qp0.apps.googleusercontent.com",
       "webClientId": "195740328135-mibbpe3cbvdmefrcmdd548mk0aedsli9.apps.googleusercontent.com",
       "iosClientId": "195740328135-sbu195prmfg68gr7t1k88ugfr0hbo5bf.apps.googleusercontent.com"

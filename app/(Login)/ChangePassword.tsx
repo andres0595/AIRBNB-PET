@@ -1,17 +1,18 @@
 import {
-  View,
+  Image,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-  Image,
+  View,
 } from "react-native";
-import React, { useState } from "react";
-import Toast from "react-native-toast-message";
+
 import { useRouter } from "expo-router";
-import { changePassword } from "../Service/authService";
+import { useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Toast from "react-native-toast-message";
 import AuthLayout from "../../components/AuthLayout";
+import { GenetateOtp } from "../Service/authService";
 
 export default function ChangePassword() {
   const router = useRouter();
@@ -46,8 +47,8 @@ export default function ChangePassword() {
 
     setLoading(true);
     try {
-      await changePassword(email);
-      router.replace("/(tabs)/explore");
+      await GenetateOtp(email);
+      router.replace("/(Login)/ValidateOtp");
     } catch (error: any) {
       Toast.show({
         type: "error",

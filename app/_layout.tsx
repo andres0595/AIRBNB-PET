@@ -148,6 +148,13 @@ export default function RootLayout() {
                 drawerItemStyle: { display: "none" }, // lo oculta del Drawer
               }}
             />
+
+                 <Drawer.Screen
+              name="(Login)/ValidateOtp"
+              options={{
+                drawerItemStyle: { display: "none" }, // lo oculta del Drawer
+              }}
+            />
           </Drawer>
 
           <StatusBar style="auto" />
