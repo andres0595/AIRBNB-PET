@@ -6,14 +6,26 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { Drawer } from "expo-router/drawer";
+import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
 import { Text } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Toast from "react-native-toast-message";
 import { Provider } from "react-redux";
 import { store } from "./(Store)/store";
-
+// Prevenir que se oculte automáticamente
+SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
+  useEffect(() => {
+    // Ocultar splash screen después de que la app esté lista
+    const hideSplash = async () => {
+      await SplashScreen.hideAsync();
+    };
+
+    // Puedes agregar aquí la lógica de carga de tu app
+    setTimeout(hideSplash, 2000); // 2 segundos de ejemplo
+  }, []);
   const colorScheme = useColorScheme();
 
   return (

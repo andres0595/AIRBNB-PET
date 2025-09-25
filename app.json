@@ -38,12 +38,12 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
+          "image": "./assets/images/PuppyPop.png",
+          "resizeMode": "cover",
+          "backgroundColor": "#ff0000",
           "dark": {
-            "backgroundColor": "#000000"
+            "image": "./assets/images/PuppyPop.png",
+            "backgroundColor": "#ff0000"
           }
         }
       ]
