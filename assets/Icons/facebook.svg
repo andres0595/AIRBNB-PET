@@ -1,3 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <path fill="#1877F2" d="M24 12a12 12 0 1 0-13.875 11.9v-8.4H7.078V12h3.047V9.356c0-3.012 1.792-4.669 4.532-4.669 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.493 0-1.954.928-1.954 1.88V12h3.328l-.532 3.5h-2.796v8.4A12.002 12.002 0 0 0 24 12Z"/>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="57.799" height="57.799" viewBox="0 0 57.799 57.799">
+  <defs>
+    <filter id="Elipse_9735" x="0" y="0" width="57.799" height="57.799" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-color="#fff" flood-opacity="0.706"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Grupo_67" data-name="Grupo 67" transform="translate(-124.374 -645.201)">
+    <g transform="matrix(1, 0, 0, 1, 124.37, 645.2)" filter="url(#Elipse_9735)">
+      <circle id="Elipse_9735-2" data-name="Elipse 9735" cx="19.899" cy="19.899" r="19.899" transform="translate(9 6)" fill="red"/>
+    </g>
+    <g id="Grupo_44" data-name="Grupo 44" transform="translate(140.291 658.146)">
+      <path id="Trazado_190544" data-name="Trazado 190544" d="M0,0H25.909V25.909H0Z" fill="none"/>
+      <path id="Trazado_190545" data-name="Trazado 190545" d="M7,10.557v4.318h3.239v7.557h4.318V14.875H17.8l1.08-4.318H14.557V8.4a1.08,1.08,0,0,1,1.08-1.08h3.239V3H15.636a5.4,5.4,0,0,0-5.4,5.4v2.159H7" transform="translate(0.557 0.239)" fill="#fbfbfb"/>
+    </g>
+  </g>
 </svg>

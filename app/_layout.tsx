@@ -9,7 +9,6 @@ import { Drawer } from "expo-router/drawer";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { Text } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Toast from "react-native-toast-message";
 import { Provider } from "react-redux";
@@ -23,7 +22,7 @@ export default function RootLayout() {
       await SplashScreen.hideAsync();
     };
 
-    // Puedes agregar aquí la lógica de carga de tu app
+    // Puedes agregar aquí la lógica de carga de tu ap
     setTimeout(hideSplash, 2000); // 2 segundos de ejemplo
   }, []);
   const colorScheme = useColorScheme();
@@ -36,14 +35,7 @@ export default function RootLayout() {
         >
           <Drawer
             screenOptions={{
-              headerStyle: { backgroundColor: "#fff" },
-              headerTitle: () => (
-                <Text style={{ fontWeight: "bold", fontSize: 18 }}>
-                  PuppyPo 🐶
-                </Text>
-              ),
-              drawerActiveTintColor: "#16c3b0",
-              drawerLabelStyle: { fontSize: 16 },
+              headerShown: false,
             }}
           >
             <Drawer.Screen
@@ -161,8 +153,15 @@ export default function RootLayout() {
               }}
             />
 
-                 <Drawer.Screen
+            <Drawer.Screen
               name="(Login)/ValidateOtp"
+              options={{
+                drawerItemStyle: { display: "none" }, // lo oculta del Drawer
+              }}
+            />
+
+            <Drawer.Screen
+              name="(Users)/Home_Register"
               options={{
                 drawerItemStyle: { display: "none" }, // lo oculta del Drawer
               }}
