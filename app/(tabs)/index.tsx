@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import IconoBanner from "../../assets/Icons/IconoBanner.svg";
 
 const { width, height } = Dimensions.get("window");
 
@@ -42,7 +43,7 @@ const PetCareHomeScreen = () => {
   }, [currentImageIndex]);
 
   // Manejar el scroll manual
-  const handleScroll = (event) => {
+  const handleScroll = (event:any) => {
     const scrollX = event.nativeEvent.contentOffset.x;
     const index = Math.round(scrollX / width);
     setCurrentImageIndex(index);
@@ -52,10 +53,11 @@ const PetCareHomeScreen = () => {
       <View style={homeStyles.inner}>
         {/* Logo en la esquina superior */}
         <View style={homeStyles.logoContainer}>
-          <Text style={homeStyles.logo}>PO</Text>
+          <IconoBanner width={90} height={80} />
+          {/* <Text style={homeStyles.logo}>PO</Text>
           <View style={homeStyles.pawIcon}>
             <Text style={homeStyles.pawText}>🐾</Text>
-          </View>
+          </View> */}
         </View>
 
         {/* Contenedor principal con imagen y contenido */}

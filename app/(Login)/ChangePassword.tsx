@@ -1,8 +1,9 @@
+import { useModalToast } from "@/components/ModalToast";
 import { useGoogleAuth } from "@/hooks/useSocialAuth";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
-import Toast from "react-native-toast-message";
 import ArrobaIcon from "../../assets/Icons/arroba.svg";
 import FacebookIcon from "../../assets/Icons/Facebook.svg";
 import GoogleIcon from "../../assets/Icons/google.svg";
@@ -10,10 +11,12 @@ import IOSIconfrom from "../../assets/Icons/IOS.svg";
 import AuthLayout from "../../components/AuthLayout";
 import { GenetateOtp, login } from "../Service/authService";
 import { changeStyles } from "../Styles/components/ChangePassword/changeStyles";
+
 export default function ChangePassword() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+ const { showToast, ToastComponent } = useModalToast();
 
   const googleAuth = useGoogleAuth(async (token: string) => {
     const data = await login("google", token);
@@ -29,21 +32,17 @@ export default function ChangePassword() {
     return emailRegex.test(emailTrimmed);
   };
 
+  const handleGoBack = () => {
+    router.push('/login'); // Navega específicamente a Home_Register
+  };
+
   const handleChange = async () => {
     if (!email) {
-      Toast.show({
-        type: "info",
-        text1: "Faltan datos",
-        text2: "Por favor digita tu correo",
-      });
+       showToast.info("Faltan datos", "Por favor digita tu correo");  
       return;
     }
     if (!validateEmail(email)) {
-      Toast.show({
-        type: "error",
-        text1: "Correo inválido",
-        text2: "Por favor ingresa un correo válido",
-      });
+      showToast.error("Correo inválido", "Por favor ingresa un correo válido");   
       return;
     }
 
@@ -52,13 +51,7 @@ export default function ChangePassword() {
       await GenetateOtp(email);
       router.replace("/(Login)/ValidateOtp");
     } catch (error: any) {
-      Toast.show({
-        type: "error",
-        text1: "Error al intentar cambiar contraseña",
-        text2: "Por favor verifica tu conexión a internet",
-        position: "top",
-        topOffset: 60,
-      });
+       showToast.error("Error al intentar cambiar contraseña", "Por favor verifica tu conexión a internet");
     } finally {
       setLoading(false);
     }
@@ -69,6 +62,10 @@ export default function ChangePassword() {
       <View style={changeStyles.inner}>
         {/* Form */}
         <View style={changeStyles.formContainer}>
+                <TouchableOpacity style={changeStyles.backButton} onPress={handleGoBack}>
+          <Ionicons name="chevron-back" size={24} color="#333" />
+        </TouchableOpacity>
+              <ToastComponent />
           {/* Header */}
           <View style={changeStyles.header}>
             <Image

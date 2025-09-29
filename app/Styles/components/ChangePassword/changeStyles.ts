@@ -180,4 +180,19 @@ export const changeStyles = StyleSheet.create({
     alignItems: "center",
     color: "#fffff",
   },
+
+    backButton: {
+  position: "absolute",
+  top: 20,
+  left: 5,
+  zIndex: 10,
+  padding: 10,
+  borderRadius: 20,
+  backgroundColor: "rgba(255, 255, 255, 0.9)",
+  shadowColor: "#000",
+  shadowOffset: { width: 0, height: 1 },
+  shadowOpacity: 0.1,
+  shadowRadius: 2,
+  elevation: 2,
+}
 });

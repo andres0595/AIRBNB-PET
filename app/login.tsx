@@ -11,8 +11,10 @@ import GoogleIcon from "../assets/Icons/google.svg";
 import IOSIconfrom from "../assets/Icons/IOS.svg";
 import LlaveIcon from "../assets/Icons/Llave.svg";
 import AuthLayout from "../components/AuthLayout";
+import { useModalToast } from '../components/ModalToast';
 import { setCredentials } from "./(Store)/authSlice";
 import { loginStyles } from "./Styles/components/Login/loginStyles";
+
 
 export default function Login() {
   const router = useRouter();
@@ -21,6 +23,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+ const { showToast, ToastComponent } = useModalToast();
 
   const validateEmail = (email: string) => {
     if (!email) return false;
@@ -30,21 +33,13 @@ export default function Login() {
     return emailRegex.test(emailTrimmed);
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async () => {    
     if (!email || !password) {
-      Toast.show({
-        type: "info",
-        text1: "Faltan datos",
-        text2: "Ingresa correo y contraseña",
-      });
+      showToast.info("Faltan datos", "Ingresa correo y contraseña");
       return;
     }
     if (!validateEmail(email)) {
-      Toast.show({
-        type: "error",
-        text1: "Correo inválido",
-        text2: "Ingresa un correo válido",
-      });
+        showToast.error("Correo inválido", "Ingresa un correo válido");
       return;
     }
 
@@ -75,6 +70,7 @@ export default function Login() {
   return (
     <AuthLayout contentStyle={loginStyles.container}>
       <View style={loginStyles.inner}>
+       <ToastComponent />
         {/* Form */}
         <View style={loginStyles.formContainer}>
           {/* Header */}
@@ -180,7 +176,7 @@ export default function Login() {
             <Text style={loginStyles.registerText}>
               ¿No tienes una cuenta?{" "}
             </Text>
-            <TouchableOpacity onPress={() => router.push("/(Users)/Users")}>
+            <TouchableOpacity onPress={() => router.push("/(Users)/Home_Register")}>
               <Text style={loginStyles.registerLink}>Regístrate</Text>
             </TouchableOpacity>
           </View>

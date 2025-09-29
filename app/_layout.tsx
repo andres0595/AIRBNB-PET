@@ -10,7 +10,6 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import Toast from "react-native-toast-message";
 import { Provider } from "react-redux";
 import { store } from "./(Store)/store";
 // Prevenir que se oculte automáticamente
@@ -170,7 +169,7 @@ export default function RootLayout() {
 
           <StatusBar style="auto" />
         </ThemeProvider>
-        <Toast />
+     
       </GestureHandlerRootView>
     </Provider>
   );
