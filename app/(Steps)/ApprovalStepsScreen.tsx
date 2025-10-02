@@ -1,0 +1,522 @@
+import AuthLayout from "@/components/AuthLayout";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { useState } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
+const ApprovalStepsScreen = () => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = 4;
+
+  // Estados para los formularios
+  const [testimonials, setTestimonials] = useState([
+    { name: "", phone: "", relation: "", email: "" },
+    { name: "", phone: "", relation: "", email: "" },
+  ]);
+
+  const handleNext = () => {
+    if (currentStep < totalSteps) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      // Finalizar proceso
+      console.log("Proceso completado");
+      // router.push("/(Users)/Dashboard");
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    } else {
+      router.back();
+    }
+  };
+
+  const updateTestimonial = (index: number, field: string, value: string) => {
+    const updated = [...testimonials];
+    updated[index] = { ...updated[index], [field]: value };
+    setTestimonials(updated);
+  };
+
+  const renderProgressBar = () => {
+    return (
+      <View style={styles.progressContainer}>
+        {[1, 2, 3, 4].map((step) => (
+          <View
+            key={step}
+            style={[
+              styles.progressBar,
+              step <= currentStep && styles.progressBarActive,
+            ]}
+          />
+        ))}
+      </View>
+    );
+  };
+
+  const renderStep1 = () => (
+    <AuthLayout contentStyle={styles.container}>
+      <ScrollView
+        style={styles.stepContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.stepTitle}>Información del servicio</Text>
+
+        <Text style={styles.infoText}>
+          Evalúa tu experiencia y habilidades si eres nuevo, empieza cobrando
+          poco para generar confianza y reseñas
+        </Text>
+
+        <Text style={styles.infoText}>
+          si tienes años de experiencia certificaciones o referencias
+          comprobadas puedes cobrar un poco más
+        </Text>
+
+        <Text style={styles.infoText}>
+          adopta el precio al tipo de servicio rango de paseo 30 min 15-25
+        </Text>
+
+        <Text style={styles.infoText}>
+          hospedaje depende de días festivos y verano si ofreces servicios extra
+          como entrenamiento básico administración de medicamentos cuidado de
+          animales con condiciones especiales [súmale un plus al precio 45-75
+        </Text>
+
+        <Text style={styles.infoText}>
+          day care ideal para dueños que trabajan en el día y sus mascotas
+          necesitan compañía en la casa del cuidador 32-75
+        </Text>
+
+        <Text style={styles.infoText}>
+          baño a domicilio puedes llamar a sitios donde se brindan estos
+          servicios y agregar un plus por el domicilio esto dependerá de ti
+        </Text>
+
+        <Text style={styles.infoText}>
+          sitter en la casa del dueño podrás gan
+        </Text>
+      </ScrollView>
+    </AuthLayout>
+  );
+
+  const renderStep2 = () => (
+    <ScrollView style={styles.stepContent} showsVerticalScrollIndicator={false}>
+      <Text style={styles.stepTitle}>Generar confianza</Text>
+      <Text style={styles.stepSubtitle}>(Perfil)</Text>
+
+      <View style={styles.accordionContainer}>
+        <AccordionItem title="Información personal" percentage="100%" />
+        <AccordionItem title="Perfil como Sitter" percentage="100%" />
+        <AccordionItem title="Validaciones" percentage="100%" />
+        <AccordionItem title="Consentimientos legales" percentage="100%" />
+        <AccordionItem title="Activación" percentage="100%" />
+      </View>
+    </ScrollView>
+  );
+
+  const renderStep3 = () => (
+    <ScrollView style={styles.stepContent} showsVerticalScrollIndicator={false}>
+      <Text style={styles.stepTitle}>Solicitar testimonios</Text>
+
+      <Text style={styles.infoText}>
+        Tu reputación habla por ti. Necesitamos 2 testimonios de personas que
+        confirmen tu buen desempeño.
+      </Text>
+
+      {/* Testimonio 1 */}
+      <View style={styles.testimonialCard}>
+        <Text style={styles.testimonialNumber}>1. Testimonio</Text>
+
+        <Text style={styles.label}>Nombre de la persona *</Text>
+        <TextInput
+          style={styles.input}
+          value={testimonials[0].name}
+          onChangeText={(value) => updateTestimonial(0, "name", value)}
+          placeholder="Ingrese el nombre"
+        />
+
+        <View style={styles.row}>
+          <View style={styles.halfInput}>
+            <Text style={styles.label}>Celular *</Text>
+            <TextInput
+              style={styles.input}
+              value={testimonials[0].phone}
+              onChangeText={(value) => updateTestimonial(0, "phone", value)}
+              placeholder="Teléfono"
+              keyboardType="phone-pad"
+            />
+          </View>
+
+          <View style={styles.halfInput}>
+            <Text style={styles.label}>Relación *</Text>
+            <TextInput
+              style={styles.input}
+              value={testimonials[0].relation}
+              onChangeText={(value) => updateTestimonial(0, "relation", value)}
+              placeholder="Relación"
+            />
+          </View>
+        </View>
+
+        <Text style={styles.label}>Correo electrónico *</Text>
+        <TextInput
+          style={styles.input}
+          value={testimonials[0].email}
+          onChangeText={(value) => updateTestimonial(0, "email", value)}
+          placeholder="correo@ejemplo.com"
+          keyboardType="email-address"
+        />
+      </View>
+
+      {/* Testimonio 2 */}
+      <View style={styles.testimonialCard}>
+        <Text style={styles.testimonialNumber}>2. Testimonio</Text>
+
+        <Text style={styles.label}>Nombre de la persona *</Text>
+        <TextInput
+          style={styles.input}
+          value={testimonials[1].name}
+          onChangeText={(value) => updateTestimonial(1, "name", value)}
+          placeholder="Ingrese el nombre"
+        />
+
+        <View style={styles.row}>
+          <View style={styles.halfInput}>
+            <Text style={styles.label}>Celular *</Text>
+            <TextInput
+              style={styles.input}
+              value={testimonials[1].phone}
+              onChangeText={(value) => updateTestimonial(1, "phone", value)}
+              placeholder="Teléfono"
+              keyboardType="phone-pad"
+            />
+          </View>
+
+          <View style={styles.halfInput}>
+            <Text style={styles.label}>Relación *</Text>
+            <TextInput
+              style={styles.input}
+              value={testimonials[1].relation}
+              onChangeText={(value) => updateTestimonial(1, "relation", value)}
+              placeholder="Relación"
+            />
+          </View>
+        </View>
+      </View>
+    </ScrollView>
+  );
+
+  const renderStep4 = () => (
+    <ScrollView style={styles.stepContent} showsVerticalScrollIndicator={false}>
+      <Text style={styles.stepTitle}>Cuestionario de seguridad</Text>
+
+      <Text style={styles.infoText}>
+        Para formar parte de nuestra comunidad de trabajo en PuppyPo.,
+        necesitamos confirmar tu información a través de un Background Check
+        (verificación de antecedentes).
+      </Text>
+
+      <Text style={styles.infoText}>
+        Este proceso nos ayuda a garantizar un espacio confiable y seguro para
+        todos. Al continuar, serás redirigido al formulario oficial donde podrás
+        realizar tu verificación.
+      </Text>
+
+      <Text style={styles.infoText}>
+        Ten en cuenta que este trámite tiene un costo que deberás asumir
+        directamente con la entidad que lo gestiona.
+      </Text>
+
+      <Text style={styles.infoText}>
+        ¡Gracias por tu comprensión y por dar este paso para unirte a nosotros!
+      </Text>
+
+      <TouchableOpacity style={styles.linkButton}>
+        <Text style={styles.linkText}>
+          ¿Qué documentos puedes utilizar para el background check?
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.backgroundCheckButton}>
+        <Text style={styles.backgroundCheckButtonText}>Background Check</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
+
+  const renderCurrentStep = () => {
+    switch (currentStep) {
+      case 1:
+        return renderStep1();
+      case 2:
+        return renderStep2();
+      case 3:
+        return renderStep3();
+      case 4:
+        return renderStep4();
+      default:
+        return renderStep1();
+    }
+  };
+
+  return (
+    <AuthLayout contentStyle={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Pasos para aprobación</Text>
+        {renderProgressBar()}
+        <Text style={styles.stepCounter}>
+          {currentStep} de {totalSteps}
+        </Text>
+      </View>
+
+      {renderCurrentStep()}
+
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={handleBack}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.backButtonText}>Atrás</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.continueButton}
+          onPress={handleNext}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.continueButtonText}>
+            {currentStep === totalSteps ? "Entregar" : "Continuar"}
+          </Text>
+          <Ionicons name="arrow-forward" size={20} color="#FFF" />
+        </TouchableOpacity>
+      </View>
+    </AuthLayout>
+  );
+};
+
+// Componente auxiliar para acordeones del paso 2
+const AccordionItem = ({
+  title,
+  percentage,
+}: {
+  title: string;
+  percentage: string;
+}) => (
+  <View style={styles.accordionItem}>
+    <View style={styles.accordionLeft}>
+      <Text style={styles.accordionTitle}>{title}</Text>
+      <Ionicons name="chevron-down" size={24} color="#333" />
+    </View>
+    <View style={styles.percentageCircle}>
+      <Text style={styles.percentageText}>{percentage}</Text>
+    </View>
+  </View>
+);
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FAFAFA",
+    paddingTop: 60,
+  },
+  header: {
+    paddingHorizontal: 20,
+    marginBottom: 24,
+    marginTop: 10,
+  },
+  headerText: {
+    fontSize: 16,
+    color: "#666",
+    marginBottom: 12,
+  },
+  progressContainer: {
+    flexDirection: "row",
+    gap: 8,
+    marginBottom: 8,
+  },
+  progressBar: {
+    flex: 1,
+    height: 4,
+    backgroundColor: "#E0E0E0",
+    borderRadius: 2,
+  },
+  progressBarActive: {
+    backgroundColor: "#f6c3cc",
+  },
+  stepCounter: {
+    fontSize: 14,
+    color: "#333",
+    fontWeight: "600",
+  },
+  stepContent: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+  stepTitle: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#1A1A1A",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  stepSubtitle: {
+    fontSize: 18,
+    color: "#666",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  infoText: {
+    fontSize: 13,
+    color: "#333",
+    lineHeight: 20,
+    marginBottom: 12,
+  },
+  accordionContainer: {
+    gap: 12,
+  },
+  accordionItem: {
+    backgroundColor: "#FFF",
+    borderRadius: 12,
+    padding: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  accordionLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    flex: 1,
+  },
+  accordionTitle: {
+    fontSize: 15,
+    color: "#1A1A1A",
+    fontWeight: "500",
+    flex: 1,
+  },
+  percentageCircle: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    borderWidth: 3,
+    borderColor: "#FFE5E5",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  percentageText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#FF3B30",
+  },
+  testimonialCard: {
+    backgroundColor: "#FFF",
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  testimonialNumber: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#1A1A1A",
+    marginBottom: 16,
+  },
+  label: {
+    fontSize: 13,
+    color: "#333",
+    marginBottom: 6,
+    fontWeight: "500",
+  },
+  input: {
+    backgroundColor: "#F8F8F8",
+    borderRadius: 12,
+    padding: 14,
+    fontSize: 14,
+    color: "#333",
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: "#E8E8E8",
+  },
+  row: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  halfInput: {
+    flex: 1,
+  },
+  linkButton: {
+    marginVertical: 20,
+  },
+  linkText: {
+    fontSize: 13,
+    color: "#333",
+    textDecorationLine: "underline",
+  },
+  backgroundCheckButton: {
+    backgroundColor: "#FFE5E5",
+    borderRadius: 28,
+    paddingVertical: 16,
+    alignItems: "center",
+    marginTop: 12,
+  },
+  backgroundCheckButtonText: {
+    color: "#FF3B30",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+    gap: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    borderTopWidth: 1,
+    borderTopColor: "#F0F0F0",
+    backgroundColor: "#FAFAFA",
+  },
+  backButton: {
+    flex: 1,
+    backgroundColor: "#00D9C5",
+    borderRadius: 28,
+    paddingVertical: 16,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  backButtonText: {
+    color: "#000",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  continueButton: {
+    flex: 1,
+    backgroundColor: "#FF3B30",
+    borderRadius: 28,
+    paddingVertical: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
+  continueButtonText: {
+    color: "#FFF",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+});
+
+export default ApprovalStepsScreen;

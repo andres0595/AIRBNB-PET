@@ -165,11 +165,29 @@ export default function RootLayout() {
                 drawerItemStyle: { display: "none" }, // lo oculta del Drawer
               }}
             />
+            <Drawer.Screen
+              name="(Service)/Services"
+              options={{
+                drawerItemStyle: { display: "none" }, // lo oculta del Drawer
+              }}
+            />
+
+            <Drawer.Screen
+              name="(Steps)/ApprovalStepsScreen"
+              options={{
+                drawerItemStyle: { display: "none" }, // lo oculta del Drawer
+              }}
+            />
+            <Drawer.Screen
+              name="(Login)/ConfirmChange"
+              options={{
+                drawerItemStyle: { display: "none" }, // lo oculta del Drawer
+              }}
+            />
           </Drawer>
 
           <StatusBar style="auto" />
         </ThemeProvider>
-     
       </GestureHandlerRootView>
     </Provider>
   );

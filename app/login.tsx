@@ -1,7 +1,7 @@
 import { useGoogleAuth } from "@/hooks/useSocialAuth";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
 import { useDispatch } from "react-redux";
 import { login } from "../app/Service/authService";
@@ -10,11 +10,11 @@ import FacebookIcon from "../assets/Icons/Facebook.svg";
 import GoogleIcon from "../assets/Icons/google.svg";
 import IOSIconfrom from "../assets/Icons/IOS.svg";
 import LlaveIcon from "../assets/Icons/Llave.svg";
+import PuppySvg from "../assets/Icons/PuppySvg.svg";
 import AuthLayout from "../components/AuthLayout";
-import { useModalToast } from '../components/ModalToast';
+import { useModalToast } from "../components/ModalToast";
 import { setCredentials } from "./(Store)/authSlice";
 import { loginStyles } from "./Styles/components/Login/loginStyles";
-
 
 export default function Login() {
   const router = useRouter();
@@ -23,7 +23,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
- const { showToast, ToastComponent } = useModalToast();
+  const { showToast, ToastComponent } = useModalToast();
 
   const validateEmail = (email: string) => {
     if (!email) return false;
@@ -33,13 +33,13 @@ export default function Login() {
     return emailRegex.test(emailTrimmed);
   };
 
-  const handleLogin = async () => {    
+  const handleLogin = async () => {
     if (!email || !password) {
       showToast.info("Faltan datos", "Ingresa correo y contraseña");
       return;
     }
     if (!validateEmail(email)) {
-        showToast.error("Correo inválido", "Ingresa un correo válido");
+      showToast.error("Correo inválido", "Ingresa un correo válido");
       return;
     }
 
@@ -70,16 +70,12 @@ export default function Login() {
   return (
     <AuthLayout contentStyle={loginStyles.container}>
       <View style={loginStyles.inner}>
-       <ToastComponent />
+        <ToastComponent />
         {/* Form */}
         <View style={loginStyles.formContainer}>
           {/* Header */}
           <View style={loginStyles.header}>
-            <Image
-              source={require("../assets/images/PupyPoRed.png")}
-              style={loginStyles.logo}
-              resizeMode="contain"
-            />
+            <PuppySvg />
             <Text style={loginStyles.title}>Iniciar sesión</Text>
           </View>
           <Text style={loginStyles.label}>Correo electrónico *</Text>
@@ -176,7 +172,9 @@ export default function Login() {
             <Text style={loginStyles.registerText}>
               ¿No tienes una cuenta?{" "}
             </Text>
-            <TouchableOpacity onPress={() => router.push("/(Users)/Home_Register")}>
+            <TouchableOpacity
+              onPress={() => router.push("/(Users)/Home_Register")}
+            >
               <Text style={loginStyles.registerLink}>Regístrate</Text>
             </TouchableOpacity>
           </View>

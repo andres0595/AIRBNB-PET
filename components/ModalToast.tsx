@@ -1,19 +1,19 @@
-import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import { Ionicons } from "@expo/vector-icons";
+import React, { useState } from "react";
 import {
-    Dimensions,
-    Modal,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
-} from 'react-native';
+  Dimensions,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 interface ModalToastProps {
   visible: boolean;
-  type: 'info' | 'success' | 'error' | 'warning';
+  type: "info" | "success" | "error" | "warning";
   title: string;
   message?: string;
   onClose: () => void;
@@ -24,35 +24,50 @@ const ModalToast: React.FC<ModalToastProps> = ({
   type,
   title,
   message,
-  onClose
+  onClose,
 }) => {
   const getIconName = () => {
     switch (type) {
-      case 'info': return 'information-circle';
-      case 'success': return 'checkmark-circle';
-      case 'error': return 'close-circle';
-      case 'warning': return 'warning';
-      default: return 'information-circle';
+      case "info":
+        return "information-circle";
+      case "success":
+        return "checkmark-circle";
+      case "error":
+        return "close-circle";
+      case "warning":
+        return "warning";
+      default:
+        return "information-circle";
     }
   };
 
   const getIconColor = () => {
     switch (type) {
-      case 'info': return '#3498db';
-      case 'success': return '#27ae60';
-      case 'error': return '#e74c3c';
-      case 'warning': return '#f39c12';
-      default: return '#3498db';
+      case "info":
+        return "#3498db";
+      case "success":
+        return "#27ae60";
+      case "error":
+        return "#e74c3c";
+      case "warning":
+        return "#f39c12";
+      default:
+        return "#3498db";
     }
   };
 
   const getBorderColor = () => {
     switch (type) {
-      case 'info': return '#3498db';
-      case 'success': return '#27ae60';
-      case 'error': return '#e74c3c';
-      case 'warning': return '#f39c12';
-      default: return '#3498db';
+      case "info":
+        return "#3498db";
+      case "success":
+        return "#27ae60";
+      case "error":
+        return "#e74c3c";
+      case "warning":
+        return "#f39c12";
+      default:
+        return "#3498db";
     }
   };
 
@@ -65,22 +80,18 @@ const ModalToast: React.FC<ModalToastProps> = ({
     >
       {/* Overlay que bloquea la interacción */}
       <View style={styles.overlay}>
-        <TouchableOpacity 
-          style={styles.overlayTouchable} 
+        <TouchableOpacity
+          style={styles.overlayTouchable}
           activeOpacity={1}
           onPress={() => {}} // No hace nada, bloquea el toque
         />
-        
+
         {/* Card del toast */}
         <View style={[styles.toastCard, { borderTopColor: getBorderColor() }]}>
           {/* Header con icono */}
           <View style={styles.headerContainer}>
             <View style={styles.iconContainer}>
-              <Ionicons 
-                name={getIconName()} 
-                size={40} 
-                color={getIconColor()} 
-              />
+              <Ionicons name={getIconName()} size={40} color={getIconColor()} />
             </View>
           </View>
 
@@ -91,8 +102,8 @@ const ModalToast: React.FC<ModalToastProps> = ({
           </View>
 
           {/* Botón de cerrar */}
-          <TouchableOpacity 
-            style={[styles.closeButton, { backgroundColor: getBorderColor() }]} 
+          <TouchableOpacity
+            style={[styles.closeButton, { backgroundColor: getBorderColor() }]}
             onPress={onClose}
             activeOpacity={0.8}
           >
@@ -108,13 +119,13 @@ const ModalToast: React.FC<ModalToastProps> = ({
 export const useModalToast = () => {
   const [toastState, setToastState] = useState({
     visible: false,
-    type: 'info' as 'info' | 'success' | 'error' | 'warning',
-    title: '',
-    message: ''
+    type: "info" as "info" | "success" | "error" | "warning",
+    title: "",
+    message: "",
   });
 
   const showToast = (
-    type: 'info' | 'success' | 'error' | 'warning',
+    type: "info" | "success" | "error" | "warning",
     title: string,
     message?: string
   ) => {
@@ -122,12 +133,12 @@ export const useModalToast = () => {
       visible: true,
       type,
       title,
-      message: message || ''
+      message: message || "",
     });
   };
 
   const hideToast = () => {
-    setToastState(prev => ({ ...prev, visible: false }));
+    setToastState((prev) => ({ ...prev, visible: false }));
   };
 
   const ToastComponent = () => (
@@ -142,39 +153,43 @@ export const useModalToast = () => {
 
   return {
     showToast: {
-      info: (title: string, message?: string) => showToast('info', title, message),
-      success: (title: string, message?: string) => showToast('success', title, message),
-      error: (title: string, message?: string) => showToast('error', title, message),
-      warning: (title: string, message?: string) => showToast('warning', title, message),
+      info: (title: string, message?: string) =>
+        showToast("info", title, message),
+      success: (title: string, message?: string) =>
+        showToast("success", title, message),
+      error: (title: string, message?: string) =>
+        showToast("error", title, message),
+      warning: (title: string, message?: string) =>
+        showToast("warning", title, message),
     },
     hideToast,
-    ToastComponent
+    ToastComponent,
   };
 };
 
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo gris tenue
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Fondo gris tenue
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 20,
   },
   overlayTouchable: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
   },
   toastCard: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 16,
     padding: 24,
-    width: '90%',
+    width: "90%",
     maxWidth: 350,
     borderTopWidth: 6,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 8,
@@ -184,14 +199,14 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   headerContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 20,
   },
   iconContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
     borderRadius: 50,
     padding: 12,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -201,29 +216,29 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   contentContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 24,
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-    textAlign: 'center',
+    fontWeight: "bold",
+    color: "#333",
+    textAlign: "center",
     marginBottom: 8,
     lineHeight: 26,
   },
   message: {
-    fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
+    fontSize: 15,
+    color: "#666",
+    textAlign: "center",
     lineHeight: 22,
   },
   closeButton: {
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -233,9 +248,9 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   closeButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });
 

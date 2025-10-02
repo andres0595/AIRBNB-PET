@@ -31,7 +31,9 @@ export const changeStyles = StyleSheet.create({
   header: {
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 70,
+    marginBottom: 25,
+    marginTop: 40,
+    padding: 10,
   },
 
   logo: {
@@ -50,10 +52,10 @@ export const changeStyles = StyleSheet.create({
 
   description: {
     fontSize: 14,
-    textAlign: "center",
+    textAlign: "justify",
     color: "#666",
     marginBottom: 25,
-    lineHeight: 20,
+    lineHeight: 17,
   },
 
   label: {
@@ -181,18 +183,81 @@ export const changeStyles = StyleSheet.create({
     color: "#fffff",
   },
 
-    backButton: {
-  position: "absolute",
-  top: 20,
-  left: 5,
-  zIndex: 10,
-  padding: 10,
-  borderRadius: 20,
-  backgroundColor: "rgba(255, 255, 255, 0.9)",
-  shadowColor: "#000",
-  shadowOffset: { width: 0, height: 1 },
-  shadowOpacity: 0.1,
-  shadowRadius: 2,
-  elevation: 2,
-}
+  backButton: {
+    position: "absolute",
+    top: 20,
+    left: 20,
+    zIndex: 10,
+    padding: 10,
+    borderRadius: 20,
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingTop: 50,
+    paddingBottom: 100,
+  },
+
+  // Estilos del Modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 30,
+    paddingTop: 50, // Espacio extra arriba para el botón X
+    width: "85%",
+    maxWidth: 400,
+    alignItems: "center",
+    position: "relative",
+  },
+  closeButton: {
+    position: "absolute",
+    top: 15,
+    right: 15,
+    zIndex: 1,
+    padding: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#333",
+    textAlign: "center",
+    marginBottom: 25,
+  },
+  questionBlock: {
+    width: "100%",
+    marginBottom: 25,
+  },
+  questionAnswer: {
+    fontSize: 14,
+    color: "#666",
+    textAlign: "center",
+    lineHeight: 20,
+  },
+  continueButton: {
+    backgroundColor: "#00D9C5",
+    borderRadius: 25,
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    width: "100%",
+    alignItems: "center",
+  },
+  continueButtonText: {
+    color: "#0000",
+    fontSize: 16,
+    fontWeight: "600",
+  },
 });

@@ -1,4 +1,3 @@
-import { useModalToast } from "@/components/ModalToast";
 import { useGoogleAuth } from "@/hooks/useSocialAuth";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -20,11 +19,13 @@ import AuthLayout from "../../components/AuthLayout";
 import { login } from "../Service/authService";
 import { changeStyles } from "../Styles/components/ChangePassword/changeStyles";
 
-export default function ChangePassword() {
+export default function ConfirmChange() {
   const router = useRouter();
   const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
+  const [newpassword, setPassword] = useState("");
+  const [confirmpassword, setconfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { showToast, ToastComponent } = useModalToast();
   const [modalVisible, setModalVisible] = useState(false);
 
   const googleAuth = useGoogleAuth(async (token: string) => {
@@ -33,6 +34,10 @@ export default function ChangePassword() {
     router.replace("/(tabs)/explore");
   });
 
+  const handleGoBack = () => {
+    router.push("/login");
+    setModalVisible(false);
+  };
   const validateEmail = (email: string) => {
     if (!email) return false;
     const emailTrimmed = email.trim();
@@ -41,55 +46,41 @@ export default function ChangePassword() {
     return emailRegex.test(emailTrimmed);
   };
 
-  const handleGoBack = () => {
-    router.push("/login");
-  };
-
   const handleChange = async () => {
-    if (!email) {
-      showToast.info("Faltan datos", "Por favor digita tu correo");
-      return;
-    }
-    if (!validateEmail(email)) {
-      showToast.error("Correo inválido", "Por favor ingresa un correo válido");
-      return;
-    }
+    // if (!email) {
+    //     Toast.show({
+    //         type: "info",
+    //         text1: "Faltan datos",
+    //         text2: "Por favor digita tu correo",
+    //     });
+    //     return;
+    // }
+    // if (!validateEmail(email)) {
+    //     Toast.show({
+    //         type: "error",
+    //         text1: "Correo inválido",
+    //         text2: "Por favor ingresa un correo válido",
+    //     });
+    //     return;
+    // }
 
     setLoading(true);
-    try {
-      setModalVisible(true);
-      // await GenetateOtp(email);
-      //router.replace("/(Login)/ValidateOtp");
-    } catch (error: any) {
-      showToast.error(
-        "Error al intentar cambiar contraseña",
-        "Por favor verifica tu conexión a internet"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const maskEmail = (email: string): string => {
-    if (!email || !email.includes("@")) return email;
-
-    const [localPart, domain] = email.split("@");
-
-    // Mostrar los primeros 4 caracteres y enmascarar el resto
-    const visibleChars = 4;
-    const maskedLocal =
-      localPart.length > visibleChars
-        ? localPart.substring(0, visibleChars) +
-          "*".repeat(localPart.length - visibleChars)
-        : localPart;
-
-    return `${maskedLocal}@${domain}`;
-  };
-
-  const callFormOtp = async () => {
-    setEmail("");
-    setModalVisible(false);
-    router.replace("/(Login)/ValidateOtp");
+    setModalVisible(true);
+    // try {
+    //   await ChangePassword(+otp, email,newpassword);
+    //   router.replace("/login");
+    // } catch (error: any) {
+    //   Toast.show({
+    //     type: "error",
+    //     text1: "Error al intentar cambiar contraseña",
+    //     text2: "Por favor verifica tu conexión a internet",
+    //     position: "top",
+    //     topOffset: 60,
+    //   });
+    // } finally {
+    //   setLoading(false);
+    //   setModalVisible(false);
+    // }
   };
 
   return (
@@ -100,7 +91,6 @@ export default function ChangePassword() {
         contentContainerStyle={changeStyles.scrollContent}
       >
         <View style={changeStyles.inner}>
-          {/* Form */}
           <View style={changeStyles.formContainer}>
             <TouchableOpacity
               style={changeStyles.backButton}
@@ -108,54 +98,68 @@ export default function ChangePassword() {
             >
               <Ionicons name="chevron-back" size={24} color="#333" />
             </TouchableOpacity>
-            <ToastComponent />
+
             {/* Header */}
             <View style={changeStyles.header}>
               <PuppySvg />
             </View>
-            <Text style={changeStyles.title}>¿Has olvidado tu contraseña?</Text>
-            <Text style={changeStyles.description}>
-              Para restablecer tu contraseña, escribe la dirección de correo
-              electrónico completa que usaste para registrarte en PuppyPo.com y
-              te enviaremos un correo que te ayudará a restablecer tu contraseña
-              paso por paso.
-            </Text>
+            <Text style={changeStyles.title}>Cambia tu contraseña</Text>
 
-            <Text style={changeStyles.label}>Correo electrónico *</Text>
+            <Text style={changeStyles.label}>
+              Ingresa tu nueva contraseña *
+            </Text>
             <View style={changeStyles.inputContainer}>
               <Text style={changeStyles.inputIcon}>
                 <ArrobaIcon width={25} height={25} />
               </Text>
               <TextInput
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-                style={[
-                  changeStyles.input,
-                  !validateEmail(email) &&
-                    email.length > 0 &&
-                    changeStyles.inputError,
-                ]}
-                keyboardType="email-address"
+                placeholder="Contraseña"
+                value={newpassword}
+                onChangeText={setPassword}
+                secureTextEntry
+                style={changeStyles.input}
                 autoCapitalize="none"
                 autoCorrect={false}
                 autoComplete="off"
                 textContentType="none"
-                returnKeyType="next"
-                importantForAutofill="no"
-                placeholderTextColor="#999"
+                returnKeyType="done"
               />
             </View>
+            <Text style={changeStyles.label}>
+              Debe contener al menos 8 caracteres, incluir una mayúscula, un
+              número y un símbolo.
+            </Text>
+
+            <Text style={changeStyles.label}>Confirmar nueva contraseña *</Text>
+            <View style={changeStyles.inputContainer}>
+              <Text style={changeStyles.inputIcon}>
+                <ArrobaIcon width={25} height={25} />
+              </Text>
+              <TextInput
+                placeholder="Contraseña"
+                value={confirmpassword}
+                onChangeText={setconfirmPassword}
+                secureTextEntry
+                style={changeStyles.input}
+                autoCapitalize="none"
+                autoCorrect={false}
+                autoComplete="off"
+                textContentType="none"
+                returnKeyType="done"
+              />
+            </View>
+            <Text style={changeStyles.label}>Repite tu nueva contraseña.</Text>
             <TouchableOpacity
               style={changeStyles.loginButton}
               disabled={loading}
               onPress={handleChange}
             >
               <Text style={changeStyles.loginButtonText}>
-                {loading ? "Enviando..." : "Enviar"}
+                {loading ? "Guardando..." : "Guardar nueva contraseña"}
               </Text>
             </TouchableOpacity>
           </View>
+
           <View style={changeStyles.dividerContainer}>
             <View style={changeStyles.divider} />
             <Text style={changeStyles.dividerText}>O Continuar con</Text>
@@ -187,7 +191,6 @@ export default function ChangePassword() {
           </View>
         </View>
       </ScrollView>
-
       {/* Modal de información */}
       <Modal
         animationType="fade"
@@ -205,23 +208,20 @@ export default function ChangePassword() {
               <Ionicons name="close" size={28} color="#333" />
             </TouchableOpacity>
 
-            {/* Título centrado */}
-            <Text style={changeStyles.modalTitle}>Restablecer contraseña</Text>
-
             {/* Contenido */}
             <View style={changeStyles.questionBlock}>
               <Text style={changeStyles.questionAnswer}>
-                Te hemos enviado instrucciones para restablecer la contraseña,
-                al correo {maskEmail(email)} que se encuentra asociado a tu
-                cuenta.
+                ¡Tu contraseña ha sido cambiada con éxito!
               </Text>
             </View>
 
             <TouchableOpacity
               style={[changeStyles.continueButton]}
-              onPress={() => callFormOtp()}
+              onPress={() => handleGoBack()}
             >
-              <Text style={[changeStyles.continueButtonText]}>Ok</Text>
+              <Text style={[changeStyles.continueButtonText]}>
+                Iniciar sesión
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

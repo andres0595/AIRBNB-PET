@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="133.185" height="91.544" viewBox="0 0 133.185 91.544">
+  <g id="Grupo_40" data-name="Grupo 40" transform="translate(-202 -127.484)">
+    <path id="Trazado_190535" data-name="Trazado 190535" d="M5237.442,2578.2l3.582-13.381s1.957-5.135-5-6.422-7.058-7.428-7.058-7.428,3.313-.711,4.152-3.375,1.66-7.555,8.566-8.589c1.672-.25,2.787-1.507,3.626-4.228s-.271-6.656-.271-6.656,7.337,6.793,8.8,11.934c1.732,6.06,2.368,15.269,5.685,22.717a29.612,29.612,0,0,0,17.923,16.683c.825.277,0-5.04,0-5.04s-3.254-17.668,7.19-17.55c5.295.06,9.83-.961,12.6-3.683,2.646-2.6,3.6-6.874,3.83-9.487.474-5.3-7.122-3.858-10.5-6.66a23.062,23.062,0,0,1-5.33-6.919s-4.27-6.585-10.825-7.1-19.308,2.024-20.573,15.984c0,0,.291,8.9,8.245,13.58,4.8,2.83,8.978-.13,9.9-5.445.6-3.445-1-7.955-1.912-12.362" transform="translate(-4990.728 -2393.455)" fill="none" stroke="red" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+    <ellipse id="Elipse_9645" data-name="Elipse 9645" cx="1.588" cy="1.985" rx="1.588" ry="1.985" transform="translate(246.978 151.655)" fill="red"/>
+    <ellipse id="Elipse_9646" data-name="Elipse 9646" cx="2.064" cy="2.54" rx="2.064" ry="2.54" transform="translate(287.781 143.002)" fill="red"/>
+    <ellipse id="Elipse_9647" data-name="Elipse 9647" cx="3.017" cy="3.731" rx="3.017" ry="3.731" transform="translate(304.292 146.178)" fill="red"/>
+    <text id="PuppyPo" transform="translate(203 211.028)" fill="red" stroke="red" stroke-width="1" font-size="28" font-family="Comfortaa" font-weight="700"><tspan x="0" y="0">PuppyPo</tspan></text>
+    <g id="Elipse_9712" data-name="Elipse 9712" transform="translate(319.341 184.921) rotate(7)" fill="red" stroke="red" stroke-width="5">
+      <ellipse cx="2.605" cy="3.73" rx="2.605" ry="3.73" stroke="none"/>
+      <ellipse cx="2.605" cy="3.73" rx="0.105" ry="1.23" fill="none"/>
+    </g>
+    <g id="Elipse_9713" data-name="Elipse 9713" transform="translate(328.145 186.481) rotate(33)" fill="red" stroke="red" stroke-width="5">
+      <ellipse cx="2.605" cy="3.73" rx="2.605" ry="3.73" stroke="none"/>
+      <ellipse cx="2.605" cy="3.73" rx="0.105" ry="1.23" fill="none"/>
+    </g>
+    <g id="Elipse_9714" data-name="Elipse 9714" transform="translate(332.522 194.033) rotate(51)" fill="red" stroke="red" stroke-width="5">
+      <ellipse cx="2.116" cy="3.029" rx="2.116" ry="3.029" stroke="none"/>
+      <ellipse cx="2.116" cy="3.029" rx="0.384" ry="0.529" fill="none"/>
+    </g>
+    <g id="Elipse_9715" data-name="Elipse 9715" transform="translate(317.789 193.893) rotate(167)" fill="red" stroke="red" stroke-width="5">
+      <ellipse cx="2.116" cy="3.029" rx="2.116" ry="3.029" stroke="none"/>
+      <ellipse cx="2.116" cy="3.029" rx="0.384" ry="0.529" fill="none"/>
+    </g>
+  </g>
+</svg>

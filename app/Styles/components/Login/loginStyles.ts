@@ -31,6 +31,7 @@ export const loginStyles = StyleSheet.create({
     fontWeight: "600",
     color: "#333",
     textAlign: "center",
+    marginTop: 20,
   },
 
   formContainer: {
