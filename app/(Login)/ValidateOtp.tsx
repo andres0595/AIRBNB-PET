@@ -17,7 +17,7 @@ import FacebookIcon from "../../assets/Icons/Facebook.svg";
 import GoogleIcon from "../../assets/Icons/google.svg";
 import IOSIconfrom from "../../assets/Icons/IOS.svg";
 import PuppySvg from "../../assets/Icons/PuppySvg.svg";
-import { login } from "../Service/authService";
+import { login } from "../Service/Service-Login/authService";
 
 export default function ValidateOtp() {
   const router = useRouter();

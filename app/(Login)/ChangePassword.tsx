@@ -17,7 +17,7 @@ import GoogleIcon from "../../assets/Icons/google.svg";
 import IOSIconfrom from "../../assets/Icons/IOS.svg";
 import PuppySvg from "../../assets/Icons/PuppySvg.svg";
 import AuthLayout from "../../components/AuthLayout";
-import { login } from "../Service/authService";
+import { login } from "../Service/Service-Login/authService";
 import { changeStyles } from "../Styles/components/ChangePassword/changeStyles";
 
 export default function ChangePassword() {

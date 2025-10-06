@@ -1,6 +1,7 @@
 import Constants from "expo-constants";
-import { LoginResponse } from "../Models/LoginResponse";
+import { LoginResponse } from "../../Models/Model-Login/LoginResponse";
 const { apiUrl } = Constants.expoConfig?.extra || {};
+
 export async function login(
   correo: string,
   contrasena: string
@@ -47,6 +48,27 @@ export async function ChangePassword(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ otp, email,newPassword }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Credenciales inválidas");
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+export async function loginGoogle(token: string): Promise<LoginResponse> {
+  try {
+    const response = await fetch(`${apiUrl}auth/AuthGoogle`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token }),
     });
 
     if (!response.ok) {

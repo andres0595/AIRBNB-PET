@@ -45,7 +45,7 @@ export const UsersStyles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 14,
-    color: "#000",
+    color: "#333",
     borderColor: "#ddd",
     borderWidth: 1,
     borderRadius: 15,
@@ -145,5 +145,38 @@ export const UsersStyles = StyleSheet.create({
     color: "#000000",
     fontSize: 16,
     fontWeight: "700",
+  },
+
+  // Para Picker nativo
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    marginBottom: 15,
+    backgroundColor: '#fff',
+  },
+  picker: {
+    height: 50,
+    width: '100%',
+  },
+
+  // Para CustomPicker
+  pickerButton: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 15,
+    backgroundColor: '#fff',
+    marginBottom: 15,
+  },
+  pickerButtonText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  pickerPlaceholder: {
+    color: '#999',
   },
 });

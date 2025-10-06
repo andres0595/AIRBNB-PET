@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
 import { useDispatch } from "react-redux";
-import { login } from "../app/Service/authService";
 import ArrobaIcon from "../assets/Icons/arroba.svg";
 import FacebookIcon from "../assets/Icons/Facebook.svg";
 import GoogleIcon from "../assets/Icons/google.svg";
@@ -14,6 +13,7 @@ import PuppySvg from "../assets/Icons/PuppySvg.svg";
 import AuthLayout from "../components/AuthLayout";
 import { useModalToast } from "../components/ModalToast";
 import { setCredentials } from "./(Store)/authSlice";
+import { login, loginGoogle } from "./Service/Service-Login/authService";
 import { loginStyles } from "./Styles/components/Login/loginStyles";
 
 export default function Login() {
@@ -62,7 +62,7 @@ export default function Login() {
   };
 
   const googleAuth = useGoogleAuth(async (token: string) => {
-    const data = await login("google", token);
+    const data = await loginGoogle(token);
     console.log("Usuario Google:", data);
     router.replace("/(tabs)/explore");
   });
