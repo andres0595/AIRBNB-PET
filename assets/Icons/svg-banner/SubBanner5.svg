@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 220" width="600" height="220">
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f6fbff"/>
+  <!-- Soap bubbles cluster (background) -->
+  <g opacity="0.9">
+    <circle cx="420" cy="40" r="32" fill="#e9f5ff"/>
+    <circle cx="460" cy="18" r="20" fill="#e7f3ff"/>
+    <circle cx="495" cy="48" r="14" fill="#f3fbff"/>
+    <circle cx="360" cy="28" r="26" fill="#eaf6ff"/>
+    <circle cx="390" cy="10" r="12" fill="#f7fdff"/>
+  </g>
+
+  <!-- Bathtub -->
+  <g transform="translate(60,70)">
+    <ellipse cx="240" cy="90" rx="220" ry="40" fill="#cfeefe" />
+    <path d="M20 90 q220 -80 440 0 v20 q-220 30 -440 0 z" fill="#a6def7" />
+    <ellipse cx="240" cy="82" rx="180" ry="25" fill="#e9f9ff" />
+  </g>
+
+  <!-- Water and inner rim -->
+  <g transform="translate(60,70)">
+    <path d="M60 95 q180 -40 360 0 q-180 20 -360 0 z" fill="#dff5ff" />
+    <!-- water waves -->
+    <path d="M80 102 q30 -8 60 0 q30 8 60 0 q30 -8 60 0 q30 8 60 0 q30 -8 60 0" fill="none" stroke="#c4eef9" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+  </g>
+
+  <!-- Woman (simplified) -->
+  <g transform="translate(120,10)">
+    <!-- Hair -->
+    <path d="M150 32 c-5 -30 -40 -50 -70 -28 c-8 6 -18 22 -14 36 c4 14 12 26 28 32 c24 10 66 6 78 -40 z" fill="#8b4a2b"/>
+    <!-- Head -->
+    <circle cx="120" cy="70" r="26" fill="#ffd8b6" />
+    <!-- Face details -->
+    <ellipse cx="112" cy="68" rx="3" ry="2" fill="#6b4b3a"/>
+    <ellipse cx="128" cy="68" rx="3" ry="2" fill="#6b4b3a"/>
+    <path d="M112 78 q8 8 16 0" stroke="#b36a4a" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+    <!-- Torso and arms -->
+    <path d="M90 100 q50 40 120 10 q-10 40 -120 0 z" fill="#ff9f87" />
+    <!-- Left arm (holding child) -->
+    <path d="M100 110 q-10 10 0 20 q20 10 36 2 q-6 -18 -18 -30 z" fill="#ffd8b6" />
+    <!-- Right arm (supporting) -->
+    <path d="M170 105 q40 22 60 8 q-6 -8 -18 -20 q-40 -10 -42 4 z" fill="#ffd8b6" />
+  </g>
+
+  <!-- Child in tub -->
+  <g transform="translate(210,80)">
+    <!-- Head -->
+    <circle cx="60" cy="40" r="18" fill="#ffd8b6" />
+    <!-- Hair -->
+    <path d="M50 28 q8 -18 26 -10 q-8 10 -26 12 z" fill="#6b3f2b" />
+    <!-- Eyes and smile -->
+    <circle cx="54" cy="40" r="2" fill="#6b4b3a"/>
+    <circle cx="66" cy="40" r="2" fill="#6b4b3a"/>
+    <path d="M54 46 q6 6 12 0" stroke="#b36a4a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+    <!-- Body -->
+    <path d="M30 58 q30 20 60 0 q-30 28 -60 0 z" fill="#ffe7d0" opacity="0.95"/>
+    <!-- Small arm -->
+    <path d="M75 60 q10 6 18 2 q-2 -6 -10 -10 q-8 0 -8 8 z" fill="#ffd8b6"/>
+  </g>
+
+  <!-- Bubbles near child and woman -->
+  <g fill="#ffffff" opacity="0.95">
+    <circle cx="340" cy="70" r="8" />
+    <circle cx="360" cy="62" r="6" />
+    <circle cx="320" cy="58" r="10" />
+    <circle cx="290" cy="80" r="6" />
+    <circle cx="250" cy="60" r="5" />
+  </g>
+
+  <!-- Soap bottle -->
+  <g transform="translate(470,120)">
+    <rect x="0" y="0" width="28" height="48" rx="6" fill="#ff7b9b" />
+    <rect x="5" y="6" width="18" height="30" rx="3" fill="#ffdfe6" />
+    <path d="M4 0 q5 -6 20 0" fill="#ff4976" opacity="0.9"/>
+    <rect x="8" y="4" width="12" height="4" rx="2" fill="#ff7b9b"/>
+  </g>
+
+  <!-- Small towel (fold) -->
+  <g transform="translate(370,150) rotate(-8)">
+    <rect x="0" y="0" width="54" height="18" rx="6" fill="#ffe3c9" />
+    <rect x="6" y="3" width="40" height="12" rx="4" fill="#ffd0b2" />
+  </g>
+
+  <!-- Decorative shadow under tub -->
+  <ellipse cx="300" cy="185" rx="220" ry="22" fill="#d1eef7" opacity="0.45" />
+
+</svg>

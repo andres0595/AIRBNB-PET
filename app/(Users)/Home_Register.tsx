@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { router } from "expo-router";
 import { useState } from "react";
 import {
   ImageBackground,
@@ -14,28 +14,27 @@ import { HomeRegisterStyles } from "../Styles/components/Users/Home_RegisterStyl
 const UserTypeSelectionScreen = () => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
 
-// Función para manejar la navegación del cliente
+  // Función para manejar la navegación del cliente
   const handleClientPress = () => {
-    setSelectedType('client');
-    console.log('Usuario seleccionó: Cliente');
+    setSelectedType("client");
+    console.log("Usuario seleccionó: Cliente");
     router.push({
-      pathname: '/(Users)/Users',
-      params: { userType: 'client' }
+      pathname: "/(Users)/Users",
+      params: { userType: "client" },
     });
   };
 
   // Función para manejar la navegación del cuidador
   const handleCaretakerPress = () => {
-    setSelectedType('caretaker');
-    console.log('Usuario seleccionó: Cuidador');
+    setSelectedType("caretaker");
+    console.log("Usuario seleccionó: Cuidador");
     router.push({
-      pathname: '/(Users)/Users',
-      params: { userType: 'caretaker' }
+      pathname: "/(Users)/Users",
+      params: { userType: "caretaker" },
     });
   };
 
   return (
-    
     <ImageBackground
       source={require("../../assets/images/registrate2.png")} // Cambia por tu imagen de fondo
       style={HomeRegisterStyles.backgroundImage}
@@ -64,13 +63,18 @@ const UserTypeSelectionScreen = () => {
             onPress={handleClientPress}
           >
             <View style={HomeRegisterStyles.cardContent}>
-              <Text style={[HomeRegisterStyles.cardTitle, HomeRegisterStyles.clientTitle]}>
+              <Text
+                style={[
+                  HomeRegisterStyles.cardTitle,
+                  HomeRegisterStyles.clientTitle,
+                ]}
+              >
                 Cliente
               </Text>
 
               {/* Icono Cliente */}
               <View style={HomeRegisterStyles.iconContainer}>
-                <ClientIcon width={120} height={100} />
+                <ClientIcon width={160} height={140} />
               </View>
 
               <TouchableOpacity
@@ -81,7 +85,12 @@ const UserTypeSelectionScreen = () => {
                 ]}
                 onPress={handleClientPress}
               >
-                <Text style={[HomeRegisterStyles.buttonText, HomeRegisterStyles.clientButtonText]}>
+                <Text
+                  style={[
+                    HomeRegisterStyles.buttonText,
+                    HomeRegisterStyles.clientButtonText,
+                  ]}
+                >
                   Quiero ser cliente
                 </Text>
               </TouchableOpacity>
@@ -104,20 +113,33 @@ const UserTypeSelectionScreen = () => {
             onPress={handleCaretakerPress}
           >
             <View style={HomeRegisterStyles.cardContent}>
-              <Text style={[HomeRegisterStyles.cardTitle, HomeRegisterStyles.caretakerTitle]}>
+              <Text
+                style={[
+                  HomeRegisterStyles.cardTitle,
+                  HomeRegisterStyles.caretakerTitle,
+                ]}
+              >
                 Cuidador
               </Text>
 
               {/* Icono Cuidador */}
               <View style={HomeRegisterStyles.iconContainer}>
-                <CaregiverIcon width={120} height={100} />
+                <CaregiverIcon width={160} height={140} />
               </View>
 
               <TouchableOpacity
-                style={[HomeRegisterStyles.actionButton, HomeRegisterStyles.caretakerButton]}
+                style={[
+                  HomeRegisterStyles.actionButton,
+                  HomeRegisterStyles.caretakerButton,
+                ]}
                 onPress={handleCaretakerPress}
               >
-                <Text style={[HomeRegisterStyles.buttonText, HomeRegisterStyles.caretakerButtonText]}>
+                <Text
+                  style={[
+                    HomeRegisterStyles.buttonText,
+                    HomeRegisterStyles.caretakerButtonText,
+                  ]}
+                >
                   Quiero ser cuidador
                 </Text>
               </TouchableOpacity>

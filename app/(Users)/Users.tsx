@@ -1,11 +1,9 @@
 import AuthLayout from "@/components/AuthLayout";
 import { Ionicons } from "@expo/vector-icons";
-import { Picker } from '@react-native-picker/picker';
 import Checkbox from "expo-checkbox";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   ScrollView,
   Text,
   TextInput,
@@ -14,8 +12,7 @@ import {
 } from "react-native";
 import ClientIcon from "../../assets/Icons/Cliente.svg";
 import CaregiverIcon from "../../assets/Icons/Cuidador.svg";
-import { UserRole } from "../Models/Model-Enums/EnumSystem";
-import { CreateOrUpdateUsers, GetDocumentTypes } from "../Service/Service-Users/UsersService";
+import { GetDocumentTypes } from "../Service/Service-Users/UsersService";
 import { UsersStyles } from "../Styles/components/Users/UsersStyles";
 
 export default function UsersRegister() {
@@ -101,35 +98,43 @@ export default function UsersRegister() {
   };
 
   const handleSubmit = async () => {
-    if (validate()) {
-      setIsLoading(true);
+    // if (validate()) {
+    //   setIsLoading(true);
 
-      try {
-        // Preparar datos para enviar
-        const registerData = {
-          id: 0,
-          idRol: userType == 'client' ? UserRole.CLIENT : UserRole.CARETAKER,
-          IdDocumentType: +form.tipoDocumento,
-          DocumentNumber: form.documento,
-          FullName: `${form.nombre.trim()} ${form.apellido.trim()}`, // trim para quitar espacios
-          zipCode: form.codigoPostal,
-          Email: form.correo.toLowerCase().trim(), // normalizar email
-          Password: form.password
-        };
-        // Llamar al servicio
-        const response = await CreateOrUpdateUsers(registerData);
-        resetForm();
-        // Navegación según tipo de usuario
-        if (isCaretaker) {
-          router.push("/(Service)/Services");
-        } else {
-          // router.push("/dashboard"); // o donde vayas con clientes
-        }
-      } catch (error) {
-        alert(`Error: ${error instanceof Error ? error.message : 'Error desconocido'}`);
-      } finally {
-        setIsLoading(false);
-      }
+    //   try {
+    //     // Preparar datos para enviar
+    //     const registerData = {
+    //       id: 0,
+    //       idRol: userType == "client" ? UserRole.CLIENT : UserRole.CARETAKER,
+    //       FullName: `${form.nombre.trim()} ${form.apellido.trim()}`, // trim para quitar espacios
+    //       zipCode: form.codigoPostal,
+    //       Email: form.correo.toLowerCase().trim(), // normalizar email
+    //       Password: form.password,
+    //     };
+    //     // Llamar al servicio
+    //     const response = await CreateOrUpdateUsers(registerData);
+    //     resetForm();
+    //     // Navegación según tipo de usuario
+    //     if (isCaretaker) {
+    //       router.push("/(Service)/Services");
+    //     } else {
+    //       // router.push("/dashboard"); // o donde vayas con clientes
+    //     }
+    //   } catch (error) {
+    //     alert(
+    //       `Error: ${
+    //         error instanceof Error ? error.message : "Error desconocido"
+    //       }`
+    //     );
+    //   } finally {
+    //     setIsLoading(false);
+    //   }
+    // }
+
+    if (isCaretaker) {
+      router.push("/(Service)/Services");
+    } else {
+      // router.push("/dashboard"); // o donde vayas con clientes
     }
   };
 
@@ -162,14 +167,13 @@ export default function UsersRegister() {
       const response = await GetDocumentTypes();
 
       if (response.flag && response.data) {
-
         setDocumentTypes(response.data);
       } else {
-        console.log('Error', 'No se pudieron cargar los tipos de documento');
+        console.log("Error", "No se pudieron cargar los tipos de documento");
       }
     } catch (error) {
-      console.error('Error cargando tipos de documento:', error);
-      console.log('Error', 'Error al cargar tipos de documento');
+      console.error("Error cargando tipos de documento:", error);
+      console.log("Error", "Error al cargar tipos de documento");
     } finally {
       setLoadingDocTypes(false);
     }
@@ -198,50 +202,6 @@ export default function UsersRegister() {
             {/* Título dinámico */}
             <Text style={UsersStyles.title}>{getTitle()}</Text>
           </View>
-          {/* Campos del formulario */}
-          <Text style={UsersStyles.label}>Tipo Documento *</Text>
-          {loadingDocTypes ? (
-            <View style={UsersStyles.input}>
-              <ActivityIndicator size="small" color="#999" />
-            </View>
-          ) : (
-            <View style={UsersStyles.input} >
-              <Picker
-                selectedValue={form.tipoDocumento}
-                onValueChange={(itemValue:any) => 
-                  handleChange("tipoDocumento", itemValue)
-                }
-                style={UsersStyles.picker}
-              >
-                <Picker.Item label="Seleccione tipo de documento" value=""  />
-                {documentTypes.map((docType: any) => (
-                  <Picker.Item
-                    key={docType.IdType}
-                    label={docType.Code+' - '+docType.Description}
-                    value={docType.IdType.toString()}
-                  />
-                ))}
-              </Picker>
-            </View>
-          )}
-
-          {errors.tipoDocumento && (
-            <Text style={UsersStyles.error}>{errors.tipoDocumento}</Text>
-          )}
-
-
-          {/* Campos del formulario */}
-          <Text style={UsersStyles.label}>Documento *</Text>
-          <TextInput
-            style={UsersStyles.input}
-            placeholder="Documento"
-            value={form.documento}
-                 placeholderTextColor="#999"
-            onChangeText={(text) => handleChange("documento", text)}
-          />
-          {errors.nombre && (
-            <Text style={UsersStyles.error}>{errors.nombre}</Text>
-          )}
 
           {/* Campos del formulario */}
           <Text style={UsersStyles.label}>Nombres *</Text>
@@ -249,7 +209,7 @@ export default function UsersRegister() {
             style={UsersStyles.input}
             placeholder="Nombres"
             value={form.nombre}
-                 placeholderTextColor="#999"
+            placeholderTextColor="#999"
             onChangeText={(text) => handleChange("nombre", text)}
           />
           {errors.nombre && (
@@ -261,7 +221,7 @@ export default function UsersRegister() {
             style={UsersStyles.input}
             placeholder="Apellidos"
             value={form.apellido}
-                placeholderTextColor="#999"
+            placeholderTextColor="#999"
             onChangeText={(text) => handleChange("apellido", text)}
           />
           {errors.apellido && (
@@ -273,7 +233,7 @@ export default function UsersRegister() {
             style={UsersStyles.input}
             placeholder="Código postal"
             keyboardType="numeric"
-                 placeholderTextColor="#999"
+            placeholderTextColor="#999"
             value={form.codigoPostal}
             onChangeText={(text) => handleChange("codigoPostal", text)}
           />
@@ -286,7 +246,7 @@ export default function UsersRegister() {
             style={UsersStyles.input}
             placeholder="Correo electrónico"
             keyboardType="email-address"
-                 placeholderTextColor="#999"
+            placeholderTextColor="#999"
             value={form.correo}
             onChangeText={(text) => handleChange("correo", text)}
           />
@@ -300,7 +260,7 @@ export default function UsersRegister() {
             placeholder="Contraseña"
             secureTextEntry
             value={form.password}
-                 placeholderTextColor="#999"
+            placeholderTextColor="#999"
             onChangeText={(text) => handleChange("password", text)}
           />
           {errors.password && (
@@ -313,7 +273,7 @@ export default function UsersRegister() {
             placeholder="Repite contraseña"
             secureTextEntry
             value={form.confirmPassword}
-                 placeholderTextColor="#999"
+            placeholderTextColor="#999"
             onChangeText={(text) => handleChange("confirmPassword", text)}
           />
           {errors.confirmPassword && (
@@ -343,8 +303,8 @@ export default function UsersRegister() {
               {isClient
                 ? "Registrate como cliente"
                 : isCaretaker
-                  ? "Registrate como cuidador"
-                  : "Registrarme"}
+                ? "Registrate como cuidador"
+                : "Registrarme"}
             </Text>
           </TouchableOpacity>
           {/* Enlace "¿Ya tienes una cuenta?" */}

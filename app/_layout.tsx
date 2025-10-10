@@ -7,23 +7,21 @@ import {
 } from "@react-navigation/native";
 import { Drawer } from "expo-router/drawer";
 import * as SplashScreen from "expo-splash-screen";
-import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider } from "react-redux";
 import { store } from "./(Store)/store";
-// Prevenir que se oculte automáticamente
+
 SplashScreen.preventAutoHideAsync();
+
 export default function RootLayout() {
   useEffect(() => {
-    // Ocultar splash screen después de que la app esté lista
     const hideSplash = async () => {
       await SplashScreen.hideAsync();
     };
-
-    // Puedes agregar aquí la lógica de carga de tu ap
-    setTimeout(hideSplash, 2000); // 2 segundos de ejemplo
+    setTimeout(hideSplash, 2000);
   }, []);
+
   const colorScheme = useColorScheme();
 
   return (
@@ -40,57 +38,49 @@ export default function RootLayout() {
             <Drawer.Screen
               name="index"
               options={{
-                drawerLabel: "Inicio (Login)",
-                drawerIcon: ({
-                  color,
-                  size,
-                }: {
-                  color: string;
-                  size: number;
-                }) => (
+                drawerLabel: "Inicio",
+                drawerIcon: ({ color, size }) => (
                   <Ionicons name="home-outline" size={size} color={color} />
                 ),
               }}
             />
+
+            {/* NUEVO: Agregar las tabs al drawer */}
+            <Drawer.Screen
+              name="(tabs)"
+              options={{
+                drawerLabel: "Explorar (con Tabs)",
+                drawerIcon: ({ color, size }) => (
+                  <Ionicons name="grid-outline" size={size} color={color} />
+                ),
+              }}
+            />
+
             <Drawer.Screen
               name="services"
               options={{
                 drawerLabel: "Nuestros Servicios",
-                drawerIcon: ({
-                  color,
-                  size,
-                }: {
-                  color: string;
-                  size: number;
-                }) => <Ionicons name="paw-outline" size={size} color={color} />,
+                drawerIcon: ({ color, size }) => (
+                  <Ionicons name="paw-outline" size={size} color={color} />
+                ),
               }}
             />
+
             <Drawer.Screen
               name="blog"
               options={{
                 drawerLabel: "Blog",
-                drawerIcon: ({
-                  color,
-                  size,
-                }: {
-                  color: string;
-                  size: number;
-                }) => (
+                drawerIcon: ({ color, size }) => (
                   <Ionicons name="book-outline" size={size} color={color} />
                 ),
               }}
             />
+
             <Drawer.Screen
               name="support"
               options={{
                 drawerLabel: "Soporte",
-                drawerIcon: ({
-                  color,
-                  size,
-                }: {
-                  color: string;
-                  size: number;
-                }) => (
+                drawerIcon: ({ color, size }) => (
                   <Ionicons
                     name="help-circle-outline"
                     size={size}
@@ -99,17 +89,12 @@ export default function RootLayout() {
                 ),
               }}
             />
+
             <Drawer.Screen
               name="register"
               options={{
                 drawerLabel: "Registrarse",
-                drawerIcon: ({
-                  color,
-                  size,
-                }: {
-                  color: string;
-                  size: number;
-                }) => (
+                drawerIcon: ({ color, size }) => (
                   <Ionicons
                     name="person-add-outline"
                     size={size}
@@ -118,75 +103,51 @@ export default function RootLayout() {
                 ),
               }}
             />
+
             <Drawer.Screen
               name="login"
               options={{
                 drawerLabel: "Iniciar Sesión",
-                drawerIcon: ({
-                  color,
-                  size,
-                }: {
-                  color: string;
-                  size: number;
-                }) => (
+                drawerIcon: ({ color, size }) => (
                   <Ionicons name="log-in-outline" size={size} color={color} />
                 ),
               }}
             />
+
+            {/* Pantallas ocultas del drawer */}
             <Drawer.Screen
               name="(Login)/ChangePassword"
-              options={{
-                drawerItemStyle: { display: "none" }, // lo oculta del Drawer
-              }}
+              options={{ drawerItemStyle: { display: "none" } }}
             />
             <Drawer.Screen
               name="(Store)/authSlice"
-              options={{
-                drawerItemStyle: { display: "none" }, // lo oculta del Drawer
-              }}
+              options={{ drawerItemStyle: { display: "none" } }}
             />
             <Drawer.Screen
               name="(Users)/Users"
-              options={{
-                drawerItemStyle: { display: "none" }, // lo oculta del Drawer
-              }}
+              options={{ drawerItemStyle: { display: "none" } }}
             />
-
             <Drawer.Screen
               name="(Login)/ValidateOtp"
-              options={{
-                drawerItemStyle: { display: "none" }, // lo oculta del Drawer
-              }}
+              options={{ drawerItemStyle: { display: "none" } }}
             />
-
             <Drawer.Screen
               name="(Users)/Home_Register"
-              options={{
-                drawerItemStyle: { display: "none" }, // lo oculta del Drawer
-              }}
+              options={{ drawerItemStyle: { display: "none" } }}
             />
             <Drawer.Screen
               name="(Service)/Services"
-              options={{
-                drawerItemStyle: { display: "none" }, // lo oculta del Drawer
-              }}
+              options={{ drawerItemStyle: { display: "none" } }}
             />
-
             <Drawer.Screen
               name="(Steps)/ApprovalStepsScreen"
-              options={{
-                drawerItemStyle: { display: "none" }, // lo oculta del Drawer
-              }}
+              options={{ drawerItemStyle: { display: "none" } }}
             />
             <Drawer.Screen
               name="(Login)/ConfirmChange"
-              options={{
-                drawerItemStyle: { display: "none" }, // lo oculta del Drawer
-              }}
+              options={{ drawerItemStyle: { display: "none" } }}
             />
           </Drawer>
-
-          <StatusBar style="auto" />
         </ThemeProvider>
       </GestureHandlerRootView>
     </Provider>

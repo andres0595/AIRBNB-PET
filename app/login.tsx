@@ -137,47 +137,43 @@ export default function Login() {
               {loading ? "Ingresando..." : "Ingresar"}
             </Text>
           </TouchableOpacity>
+        </View>
+        {/* Social Buttons */}
+        <View style={loginStyles.dividerContainer}>
+          <View style={loginStyles.divider} />
+          <Text style={loginStyles.dividerText}>O Continuar con</Text>
+          <View style={loginStyles.divider} />
+        </View>
+        <View style={loginStyles.socialButtonsContainer}>
+          <TouchableOpacity style={loginStyles.socialButton}>
+            <View style={loginStyles.socialIconContainer}>
+              <FacebookIcon width={40} height={40} />
+            </View>
+          </TouchableOpacity>
 
-          <View style={loginStyles.dividerContainer}>
-            <View style={loginStyles.divider} />
-            <Text style={loginStyles.dividerText}>O Continuar con</Text>
-            <View style={loginStyles.divider} />
-          </View>
+          <TouchableOpacity
+            style={loginStyles.socialButton}
+            onPress={() => googleAuth.promptAsync()}
+          >
+            <View style={loginStyles.socialIconContainer}>
+              <GoogleIcon width={40} height={40} />
+            </View>
+          </TouchableOpacity>
 
-          {/* Social Buttons */}
-          <View style={loginStyles.socialButtonsContainer}>
-            <TouchableOpacity style={loginStyles.socialButton}>
-              <View style={loginStyles.socialIconContainer}>
-                <FacebookIcon width={40} height={40} />
-              </View>
-            </TouchableOpacity>
+          <TouchableOpacity style={loginStyles.socialButton}>
+            <View style={loginStyles.socialIconContainer}>
+              <IOSIconfrom width={40} height={40} />
+            </View>
+          </TouchableOpacity>
+        </View>
 
-            <TouchableOpacity
-              style={loginStyles.socialButton}
-              onPress={() => googleAuth.promptAsync()}
-            >
-              <View style={loginStyles.socialIconContainer}>
-                <GoogleIcon width={40} height={40} />
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={loginStyles.socialButton}>
-              <View style={loginStyles.socialIconContainer}>
-                <IOSIconfrom width={40} height={40} />
-              </View>
-            </TouchableOpacity>
-          </View>
-
-          <View style={loginStyles.registerContainer}>
-            <Text style={loginStyles.registerText}>
-              ¿No tienes una cuenta?{" "}
-            </Text>
-            <TouchableOpacity
-              onPress={() => router.push("/(Users)/Home_Register")}
-            >
-              <Text style={loginStyles.registerLink}>Regístrate</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={loginStyles.registerContainer}>
+          <Text style={loginStyles.registerText}>¿No tienes una cuenta? </Text>
+          <TouchableOpacity
+            onPress={() => router.push("/(Users)/Home_Register")}
+          >
+            <Text style={loginStyles.registerLink}>Regístrate</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </AuthLayout>

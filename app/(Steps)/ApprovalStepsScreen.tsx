@@ -491,20 +491,20 @@ const styles = StyleSheet.create({
   },
   backButton: {
     flex: 1,
-    backgroundColor: "#00D9C5",
+    backgroundColor: "#FF3B30",
     borderRadius: 28,
     paddingVertical: 16,
     alignItems: "center",
     justifyContent: "center",
   },
   backButtonText: {
-    color: "#000",
+    color: "#FFF",
     fontSize: 16,
     fontWeight: "600",
   },
   continueButton: {
     flex: 1,
-    backgroundColor: "#FF3B30",
+    backgroundColor: "#00D9C5",
     borderRadius: 28,
     paddingVertical: 16,
     flexDirection: "row",
@@ -513,7 +513,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   continueButtonText: {
-    color: "#FFF",
+    color: "#000",
     fontSize: 16,
     fontWeight: "700",
   },
