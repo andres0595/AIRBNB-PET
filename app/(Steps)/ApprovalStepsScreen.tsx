@@ -10,10 +10,27 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { ActivationForm } from "./ActivationForm";
+import { LegalConsentsForm } from "./LegalConsentsForm";
+import { PersonalInfoForm } from "./PersonalInfoForm";
+import { SitterProfileForm } from "./SitterProfileForm";
+import { ValidationsForm } from "./ValidationsForm";
 
 const ApprovalStepsScreen = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
+  const [expandedAccordion, setExpandedAccordion] = useState<string | null>(
+    null
+  );
+
+  // Estados para los porcentajes de cada formulario
+  const [formProgress, setFormProgress] = useState({
+    personalInfo: 0,
+    sitterProfile: 0,
+    validations: 0,
+    legalConsents: 0,
+    activation: 0,
+  });
 
   // Estados para los formularios
   const [testimonials, setTestimonials] = useState([
@@ -45,6 +62,31 @@ const ApprovalStepsScreen = () => {
     setTestimonials(updated);
   };
 
+  const toggleAccordion = (id: string) => {
+    setExpandedAccordion(expandedAccordion === id ? null : id);
+  };
+
+  // Funciones para actualizar el progreso de cada formulario
+  const updatePersonalInfoProgress = (percentage: number) => {
+    setFormProgress((prev) => ({ ...prev, personalInfo: percentage }));
+  };
+
+  const updateSitterProfileProgress = (percentage: number) => {
+    setFormProgress((prev) => ({ ...prev, sitterProfile: percentage }));
+  };
+
+  const updateValidationsProgress = (percentage: number) => {
+    setFormProgress((prev) => ({ ...prev, validations: percentage }));
+  };
+
+  const updateLegalConsentsProgress = (percentage: number) => {
+    setFormProgress((prev) => ({ ...prev, legalConsents: percentage }));
+  };
+
+  const updateActivationProgress = (percentage: number) => {
+    setFormProgress((prev) => ({ ...prev, activation: percentage }));
+  };
+
   const renderProgressBar = () => {
     return (
       <View style={styles.progressContainer}>
@@ -62,48 +104,43 @@ const ApprovalStepsScreen = () => {
   };
 
   const renderStep1 = () => (
-    <AuthLayout contentStyle={styles.container}>
-      <ScrollView
-        style={styles.stepContent}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text style={styles.stepTitle}>Información del servicio</Text>
+    <ScrollView style={styles.stepContent} showsVerticalScrollIndicator={false}>
+      <Text style={styles.stepTitle}>Información del servicio</Text>
 
-        <Text style={styles.infoText}>
-          Evalúa tu experiencia y habilidades si eres nuevo, empieza cobrando
-          poco para generar confianza y reseñas
-        </Text>
+      <Text style={styles.infoText}>
+        Evalúa tu experiencia y habilidades si eres nuevo, empieza cobrando poco
+        para generar confianza y reseñas
+      </Text>
 
-        <Text style={styles.infoText}>
-          si tienes años de experiencia certificaciones o referencias
-          comprobadas puedes cobrar un poco más
-        </Text>
+      <Text style={styles.infoText}>
+        si tienes años de experiencia certificaciones o referencias comprobadas
+        puedes cobrar un poco más
+      </Text>
 
-        <Text style={styles.infoText}>
-          adopta el precio al tipo de servicio rango de paseo 30 min 15-25
-        </Text>
+      <Text style={styles.infoText}>
+        adopta el precio al tipo de servicio rango de paseo 30 min 15-25
+      </Text>
 
-        <Text style={styles.infoText}>
-          hospedaje depende de días festivos y verano si ofreces servicios extra
-          como entrenamiento básico administración de medicamentos cuidado de
-          animales con condiciones especiales [súmale un plus al precio 45-75
-        </Text>
+      <Text style={styles.infoText}>
+        hospedaje depende de días festivos y verano si ofreces servicios extra
+        como entrenamiento básico administración de medicamentos cuidado de
+        animales con condiciones especiales [súmale un plus al precio 45-75
+      </Text>
 
-        <Text style={styles.infoText}>
-          day care ideal para dueños que trabajan en el día y sus mascotas
-          necesitan compañía en la casa del cuidador 32-75
-        </Text>
+      <Text style={styles.infoText}>
+        day care ideal para dueños que trabajan en el día y sus mascotas
+        necesitan compañía en la casa del cuidador 32-75
+      </Text>
 
-        <Text style={styles.infoText}>
-          baño a domicilio puedes llamar a sitios donde se brindan estos
-          servicios y agregar un plus por el domicilio esto dependerá de ti
-        </Text>
+      <Text style={styles.infoText}>
+        baño a domicilio puedes llamar a sitios donde se brindan estos servicios
+        y agregar un plus por el domicilio esto dependerá de ti
+      </Text>
 
-        <Text style={styles.infoText}>
-          sitter en la casa del dueño podrás gan
-        </Text>
-      </ScrollView>
-    </AuthLayout>
+      <Text style={styles.infoText}>
+        sitter en la casa del dueño podrás gan
+      </Text>
+    </ScrollView>
   );
 
   const renderStep2 = () => (
@@ -112,11 +149,55 @@ const ApprovalStepsScreen = () => {
       <Text style={styles.stepSubtitle}>(Perfil)</Text>
 
       <View style={styles.accordionContainer}>
-        <AccordionItem title="Información personal" percentage="100%" />
-        <AccordionItem title="Perfil como Sitter" percentage="100%" />
-        <AccordionItem title="Validaciones" percentage="100%" />
-        <AccordionItem title="Consentimientos legales" percentage="100%" />
-        <AccordionItem title="Activación" percentage="100%" />
+        <AccordionItem
+          id="personal-info"
+          title="Información personal"
+          percentage={`${formProgress.personalInfo}%`}
+          isExpanded={expandedAccordion === "personal-info"}
+          onToggle={() => toggleAccordion("personal-info")}
+        >
+          <PersonalInfoForm onProgressChange={updatePersonalInfoProgress} />
+        </AccordionItem>
+
+        <AccordionItem
+          id="sitter-profile"
+          title="Perfil como Sitter"
+          percentage={`${formProgress.sitterProfile}%`}
+          isExpanded={expandedAccordion === "sitter-profile"}
+          onToggle={() => toggleAccordion("sitter-profile")}
+        >
+          <SitterProfileForm onProgressChange={updateSitterProfileProgress} />
+        </AccordionItem>
+
+        <AccordionItem
+          id="validations"
+          title="Validaciones"
+          percentage={`${formProgress.validations}%`}
+          isExpanded={expandedAccordion === "validations"}
+          onToggle={() => toggleAccordion("validations")}
+        >
+          <ValidationsForm onProgressChange={updateValidationsProgress} />
+        </AccordionItem>
+
+        <AccordionItem
+          id="legal-consents"
+          title="Consentimientos legales"
+          percentage={`${formProgress.legalConsents}%`}
+          isExpanded={expandedAccordion === "legal-consents"}
+          onToggle={() => toggleAccordion("legal-consents")}
+        >
+          <LegalConsentsForm onProgressChange={updateLegalConsentsProgress} />
+        </AccordionItem>
+
+        <AccordionItem
+          id="activation"
+          title="Activación"
+          percentage={`${formProgress.activation}%`}
+          isExpanded={expandedAccordion === "activation"}
+          onToggle={() => toggleAccordion("activation")}
+        >
+          <ActivationForm onProgressChange={updateActivationProgress} />
+        </AccordionItem>
       </View>
     </ScrollView>
   );
@@ -302,23 +383,46 @@ const ApprovalStepsScreen = () => {
 };
 
 // Componente auxiliar para acordeones del paso 2
-const AccordionItem = ({
-  title,
-  percentage,
-}: {
+interface AccordionItemProps {
+  id: string;
   title: string;
   percentage: string;
-}) => (
-  <View style={styles.accordionItem}>
-    <View style={styles.accordionLeft}>
-      <Text style={styles.accordionTitle}>{title}</Text>
-      <Ionicons name="chevron-down" size={24} color="#333" />
+  isExpanded: boolean;
+  onToggle: () => void;
+  children?: React.ReactNode;
+}
+
+const AccordionItem: React.FC<AccordionItemProps> = ({
+  title,
+  percentage,
+  isExpanded,
+  onToggle,
+  children,
+}) => {
+  return (
+    <View style={styles.accordionWrapper}>
+      <TouchableOpacity
+        style={styles.accordionHeader}
+        onPress={onToggle}
+        activeOpacity={0.8}
+      >
+        <View style={styles.accordionLeft}>
+          <Text style={styles.accordionTitle}>{title}</Text>
+          <Ionicons
+            name={isExpanded ? "chevron-up" : "chevron-down"}
+            size={24}
+            color="#333"
+          />
+        </View>
+        <View style={styles.percentageCircle}>
+          <Text style={styles.percentageText}>{percentage}</Text>
+        </View>
+      </TouchableOpacity>
+
+      {isExpanded && <View style={styles.accordionContent}>{children}</View>}
     </View>
-    <View style={styles.percentageCircle}>
-      <Text style={styles.percentageText}>{percentage}</Text>
-    </View>
-  </View>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -380,19 +484,23 @@ const styles = StyleSheet.create({
   },
   accordionContainer: {
     gap: 12,
+    paddingBottom: 20,
   },
-  accordionItem: {
+  accordionWrapper: {
     backgroundColor: "#FFF",
     borderRadius: 12,
-    padding: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 2,
+    overflow: "hidden",
+  },
+  accordionHeader: {
+    padding: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   accordionLeft: {
     flexDirection: "row",
@@ -419,6 +527,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "600",
     color: "#FF3B30",
+  },
+  accordionContent: {
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+    borderTopWidth: 1,
+    borderTopColor: "#F0F0F0",
+  },
+  placeholderText: {
+    fontSize: 14,
+    color: "#666",
+    textAlign: "center",
+    paddingVertical: 20,
+    fontStyle: "italic",
   },
   testimonialCard: {
     backgroundColor: "#FFF",
