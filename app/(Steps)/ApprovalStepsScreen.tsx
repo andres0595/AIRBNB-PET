@@ -10,6 +10,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSelector } from "react-redux";
+import { RootState } from "../(Store)/store";
 import { ActivationForm } from "./ActivationForm";
 import { LegalConsentsForm } from "./LegalConsentsForm";
 import { PersonalInfoForm } from "./PersonalInfoForm";
@@ -17,6 +19,15 @@ import { SitterProfileForm } from "./SitterProfileForm";
 import { ValidationsForm } from "./ValidationsForm";
 
 const ApprovalStepsScreen = () => {
+  // Obtener los porcentajes directamente de Redux
+  const {
+    personalInfoPercentage,
+    sitterProfilePercentage,
+    validationsPercentage,
+    legalConsentsPercentage,
+    activationPercentage,
+  } = useSelector((state: RootState) => state.validations);
+
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
   const [expandedAccordion, setExpandedAccordion] = useState<string | null>(
@@ -172,11 +183,11 @@ const ApprovalStepsScreen = () => {
         <AccordionItem
           id="validations"
           title="Validaciones"
-          percentage={`${formProgress.validations}%`}
+          percentage={`${validationsPercentage}%`}
           isExpanded={expandedAccordion === "validations"}
           onToggle={() => toggleAccordion("validations")}
         >
-          <ValidationsForm onProgressChange={updateValidationsProgress} />
+          <ValidationsForm />
         </AccordionItem>
 
         <AccordionItem

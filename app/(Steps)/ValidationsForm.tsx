@@ -1,95 +1,281 @@
 import { Ionicons } from "@expo/vector-icons";
+import * as DocumentPicker from "expo-document-picker";
 import { useEffect } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../(Store)/store";
 import {
   setBackgroundCheck,
   setDocuments,
-  setPercentage,
+  setValidationsPercentage,
 } from "../(Store)/validationsSlice";
 
-export const ValidationsForm = () => {
+interface ValidationsProps {
+  onSave?: (data: ValidationsData) => void;
+  onProgressChange?: (percentage: number) => void;
+}
+
+interface ValidationsData {
+  backgroundCheckAccepted: boolean | null;
+  documents: string[];
+}
+
+export const ValidationsForm: React.FC<ValidationsProps> = ({
+  onSave,
+  onProgressChange,
+}) => {
   const dispatch = useDispatch();
   const { backgroundCheckAccepted, documents } = useSelector(
     (state: RootState) => state.validations
   );
 
+  // Asegurar que no haya valores por defecto
+  useEffect(() => {
+    // Limpiar cualquier estado previo al montar el componente
+    dispatch(setBackgroundCheck(null));
+    dispatch(setDocuments([]));
+    dispatch(setValidationsPercentage(0));
+  }, [dispatch]);
+
   const toggleBackgroundCheck = (value: boolean) => {
     dispatch(setBackgroundCheck(value));
   };
 
-  const handleAddDocument = () => {
-    dispatch(setDocuments([...documents, `doc_${documents.length + 1}`]));
+  // Función para seleccionar documentos
+  const pickDocument = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ["image/png", "image/jpeg", "image/jpg", "application/pdf"],
+        copyToCacheDirectory: true,
+      });
+
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        const file = result.assets[0];
+        dispatch(setDocuments([...documents, file.name]));
+        Alert.alert("Éxito", `Archivo "${file.name}" cargado correctamente`);
+      }
+    } catch (error) {
+      console.error("Error al seleccionar documento:", error);
+      Alert.alert("Error", "No se pudo cargar el archivo");
+    }
   };
 
+  const removeDocument = (index: number) => {
+    const newDocuments = documents.filter((_, i) => i !== index);
+    dispatch(setDocuments(newDocuments));
+  };
+
+  // Cálculo del porcentaje - INICIA EN 0%
   useEffect(() => {
-    const totalFields = 2;
-    let filled = 0;
+    let percentage = 0;
 
-    if (backgroundCheckAccepted === true) filled++;
-    if (documents.length >= 2) filled++;
+    // Solo cuenta como completado si aceptó el background check (true)
+    if (backgroundCheckAccepted === true) {
+      percentage += 50; // 50% por aceptar el background check
+    }
 
-    const percentage = Math.round((filled / totalFields) * 100);
-    dispatch(setPercentage(percentage));
-  }, [backgroundCheckAccepted, documents]);
+    // Solo cuenta como completado si hay al menos 1 documento Y aceptó el background check
+    if (documents.length > 0 && backgroundCheckAccepted === true) {
+      percentage += 50; // 50% por subir documentos
+    }
+
+    if (onProgressChange) {
+      onProgressChange(percentage);
+    }
+    dispatch(setValidationsPercentage(percentage));
+  }, [backgroundCheckAccepted, documents, dispatch]);
+
+  // Función para limpiar todos los documentos
+  const clearAllDocuments = () => {
+    if (documents.length > 0) {
+      dispatch(setDocuments([]));
+      Alert.alert(
+        "Documentos eliminados",
+        "Todos los documentos han sido removidos"
+      );
+    }
+  };
 
   return (
     <View style={styles.formContainer}>
+      {/* Pregunta de background check */}
       <Text style={styles.label}>
-        12. ¿Aceptas la verificación de antecedentes?
+        12. ¿Aceptas la verificación de antecedentes (background check)? *
       </Text>
 
       <View style={styles.radioGroup}>
         <TouchableOpacity
-          onPress={() => toggleBackgroundCheck(true)}
           style={styles.radioOption}
+          onPress={() => toggleBackgroundCheck(true)}
+          activeOpacity={0.7}
         >
-          <View style={styles.radioCircle}>
+          <View
+            style={[
+              styles.radioCircle,
+              backgroundCheckAccepted === true && styles.radioCircleSelected,
+            ]}
+          >
             {backgroundCheckAccepted === true && (
               <View style={styles.radioSelected} />
             )}
           </View>
-          <Text>Sí, autorizo el proceso</Text>
+          <Text style={styles.radioLabel}>Sí, autorizo el proceso</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => toggleBackgroundCheck(false)}
           style={styles.radioOption}
+          onPress={() => toggleBackgroundCheck(false)}
+          activeOpacity={0.7}
         >
-          <View style={styles.radioCircle}>
+          <View
+            style={[
+              styles.radioCircle,
+              backgroundCheckAccepted === false && styles.radioCircleSelected,
+            ]}
+          >
             {backgroundCheckAccepted === false && (
               <View style={styles.radioSelected} />
             )}
           </View>
-          <Text>No, no autorizo</Text>
+          <Text style={styles.radioLabel}>
+            No (No podrás ser activado como sitter)
+          </Text>
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity
-        onPress={handleAddDocument}
-        style={styles.addDocumentCard}
-      >
-        <Ionicons name="add-circle" size={40} color="#00D9C5" />
-        <Text>Agregar Documento</Text>
-      </TouchableOpacity>
+      {/* Información del comprobante - Solo visible si aceptó el background check */}
+      {backgroundCheckAccepted === true && (
+        <View style={styles.infoBox}>
+          <Text style={styles.infoTitle}>
+            13. Sube tu comprobante de antecedentes criminales (si ya lo tienes,
+            NO mayor a 60 días) si no lo tienes no hay te preocupes te dirigimos
+            al lugar correcto para que diligencies tu check background *
+          </Text>
+          <Text style={styles.infoSubtext}>
+            (Ejemplo: Sterling Backcheck, MyCRC, RCMP) (TRITON)
+          </Text>
+        </View>
+      )}
+
+      {/* Subida de documentos - Solo visible si aceptó el background check */}
+      {backgroundCheckAccepted === true && (
+        <>
+          <View style={styles.uploadHeader}>
+            <Text style={styles.uploadSectionTitle}>Agregar Documentos</Text>
+            {documents.length > 0 && (
+              <TouchableOpacity
+                onPress={clearAllDocuments}
+                style={styles.clearAllButton}
+              >
+                <Text style={styles.clearAllText}>Limpiar todo</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+
+          <View style={styles.documentsContainer}>
+            {/* Documentos ya subidos */}
+            {documents.map((fileName, index) => (
+              <View key={index} style={styles.documentCard}>
+                <Ionicons name="document-text" size={40} color="#00D9C5" />
+                <Text style={styles.documentName} numberOfLines={1}>
+                  {fileName}
+                </Text>
+                <TouchableOpacity
+                  style={styles.removeButton}
+                  onPress={() => removeDocument(index)}
+                >
+                  <Ionicons name="close-circle" size={20} color="#FF3B30" />
+                </TouchableOpacity>
+              </View>
+            ))}
+
+            {/* Botón agregar más archivos */}
+            <TouchableOpacity
+              style={styles.addDocumentCard}
+              onPress={pickDocument}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="add-circle" size={40} color="#00D9C5" />
+              <Text style={styles.addDocumentText}>Agregar</Text>
+              <Text style={styles.addDocumentText}>más archivos</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
+
+      {/* Indicadores visuales de estado */}
+      {backgroundCheckAccepted === null && (
+        <View style={styles.infoBoxSmall}>
+          <Ionicons name="information-circle" size={20} color="#666" />
+          <Text style={styles.infoTextSmall}>
+            Selecciona una opción para continuar
+          </Text>
+        </View>
+      )}
+
+      {backgroundCheckAccepted === false && (
+        <View style={styles.warningBox}>
+          <Ionicons name="warning" size={20} color="#FF3B30" />
+          <Text style={styles.warningText}>
+            Debes aceptar la verificación de antecedentes para continuar
+          </Text>
+        </View>
+      )}
+
+      {backgroundCheckAccepted === true && documents.length === 0 && (
+        <View style={styles.infoBoxSmall}>
+          <Ionicons name="information-circle" size={20} color="#00D9C5" />
+          <Text style={styles.infoTextSmall}>
+            Agrega al menos un documento para completar este paso
+          </Text>
+        </View>
+      )}
+
+      {backgroundCheckAccepted === true && documents.length > 0 && (
+        <View style={styles.successBox}>
+          <Ionicons name="checkmark-circle" size={20} color="#00A896" />
+          <Text style={styles.successText}>
+            {documents.length} documento(s) cargado(s). Puedes agregar más si es
+            necesario.
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  formContainer: { paddingTop: 16 },
-  label: { fontSize: 13, marginBottom: 16 },
-  radioGroup: { marginBottom: 20 },
-  radioOption: { flexDirection: "row", alignItems: "center", gap: 12 },
+  formContainer: {
+    paddingTop: 16,
+  },
+  label: {
+    fontSize: 13,
+    color: "#333",
+    marginBottom: 16,
+    fontWeight: "500",
+    lineHeight: 20,
+  },
+  radioGroup: {
+    marginBottom: 24,
+    gap: 12,
+  },
+  radioOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    paddingVertical: 4,
+  },
   radioCircle: {
     width: 20,
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#333",
+    borderColor: "#CCC",
     justifyContent: "center",
     alignItems: "center",
+  },
+  radioCircleSelected: {
+    borderColor: "#333",
   },
   radioSelected: {
     width: 10,
@@ -97,12 +283,150 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "#333",
   },
+  radioLabel: {
+    fontSize: 14,
+    color: "#333",
+    flex: 1,
+    lineHeight: 20,
+  },
+  infoBox: {
+    backgroundColor: "#F8F8F8",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: "#E8E8E8",
+  },
+  infoTitle: {
+    fontSize: 13,
+    color: "#333",
+    lineHeight: 20,
+    marginBottom: 8,
+    fontWeight: "500",
+  },
+  infoSubtext: {
+    fontSize: 12,
+    color: "#666",
+    lineHeight: 18,
+    fontStyle: "italic",
+  },
+  uploadHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  uploadSectionTitle: {
+    fontSize: 14,
+    color: "#333",
+    fontWeight: "600",
+  },
+  clearAllButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    backgroundColor: "#FF3B30",
+    borderRadius: 8,
+  },
+  clearAllText: {
+    fontSize: 12,
+    color: "white",
+    fontWeight: "500",
+  },
+  documentsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 12,
+  },
+  documentCard: {
+    width: 100,
+    height: 120,
+    backgroundColor: "#F8F8F8",
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#E8E8E8",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+  },
+  documentName: {
+    fontSize: 10,
+    color: "#666",
+    marginTop: 4,
+    textAlign: "center",
+    paddingHorizontal: 4,
+  },
+  removeButton: {
+    position: "absolute",
+    top: 4,
+    right: 4,
+  },
   addDocumentCard: {
+    width: 100,
+    height: 120,
+    backgroundColor: "#F8F8F8",
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: "#00D9C5",
+    borderStyle: "dashed",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 4,
+  },
+  addDocumentText: {
+    fontSize: 12,
+    color: "#00D9C5",
+    fontWeight: "500",
+    textAlign: "center",
+  },
+  warningBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    backgroundColor: "#FFF3F3",
+    borderRadius: 12,
+    padding: 12,
     marginTop: 16,
     borderWidth: 1,
-    borderColor: "#00D9C5",
-    borderRadius: 8,
-    padding: 12,
+    borderColor: "#FFCCCB",
+  },
+  warningText: {
+    fontSize: 12,
+    color: "#FF3B30",
+    flex: 1,
+    lineHeight: 18,
+  },
+  infoBoxSmall: {
+    flexDirection: "row",
     alignItems: "center",
+    gap: 8,
+    backgroundColor: "#F8F8F8",
+    borderRadius: 12,
+    padding: 12,
+    marginTop: 16,
+    borderWidth: 1,
+    borderColor: "#E8E8E8",
+  },
+  infoTextSmall: {
+    fontSize: 12,
+    color: "#666",
+    flex: 1,
+    lineHeight: 18,
+  },
+  successBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    backgroundColor: "#E8F9F7",
+    borderRadius: 12,
+    padding: 12,
+    marginTop: 16,
+    borderWidth: 1,
+    borderColor: "#B8EDE7",
+  },
+  successText: {
+    fontSize: 12,
+    color: "#00A896",
+    flex: 1,
+    lineHeight: 18,
   },
 });
