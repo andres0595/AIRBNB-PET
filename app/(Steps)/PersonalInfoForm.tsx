@@ -1,64 +1,78 @@
 import { Ionicons } from "@expo/vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../(Store)/store";
+import {
+  setPersonalInfoData,
+  setPersonalInfoFiles,
+  setPersonalInfoPercentage,
+} from "../(Store)/validationsSlice";
 
 interface PersonalInfoFormProps {
-  onSave?: (data: PersonalInfoData) => void;
+  onSave?: (data: any) => void;
   onProgressChange?: (percentage: number) => void;
 }
 
-interface PersonalInfoData {
-  fullName: string;
-  birthDate: string;
-  phone: string;
-  email: string;
-  address: string;
-  city: string;
-  province: string;
-  postCode: string;
-  housingType: "casa" | "apartamento" | "";
-  idDocument: string;
-}
-
 export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
-  onSave,
   onProgressChange,
 }) => {
-  const [formData, setFormData] = useState<PersonalInfoData>({
-    fullName: "",
-    birthDate: "",
-    phone: "",
-    email: "",
-    address: "",
-    city: "",
-    province: "",
-    postCode: "",
-    housingType: "",
-    idDocument: "",
-  });
+  const dispatch = useDispatch();
 
-  const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
+  // Obtener datos de Redux con valores por defecto seguros
+  const personalInfoData = useSelector(
+    (state: RootState) =>
+      state.validations.personalInfoData || {
+        fullName: "",
+        birthDate: "",
+        phone: "",
+        email: "",
+        address: "",
+        city: "",
+        province: "",
+        postCode: "",
+        housingType: "",
+        idDocument: "",
+        uploadedFiles: [],
+      }
+  );
+
+  const formData = personalInfoData;
+  const uploadedFiles = personalInfoData.uploadedFiles || [];
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   // Calcular porcentaje de completitud
   useEffect(() => {
-    const totalFields = Object.keys(formData).length;
-    const filledFields = Object.values(formData).filter(
-      (value) => value !== ""
-    ).length;
+    const fields = [
+      formData.fullName,
+      formData.birthDate,
+      formData.phone,
+      formData.email,
+      formData.address,
+      formData.city,
+      formData.province,
+      formData.postCode,
+      formData.housingType,
+      uploadedFiles.length,
+    ];
 
-    const percentage = Math.round((filledFields / totalFields) * 100);
+    const filled = fields.filter(Boolean).length;
+    const percentage = Math.round((filled / fields.length) * 100);
 
-    if (onProgressChange) {
-      onProgressChange(percentage);
+    if (percentage !== personalInfoData.percentage) {
+      dispatch(setPersonalInfoPercentage(percentage));
+      if (onProgressChange) onProgressChange(percentage);
     }
   }, [
     formData.fullName,
@@ -70,17 +84,15 @@ export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
     formData.province,
     formData.postCode,
     formData.housingType,
-    formData.idDocument,
+    uploadedFiles.length,
   ]);
 
-  const updateField = (field: keyof PersonalInfoData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const updateField = (field: string, value: string) => {
+    dispatch(setPersonalInfoData({ [field]: value }));
   };
 
-  // Función para seleccionar archivos
   const pickDocument = async () => {
     try {
-      // Solicitar permisos
       const { status } =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -92,7 +104,6 @@ export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
         return;
       }
 
-      // Abrir selector de documentos
       const result = await DocumentPicker.getDocumentAsync({
         type: ["image/png", "image/jpeg", "image/jpg", "application/pdf"],
         copyToCacheDirectory: true,
@@ -100,11 +111,10 @@ export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
 
       if (!result.canceled && result.assets && result.assets.length > 0) {
         const file = result.assets[0];
+        const newFiles = [...uploadedFiles, file.name];
 
-        // Agregar el archivo a la lista
-        setUploadedFiles((prev) => [...prev, file.name]);
+        dispatch(setPersonalInfoFiles(newFiles));
 
-        // Marcar como completado en el formulario
         if (uploadedFiles.length === 0) {
           updateField("idDocument", file.name);
         }
@@ -117,41 +127,37 @@ export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
     }
   };
 
-  // Función alternativa usando ImagePicker para solo imágenes
-  const pickImage = async () => {
-    try {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
+  const removeFile = (index: number) => {
+    const newFiles = uploadedFiles.filter((_, i) => i !== index);
+    dispatch(setPersonalInfoFiles(newFiles));
 
-      if (status !== "granted") {
-        Alert.alert(
-          "Permisos necesarios",
-          "Se necesita acceso a la galería para cargar imágenes"
-        );
-        return;
-      }
+    if (newFiles.length === 0) {
+      updateField("idDocument", "");
+    }
+  };
 
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: false,
-        quality: 1,
-      });
+  // Función para formatear la fecha
+  const formatDate = (date: Date) => {
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
 
-      if (!result.canceled && result.assets && result.assets.length > 0) {
-        const file = result.assets[0];
-        const fileName = file.uri.split("/").pop() || "documento.jpg";
+  // Función para convertir string a Date
+  const parseDate = (dateString: string): Date => {
+    if (!dateString) return new Date();
+    const [day, month, year] = dateString.split("/");
+    return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+  };
 
-        setUploadedFiles((prev) => [...prev, fileName]);
+  // Handler para cuando cambia la fecha
+  const onDateChange = (event: any, selectedDate?: Date) => {
+    setShowDatePicker(Platform.OS === "ios"); // En iOS mantener abierto, en Android cerrar
 
-        if (uploadedFiles.length === 0) {
-          updateField("idDocument", fileName);
-        }
-
-        Alert.alert("Éxito", `Imagen cargada correctamente`);
-      }
-    } catch (error) {
-      console.error("Error al seleccionar imagen:", error);
-      Alert.alert("Error", "No se pudo cargar la imagen");
+    if (selectedDate) {
+      const formattedDate = formatDate(selectedDate);
+      updateField("birthDate", formattedDate);
     }
   };
 
@@ -165,13 +171,38 @@ export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
         placeholder="Ingrese su nombre completo"
       />
 
-      <Text style={styles.label}>2. Fecha de nacimiento *</Text>
+      {/* <Text style={styles.label}>2. Fecha de nacimiento *</Text>
       <TextInput
         style={styles.input}
         value={formData.birthDate}
         onChangeText={(value) => updateField("birthDate", value)}
         placeholder="DD/MM/AAAA"
-      />
+      /> */}
+
+      <Text style={styles.label}>2. Fecha de nacimiento *</Text>
+      <TouchableOpacity
+        style={styles.dateInput}
+        onPress={() => setShowDatePicker(true)}
+      >
+        <Text
+          style={[styles.dateText, !formData.birthDate && styles.placeholder]}
+        >
+          {formData.birthDate || "DD/MM/AAAA"}
+        </Text>
+      </TouchableOpacity>
+
+      {showDatePicker && (
+        <DateTimePicker
+          value={
+            formData.birthDate ? parseDate(formData.birthDate) : new Date()
+          }
+          mode="date"
+          display={Platform.OS === "ios" ? "spinner" : "default"}
+          onChange={onDateChange}
+          maximumDate={new Date()} // No permitir fechas futuras
+          minimumDate={new Date(1900, 0, 1)} // Fecha mínima razonable
+        />
+      )}
 
       <Text style={styles.label}>3. Número de teléfono *</Text>
       <TextInput
@@ -203,7 +234,6 @@ export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
       <TouchableOpacity
         style={styles.picker}
         onPress={() => {
-          // Aquí abrirías un picker/modal
           updateField("city", "Bogotá");
         }}
       >
@@ -219,7 +249,6 @@ export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
       <TouchableOpacity
         style={styles.picker}
         onPress={() => {
-          // Aquí abrirías un picker/modal
           updateField("province", "Cundinamarca");
         }}
       >
@@ -270,7 +299,6 @@ export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
         </TouchableOpacity>
       </View>
 
-      {/* Sección de carga de documentos */}
       <Text style={styles.label}>
         6. Documento de identidad (sube una foto de tu ID válido: pasaporte,
         licencia de conducir o ID provincial) *
@@ -289,7 +317,6 @@ export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
         Tamaño del archivo - PNG, JPG, PDF
       </Text>
 
-      {/* Lista de archivos cargados */}
       {uploadedFiles.length > 0 && (
         <View style={styles.uploadedFilesContainer}>
           {uploadedFiles.map((fileName, index) => (
@@ -298,15 +325,7 @@ export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
               <Text style={styles.fileName} numberOfLines={1}>
                 {fileName}
               </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  const newFiles = uploadedFiles.filter((_, i) => i !== index);
-                  setUploadedFiles(newFiles);
-                  if (newFiles.length === 0) {
-                    updateField("idDocument", "");
-                  }
-                }}
-              >
+              <TouchableOpacity onPress={() => removeFile(index)}>
                 <Ionicons name="close-circle" size={20} color="#FF3B30" />
               </TouchableOpacity>
             </View>
@@ -420,5 +439,22 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 13,
     color: "#333",
+  },
+
+  dateInput: {
+    backgroundColor: "#F8F8F8",
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: "#E8E8E8",
+    justifyContent: "center",
+  },
+  dateText: {
+    fontSize: 14,
+    color: "#333",
+  },
+  placeholder: {
+    color: "#999",
   },
 });

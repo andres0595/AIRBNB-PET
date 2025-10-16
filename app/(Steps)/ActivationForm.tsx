@@ -1,25 +1,34 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../(Store)/store";
+import {
+  setActivationData,
+  setActivationPercentage,
+} from "../(Store)/validationsSlice";
+import { ActivationData } from "../Models/Models-Tabs/ActivationData";
 
 interface ActivationFormProps {
   onSave?: (data: ActivationData) => void;
   onProgressChange?: (percentage: number) => void;
 }
 
-interface ActivationData {
-  finalConfirmation: boolean;
-}
-
 export const ActivationForm: React.FC<ActivationFormProps> = ({
   onSave,
   onProgressChange,
 }) => {
-  const [formData, setFormData] = useState<ActivationData>({
-    finalConfirmation: false,
-  });
+  const dispatch = useDispatch();
 
-  // Calcular porcentaje de completitud
+  const activationData = useSelector(
+    (state: RootState) =>
+      state.validations.activationData || {
+        finalConfirmation: false,
+      }
+  );
+
+  const formData = activationData;
+
   useEffect(() => {
     const totalFields = Object.keys(formData).length;
     const filledFields = Object.values(formData).filter(
@@ -27,16 +36,20 @@ export const ActivationForm: React.FC<ActivationFormProps> = ({
     ).length;
 
     const percentage = Math.round((filledFields / totalFields) * 100);
-
+    dispatch(setActivationPercentage(percentage));
     onProgressChange?.(percentage);
   }, [formData.finalConfirmation]);
+
+  // ✅ Solo actualiza Redux, no retorna nada
   const toggleConfirmation = () => {
-    setFormData((prev) => ({
-      ...prev,
-      finalConfirmation: !prev.finalConfirmation,
-    }));
+    const updated = {
+      ...formData,
+      finalConfirmation: !formData.finalConfirmation,
+    };
+    dispatch(setActivationData(updated));
   };
 
+  // ✅ Ahora el componente sí retorna JSX correctamente
   return (
     <View style={styles.formContainer}>
       <Text style={styles.label}>16. Confirmación final *</Text>
@@ -60,7 +73,6 @@ export const ActivationForm: React.FC<ActivationFormProps> = ({
         </View>
       </TouchableOpacity>
 
-      {/* Mensaje informativo */}
       <View style={styles.infoBox}>
         <Ionicons name="shield-checkmark" size={32} color="#00D9C5" />
         <View style={styles.infoContent}>
@@ -73,7 +85,6 @@ export const ActivationForm: React.FC<ActivationFormProps> = ({
         </View>
       </View>
 
-      {/* Alertas de seguridad */}
       <View style={styles.warningBox}>
         <Ionicons
           name="alert-circle-outline"
@@ -96,7 +107,6 @@ export const ActivationForm: React.FC<ActivationFormProps> = ({
         </View>
       </View>
 
-      {/* Estado de progreso */}
       {formData.finalConfirmation && (
         <View style={styles.successBox}>
           <Ionicons name="checkmark-circle" size={24} color="#34C759" />

@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Alert,
   Image,
@@ -10,47 +10,61 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../(Store)/store";
+import {
+  setSitterProfileData,
+  setSitterProfilePercentage,
+} from "../(Store)/validationsSlice";
+import { SitterProfileData } from "../Models/Models-Tabs/SitterProfileData";
 
 interface SitterProfileFormProps {
-  onSave?: (data: SitterProfileData) => void;
+  onSave?: (data: any) => void;
   onProgressChange?: (percentage: number) => void;
-}
-
-interface SitterProfileData {
-  profilePhoto: string;
-  description: string;
-  services: string[];
-  scheduleDay: string;
-  scheduleHours: string;
-  animalExperience: string;
 }
 
 export const SitterProfileForm: React.FC<SitterProfileFormProps> = ({
   onSave,
   onProgressChange,
 }) => {
-  const [formData, setFormData] = useState<SitterProfileData>({
-    profilePhoto: "",
-    description: "",
-    services: [],
-    scheduleDay: "",
-    scheduleHours: "",
-    animalExperience: "",
-  });
+  const dispatch = useDispatch();
 
+  const sitterProfileData: SitterProfileData = useSelector(
+    (state: RootState) => ({
+      profilePhoto: state.validations?.sitterProfileData?.profilePhoto ?? "",
+      description: state.validations?.sitterProfileData?.description ?? "",
+      services: state.validations?.sitterProfileData?.services ?? [],
+      scheduleDay: state.validations?.sitterProfileData?.scheduleDay ?? "",
+      scheduleHours: state.validations?.sitterProfileData?.scheduleHours ?? "",
+      animalExperience:
+        state.validations?.sitterProfileData?.animalExperience ?? "",
+      percentage: 0,
+    })
+  );
+
+  const formData = sitterProfileData;
+  // Calcular porcentaje de completitud
   useEffect(() => {
-    const totalFields = Object.keys(formData).length;
+    const fields = [
+      formData.profilePhoto,
+      formData.description,
+      formData.services,
+      formData.scheduleDay,
+      formData.scheduleHours,
+      formData.animalExperience,
+    ];
 
-    const filledFields = Object.values(formData).filter((value) => {
-      if (Array.isArray(value)) {
-        return value.length > 0; // cuenta solo si tiene algo
-      }
-      return value !== ""; // strings no vacíos
+    const filled = fields.filter((f) => {
+      if (Array.isArray(f)) return f.length > 0;
+      return f !== null && f !== undefined && f !== "";
     }).length;
 
-    const percentage = Math.round((filledFields / totalFields) * 100);
+    const percentage = Math.round((filled / fields.length) * 100);
 
-    onProgressChange?.(percentage);
+    if (percentage !== sitterProfileData.percentage) {
+      dispatch(setSitterProfilePercentage(percentage));
+      if (onProgressChange) onProgressChange(percentage);
+    }
   }, [
     formData.profilePhoto,
     formData.description,
@@ -61,13 +75,18 @@ export const SitterProfileForm: React.FC<SitterProfileFormProps> = ({
   ]);
 
   const updateField = (field: keyof SitterProfileData, value: any) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    dispatch(setSitterProfileData({ [field]: value }));
   };
 
   const toggleService = (service: string) => {
-    const services = formData.services.includes(service)
-      ? formData.services.filter((s) => s !== service)
-      : [...formData.services, service];
+    const currentServices = Array.isArray(formData.services)
+      ? formData.services
+      : [];
+
+    const services = currentServices.includes(service)
+      ? currentServices.filter((s) => s !== service)
+      : [...currentServices, service];
+
     updateField("services", services);
   };
 

@@ -29,14 +29,6 @@ export const ValidationsForm: React.FC<ValidationsProps> = ({
     (state: RootState) => state.validations
   );
 
-  // Asegurar que no haya valores por defecto
-  useEffect(() => {
-    // Limpiar cualquier estado previo al montar el componente
-    dispatch(setBackgroundCheck(null));
-    dispatch(setDocuments([]));
-    dispatch(setValidationsPercentage(0));
-  }, [dispatch]);
-
   const toggleBackgroundCheck = (value: boolean) => {
     dispatch(setBackgroundCheck(value));
   };

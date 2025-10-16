@@ -1,28 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../(Store)/store";
+import {
+  setLegalConsentsData,
+  setLegalConsentsPercentage,
+} from "../(Store)/validationsSlice";
+import { LegalConsentsData } from "../Models/Models-Tabs/LegalConsentsData";
 
 interface LegalConsentsFormProps {
   onSave?: (data: LegalConsentsData) => void;
   onProgressChange?: (percentage: number) => void;
 }
 
-interface LegalConsentsData {
-  termsAndConditions: boolean;
-  privacyPolicy: boolean;
-  independentContractor: boolean;
-  animalSafetyPolicy: boolean;
-}
-
 export const LegalConsentsForm: React.FC<LegalConsentsFormProps> = ({
-  onSave,
   onProgressChange,
 }) => {
-  const [formData, setFormData] = useState<LegalConsentsData>({
-    termsAndConditions: false,
-    privacyPolicy: false,
-    independentContractor: false,
-    animalSafetyPolicy: false,
-  });
+  const dispatch = useDispatch();
+
+  // Obtener datos de Redux con valores por defecto seguros
+  const legalConsentData = useSelector(
+    (state: RootState) =>
+      state.validations.legalConsentData || {
+        termsAndConditions: false,
+        privacyPolicy: false,
+        independentContractor: false,
+        animalSafetyPolicy: false,
+      }
+  );
+
+  const formData = legalConsentData;
 
   // Calcular porcentaje de completitud
   useEffect(() => {
@@ -32,6 +39,7 @@ export const LegalConsentsForm: React.FC<LegalConsentsFormProps> = ({
     ).length;
 
     const percentage = Math.round((filledFields / totalFields) * 100);
+    dispatch(setLegalConsentsPercentage(percentage));
 
     onProgressChange?.(percentage);
   }, [
@@ -42,9 +50,9 @@ export const LegalConsentsForm: React.FC<LegalConsentsFormProps> = ({
   ]);
 
   const toggleConsent = (field: keyof LegalConsentsData) => {
-    setFormData((prev) => ({ ...prev, [field]: !prev[field] }));
+    const updated = { ...formData, [field]: !formData[field] };
+    dispatch(setLegalConsentsData(updated)); // tu action del slice
   };
-
   const handleLinkPress = (label: string) => {
     // Aquí puedes abrir el documento correspondiente
     console.log(`Abrir: ${label}`);

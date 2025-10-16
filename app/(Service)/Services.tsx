@@ -2,14 +2,7 @@ import AuthLayout from "@/components/AuthLayout";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
-import {
-  Alert,
-  Modal,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SvgProps } from "react-native-svg";
 import alojamientoMascotas from "../../assets/Icons/svg-servicios/alojamientoMascotas.svg";
 import baño from "../../assets/Icons/svg-servicios/baño.svg";
@@ -80,13 +73,13 @@ const ServiceSelectionScreen = () => {
   };
 
   const handleContinue = () => {
-    if (selectedServices.length === 0) {
-      Alert.alert(
-        "Atención",
-        "Por favor selecciona al menos un servicio para continuar"
-      );
-      return;
-    }
+    // if (selectedServices.length === 0) {
+    //   Alert.alert(
+    //     "Atención",
+    //     "Por favor selecciona al menos un servicio para continuar"
+    //   );
+    //   return;
+    // }
 
     console.log("Servicios seleccionados:", selectedServices);
     setModalVisiblePerfil(true);
@@ -196,7 +189,7 @@ const ServiceSelectionScreen = () => {
               activeOpacity={0.7}
             >
               {/* Checkbox */}
-              <View
+              {/* <View
                 style={[
                   ServicesStyles.checkbox,
                   selectedServices.includes(service.id) &&
@@ -206,7 +199,7 @@ const ServiceSelectionScreen = () => {
                 {selectedServices.includes(service.id) && (
                   <Ionicons name="checkmark" size={14} color="#00D9C5" />
                 )}
-              </View>
+              </View> */}
 
               {/* Icono */}
               <View style={ServicesStyles.iconContainer}>
@@ -218,7 +211,6 @@ const ServiceSelectionScreen = () => {
               <Text style={ServicesStyles.serviceDescription}>
                 {service.description}
               </Text>
-              <Text style={ServicesStyles.servicePrice}>{service.price}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -235,22 +227,11 @@ const ServiceSelectionScreen = () => {
         {/* Botón fijo inferior */}
         <View style={ServicesStyles.buttonContainer}>
           <TouchableOpacity
-            style={[
-              ServicesStyles.continueButton,
-              selectedServices.length === 0 &&
-                ServicesStyles.continueButtonDisabled,
-            ]}
+            style={[ServicesStyles.continueButton]}
             onPress={handleContinue}
-            activeOpacity={selectedServices.length === 0 ? 1 : 0.8}
-            disabled={selectedServices.length === 0}
+            activeOpacity={0.8}
           >
-            <Text
-              style={[
-                ServicesStyles.continueButtonText,
-                selectedServices.length === 0 &&
-                  ServicesStyles.continueButtonTextDisabled,
-              ]}
-            >
+            <Text style={[ServicesStyles.continueButtonText]}>
               Guardar y continuar
             </Text>
           </TouchableOpacity>
