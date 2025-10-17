@@ -214,14 +214,14 @@ export const ValidationsForm: React.FC<ValidationsProps> = ({
         </View>
       )}
 
-      {backgroundCheckAccepted === true && documents.length === 0 && (
+      {/* {backgroundCheckAccepted === true && documents.length === 0 && (
         <View style={styles.infoBoxSmall}>
           <Ionicons name="information-circle" size={20} color="#00D9C5" />
           <Text style={styles.infoTextSmall}>
             Agrega al menos un documento para completar este paso
           </Text>
         </View>
-      )}
+      )} */}
 
       {backgroundCheckAccepted === true && documents.length > 0 && (
         <View style={styles.successBox}>
@@ -232,6 +232,33 @@ export const ValidationsForm: React.FC<ValidationsProps> = ({
           </Text>
         </View>
       )}
+      <View>
+        <Text style={styles.label}>
+          14. ¿Tienes certificados relacionados con cuidado de mascotas o
+          primeros auxilios? *
+        </Text>
+        <View style={styles.uploadHeader}>
+          <Text style={styles.uploadSectionTitle}>Agregar Documentos</Text>
+          {documents.length > 0 && (
+            <TouchableOpacity
+              onPress={clearAllDocuments}
+              style={styles.clearAllButton}
+            >
+              <Text style={styles.clearAllText}>Limpiar todo</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        <TouchableOpacity
+          style={styles.addDocumentCard}
+          onPress={pickDocument}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="add-circle" size={40} color="#00D9C5" />
+          <Text style={styles.addDocumentText}>Agregar</Text>
+          <Text style={styles.addDocumentText}>más archivos</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -328,6 +355,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 12,
+    marginBottom: 10,
   },
   documentCard: {
     width: 100,

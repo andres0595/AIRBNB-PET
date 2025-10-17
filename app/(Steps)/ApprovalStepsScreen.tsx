@@ -11,8 +11,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../(Store)/store";
+import { resetValidations } from "../(Store)/validationsSlice";
 import { ActivationForm } from "./ActivationForm";
 import { LegalConsentsForm } from "./LegalConsentsForm";
 import { PersonalInfoForm } from "./PersonalInfoForm";
@@ -69,7 +70,9 @@ const ApprovalStepsScreen = () => {
     null
   );
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [modalFinalVisible, setModalFinalVisible] = useState(false);
+  const [showFirstContent, setShowFirstContent] = useState(true);
+  const dispatch = useDispatch();
   // Estados para los porcentajes de cada formulario
   const [formProgress, setFormProgress] = useState({
     personalInfo: 0,
@@ -91,6 +94,8 @@ const ApprovalStepsScreen = () => {
     } else {
       // Finalizar proceso
       console.log("Proceso completado");
+      setShowFirstContent(false);
+      setModalFinalVisible(true);
       // router.push("/(Users)/Dashboard");
     }
   };
@@ -107,6 +112,11 @@ const ApprovalStepsScreen = () => {
     setModalVisible(true);
   };
 
+  const handlerProfile = () => {
+    setModalFinalVisible(false);
+    dispatch(resetValidations());
+    router.push("/(Users)/Home_Register");
+  };
   const updateTestimonial = (index: number, field: string, value: string) => {
     const updated = [...testimonials];
     updated[index] = { ...updated[index], [field]: value };
@@ -371,36 +381,90 @@ const ApprovalStepsScreen = () => {
     <ScrollView style={styles.stepContent} showsVerticalScrollIndicator={false}>
       <Text style={styles.stepTitle}>Cuestionario de seguridad</Text>
 
-      <Text style={styles.infoText}>
-        Para formar parte de nuestra comunidad de trabajo en PuppyPo.,
-        necesitamos confirmar tu información a través de un Background Check
-        (verificación de antecedentes).
-      </Text>
+      {showFirstContent ? (
+        // Primer contenido
+        <View>
+          <Text style={styles.infoText}>
+            Para formar parte de nuestra comunidad de trabajo en PuppyPo.,
+            necesitamos confirmar tu información a través de un Background Check
+            (verificación de antecedentes).
+          </Text>
 
-      <Text style={styles.infoText}>
-        Este proceso nos ayuda a garantizar un espacio confiable y seguro para
-        todos. Al continuar, serás redirigido al formulario oficial donde podrás
-        realizar tu verificación.
-      </Text>
+          <Text style={styles.infoText}>
+            Este proceso nos ayuda a garantizar un espacio confiable y seguro
+            para todos. Al continuar, serás redirigido al formulario oficial
+            donde podrás realizar tu verificación.
+          </Text>
 
-      <Text style={styles.infoText}>
-        Ten en cuenta que este trámite tiene un costo que deberás asumir
-        directamente con la entidad que lo gestiona.
-      </Text>
+          <Text style={styles.infoText}>
+            Ten en cuenta que este trámite tiene un costo que deberás asumir
+            directamente con la entidad que lo gestiona.
+          </Text>
 
-      <Text style={styles.infoText}>
-        ¡Gracias por tu comprensión y por dar este paso para unirte a nosotros!
-      </Text>
+          <Text style={styles.infoText}>
+            ¡Gracias por tu comprensión y por dar este paso para unirte a
+            nosotros!
+          </Text>
 
-      <TouchableOpacity style={styles.linkButton} onPress={handlerData}>
-        <Text style={styles.linkText}>
-          ¿Qué documentos puedes utilizar para el background check?
-        </Text>
-      </TouchableOpacity>
+          <TouchableOpacity style={styles.linkButton} onPress={handlerData}>
+            <Text style={styles.linkText}>
+              ¿Qué documentos puedes utilizar para el background check?
+            </Text>
+          </TouchableOpacity>
 
-      <TouchableOpacity style={styles.backgroundCheckButton}>
-        <Text style={styles.backgroundCheckButtonText}>Background Check</Text>
-      </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.backgroundCheckButton}
+            onPress={() => setShowFirstContent(false)}
+          >
+            <Text style={styles.backgroundCheckButtonText}>
+              Background Check
+            </Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        // Segundo contenido
+        <View style={styles.successContainer}>
+          <Text style={styles.infoTextCenter}>
+            Background Check (verificación de antecedentes).
+          </Text>
+
+          {/* Imagen o ícono de los documentos */}
+          <View style={styles.documentsImageContainer}>
+            <Ionicons
+              name="document-text-outline"
+              size={100}
+              color="#999"
+              style={styles.docIcon1}
+            />
+            <Ionicons
+              name="document-text-outline"
+              size={100}
+              color="#ccc"
+              style={styles.docIcon2}
+            />
+          </View>
+
+          {/* Ícono de check y texto */}
+          <View style={styles.successCheckContainer}>
+            <Ionicons
+              name="checkmark-circle-outline"
+              size={64}
+              color="#00D9C5"
+            />
+            <Text style={styles.successText}>
+              ¡Documentos cargados con éxito!
+            </Text>
+          </View>
+
+          {/* Botón para volver */}
+          <TouchableOpacity
+            style={styles.backgroundCheckButton}
+            onPress={() => setShowFirstContent(true)}
+          >
+            <Text style={styles.backgroundCheckButtonText}>Volver</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       <Modal
         animationType="fade"
@@ -447,6 +511,52 @@ const ApprovalStepsScreen = () => {
           </View>
         </View>
       </Modal>
+
+      {/* Modal final */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalFinalVisible}
+        onRequestClose={() => setModalFinalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            {/* Botón cerrar en la esquina */}
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalFinalVisible(false)}
+            >
+              <Ionicons name="close" size={28} color="#333" />
+            </TouchableOpacity>
+
+            {/* Título centrado */}
+            <Text style={styles.modalTitle}>
+              ¡Formulario enviado con éxito!
+            </Text>
+
+            {/* Contenido */}
+            <View style={styles.questionBlock}>
+              <Text style={styles.questionAnswer}>
+                Tu solicitud de aprobación ha sido enviada correctamente.
+              </Text>
+            </View>
+
+            <View style={styles.questionBlock}>
+              <Text style={styles.questionAnswer}>
+                Recibirás una respuesta en un plazo de 24 a 48 horas a través de
+                tu correo electrónico registrado.
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              style={[styles.continueButtonModal]}
+              onPress={() => handlerProfile()}
+            >
+              <Text style={[styles.continueButtonTextModal]}>¡Entendido!</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 
@@ -489,18 +599,18 @@ const ApprovalStepsScreen = () => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            disabled={!allCompleted}
+            // disabled={!allCompleted}
             style={[
               styles.continueButton2,
-              !allCompleted && styles.disabledButton,
+              // !allCompleted && styles.disabledButton,
             ]}
             onPress={handleNext}
             activeOpacity={0.8}
           >
             <Text
               style={[
-                styles.continueButtonText2,
-                !allCompleted && styles.disabledButtonText,
+                styles.continueButtonText2, //,
+                // !allCompleted && styles.disabledButtonText,
               ]}
             >
               {currentStep === totalSteps ? "Entregar" : "Continuar"}
@@ -560,6 +670,74 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 };
 
 const styles = StyleSheet.create({
+  continueButtonModal: {
+    backgroundColor: "#00D9C5",
+    borderRadius: 25,
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    width: "100%",
+    alignItems: "center",
+  },
+  continueButtonTextModal: {
+    color: "#000",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  questionBlock: {
+    width: "100%",
+    marginBottom: 25,
+  },
+  questionAnswer: {
+    fontSize: 14,
+    color: "#666",
+    textAlign: "center",
+    lineHeight: 20,
+  },
+  successContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 20,
+    marginTop: 20,
+  },
+  infoTextCenter: {
+    fontSize: 13,
+    color: "#333",
+    lineHeight: 20,
+    marginBottom: 25,
+    textAlign: "center",
+  },
+  documentsImageContainer: {
+    position: "relative",
+    width: 140,
+    height: 120,
+    marginBottom: 40,
+    alignItems: "center",
+  },
+  docIcon1: {
+    position: "absolute",
+    top: 0,
+    left: 10,
+    transform: [{ rotate: "-10deg" }],
+  },
+  docIcon2: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    transform: [{ rotate: "5deg" }],
+  },
+  successCheckContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 30,
+  },
+  successText: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "#333",
+    marginTop: 10,
+    textAlign: "center",
+  },
   containerText: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -630,6 +808,7 @@ const styles = StyleSheet.create({
     color: "#333",
     lineHeight: 20,
   },
+
   step1ContinueButton: {
     backgroundColor: "#FF3B30",
     borderRadius: 28,
@@ -863,7 +1042,6 @@ const styles = StyleSheet.create({
   listItem: {
     flexDirection: "row",
     alignItems: "flex-start",
-    marginBottom: 12,
   },
   bulletContainer: {
     paddingTop: 6,
@@ -878,8 +1056,7 @@ const styles = StyleSheet.create({
   listText: {
     flex: 1,
     fontSize: 13,
-    color: "#333",
-    lineHeight: 20,
+    color: "#000",
   },
 
   iconContainer: {
