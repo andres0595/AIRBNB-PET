@@ -37,7 +37,7 @@ export default function RootLayout() {
                 headerShown: false,
               }}
             >
-              <Drawer.Screen
+              {/* <Drawer.Screen
                 name="index"
                 options={{
                   drawerLabel: "Inicio",
@@ -45,7 +45,7 @@ export default function RootLayout() {
                     <Ionicons name="home-outline" size={size} color={color} />
                   ),
                 }}
-              />
+              /> */}
 
               {/* NUEVO: Agregar las tabs al drawer */}
               <Drawer.Screen

@@ -310,7 +310,8 @@ export default function UsersRegister() {
           {/* Enlace "¿Ya tienes una cuenta?" */}
           <View style={UsersStyles.loginLinkContainer}>
             <Text style={UsersStyles.loginText}>¿Ya tienes una cuenta?</Text>
-            <TouchableOpacity onPress={handleGoBack}>
+            <TouchableOpacity onPress={() => router.push("/login")}>
+              {" "}
               <Text style={UsersStyles.loginLink}>Inicia sesión</Text>
             </TouchableOpacity>
           </View>

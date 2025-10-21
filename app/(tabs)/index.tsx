@@ -327,7 +327,6 @@ const homeStyles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 30,
     gap: 15,
-    marginTop: 30,
   },
   registerButton: {
     flex: 1,

@@ -105,6 +105,25 @@ export default function ConfirmChange() {
             </View>
             <Text style={changeStyles.title}>Cambia tu contraseña</Text>
 
+            <Text style={changeStyles.label}>Correo electrónico*</Text>
+            <View style={changeStyles.inputContainer}>
+              <Text style={changeStyles.inputIcon}>
+                <ArrobaIcon width={25} height={25} />
+              </Text>
+              <TextInput
+                placeholder="Usuario"
+                value={email}
+                onChangeText={setEmail}
+                secureTextEntry
+                style={changeStyles.input}
+                autoCapitalize="none"
+                autoCorrect={false}
+                autoComplete="off"
+                textContentType="none"
+                returnKeyType="done"
+              />
+            </View>
+
             <Text style={changeStyles.label}>
               Ingresa tu nueva contraseña *
             </Text>

@@ -2,13 +2,19 @@ import AuthLayout from "@/components/AuthLayout";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
-import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Modal,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SvgProps } from "react-native-svg";
-import alojamientoMascotas from "../../assets/Icons/svg-servicios/alojamientoMascotas.svg";
-import baño from "../../assets/Icons/svg-servicios/baño.svg";
-import cuidadoCasa from "../../assets/Icons/svg-servicios/cuidadoCasa.svg";
-import guarderiaDia from "../../assets/Icons/svg-servicios/guarderiaDia.svg";
-import paseo from "../../assets/Icons/svg-servicios/paseo.svg";
+import alojamientoMascotas from "../../assets/Icons/svg-servicios/Alojamiento.png";
+import Banio from "../../assets/Icons/svg-servicios/Banio.png";
+import Cuidado from "../../assets/Icons/svg-servicios/Cuidado.png";
+import Guarderia from "../../assets/Icons/svg-servicios/Guarderia.png";
 import { ServicesStyles } from "../Styles/components/Services/ServiceStyles";
 
 interface Service {
@@ -17,6 +23,7 @@ interface Service {
   title: string;
   description: string;
   price: string;
+  isPng: boolean;
 }
 
 const services: Service[] = [
@@ -26,43 +33,53 @@ const services: Service[] = [
     title: "Alojamiento de mascotas",
     description: "en casa del cuidador",
     price: "Promedio $3000 / noche",
+    isPng: true,
   },
   {
     id: "2",
-    icon: guarderiaDia,
+    icon: Guarderia,
     title: "Guardería de día",
     description: "en casa del cuidador",
     price: "Promedio $3000 / noche",
+    isPng: true,
   },
   {
     id: "3",
-    icon: cuidadoCasa,
+    icon: Cuidado,
     title: "Cuidado en casa",
     description: "Atiende a la mascota en la comodidad de su hogar",
     price: "Promedio $3000 / noche",
+    isPng: true,
   },
   {
     id: "4",
-    icon: paseo,
+    icon: alojamientoMascotas,
     title: "Paseos en el barrio",
     description: "Paseos seguros y divertidos",
     price: "Promedio $3000 / noche",
+    isPng: true,
   },
   {
     id: "5",
-    icon: baño,
+    icon: Banio,
     title: "Baño a domicilio",
     description: "Servicio de baño",
     price: "Promedio $3000 / noche",
+    isPng: true,
   },
 ];
 
 const ServiceSelectionScreen = () => {
+  // useEffect(() => {
+  //   fetchServices();
+  // }, []);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [modalVisiblePerfil, setModalVisiblePerfil] = useState(false);
   const [approvalModalVisible, setApprovalModalVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
+  // const [services, setServices] = useState<Service[]>([]);
 
   const toggleService = (serviceId: string) => {
     setSelectedServices((prev) =>
@@ -71,6 +88,60 @@ const ServiceSelectionScreen = () => {
         : [...prev, serviceId]
     );
   };
+
+  const iconMap: { [key: string]: React.FC<SvgProps> } = {
+    "alojamientoMascotas.svg": alojamientoMascotas,
+    "guarderiaDia.svg": Banio,
+    "cuidadoCasa.svg": Banio,
+    "paseo.svg": Banio,
+    "baño.svg": Banio,
+  };
+
+  // Función auxiliar para extraer el nombre del archivo del icono
+  const getIconName = (iconPath: string): string => {
+    const parts = iconPath.split("/");
+    return parts[parts.length - 1];
+  };
+
+  // const fetchServices = async () => {
+  //   try {
+  //     setLoading(true);
+
+  //     const response = await GetServices();
+
+  //     if (response.flag && response.data) {
+  //       // Ahora TypeScript sabe que response.data es ServiceData[]
+  //       const mappedServices: Service[] = response.data
+  //         .filter((service: any) => service.Status) // Solo servicios activos
+  //         .map((service: any) => ({
+  //           id: service.IdService.toString(),
+  //           icon: iconMap[getIconName(service.Icon)] || alojamientoMascotas,
+  //           title: service.Title,
+  //           description: service.Description,
+  //           price: service.AveragePrice,
+  //         }));
+
+  //       setServices(mappedServices);
+  //     } else {
+  //       Alert.alert(
+  //         "Error",
+  //         response.message || "No se pudieron cargar los servicios"
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error("Error al obtener servicios:", error);
+  //     Alert.alert(
+  //       "Error de conexión",
+  //       "No se pudo conectar con el servidor. Por favor intenta nuevamente.",
+  //       [
+  //         { text: "Reintentar", onPress: fetchServices },
+  //         { text: "Cancelar", style: "cancel" },
+  //       ]
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleContinue = () => {
     // if (selectedServices.length === 0) {
@@ -188,22 +259,17 @@ const ServiceSelectionScreen = () => {
               onPress={() => toggleService(service.id)}
               activeOpacity={0.7}
             >
-              {/* Checkbox */}
-              {/* <View
-                style={[
-                  ServicesStyles.checkbox,
-                  selectedServices.includes(service.id) &&
-                    ServicesStyles.checkboxSelected,
-                ]}
-              >
-                {selectedServices.includes(service.id) && (
-                  <Ionicons name="checkmark" size={14} color="#00D9C5" />
-                )}
-              </View> */}
-
               {/* Icono */}
               <View style={ServicesStyles.iconContainer}>
-                <service.icon width={34} height={34} />
+                {service.isPng ? (
+                  <Image
+                    source={service.icon}
+                    style={{ width: 60, height: 60 }}
+                    resizeMode="contain"
+                  />
+                ) : (
+                  <service.icon width={60} height={60} />
+                )}
               </View>
 
               {/* Textos */}

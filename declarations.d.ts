@@ -4,3 +4,9 @@ declare module "*.svg" {
   const content: React.FC<SvgProps>;
   export default content;
 }
+
+// Agrega estas declaraciones para imágenes
+declare module "*.png" {
+  const content: number;
+  export default content;
+}

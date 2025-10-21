@@ -47,7 +47,7 @@ export const changeStyles = StyleSheet.create({
     fontWeight: "600",
     textAlign: "center",
     color: "#333",
-    marginBottom: 70,
+    marginBottom: 30,
   },
 
   description: {
@@ -256,7 +256,7 @@ export const changeStyles = StyleSheet.create({
     alignItems: "center",
   },
   continueButtonText: {
-    color: "#0000",
+    color: "#FFF",
     fontSize: 16,
     fontWeight: "600",
   },
