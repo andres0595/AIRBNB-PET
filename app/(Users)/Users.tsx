@@ -40,7 +40,7 @@ export default function UsersRegister() {
   // Limpiar errores cuando el componente se monta
   useEffect(() => {
     setErrors({});
-    loadDocumentTypes();
+    // loadDocumentTypes();
   }, [userType]); // Se ejecuta cada vez que cambia userType (cuando regresa y vuelve a entrar)
 
   const handleChange = (field: string, value: string | boolean) => {

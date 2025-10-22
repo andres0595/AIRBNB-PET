@@ -239,7 +239,6 @@ const homeStyles = StyleSheet.create({
   },
   carouselContainer: {
     width: "100%",
-    marginBottom: 20,
   },
   carouselScrollView: {
     width: "100%",
@@ -247,7 +246,7 @@ const homeStyles = StyleSheet.create({
   },
   slideContainer: {
     width: width,
-    height: height * 0.55,
+    height: height * 0.5,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     overflow: "hidden",
@@ -299,12 +298,12 @@ const homeStyles = StyleSheet.create({
   iconContainer: {
     alignItems: "center",
     justifyContent: "center",
-    height: 120,
-    marginTop: -40,
+    height: 100,
+    marginTop: -60,
   },
   textContent: {
     alignItems: "center",
-    marginBottom: 40,
+    marginBottom: 30,
     paddingHorizontal: 30,
   },
   mainTitle: {
@@ -327,6 +326,7 @@ const homeStyles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 30,
     gap: 15,
+    marginTop: 10,
   },
   registerButton: {
     flex: 1,

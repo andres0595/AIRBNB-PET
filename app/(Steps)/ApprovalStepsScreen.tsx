@@ -3,7 +3,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
-  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,6 +11,7 @@ import {
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import CustomModal from "../(CustomModal)/CustomModal";
 import { RootState } from "../(Store)/store";
 import { resetValidations } from "../(Store)/validationsSlice";
 import { ActivationForm } from "./ActivationForm";
@@ -71,6 +71,7 @@ const ApprovalStepsScreen = () => {
   );
   const [modalVisible, setModalVisible] = useState(false);
   const [modalFinalVisible, setModalFinalVisible] = useState(false);
+  const [welcomeModalVisible, setWelcomeModalVisible] = useState(false);
   const [showFirstContent, setShowFirstContent] = useState(true);
   const dispatch = useDispatch();
   // Estados para los porcentajes de cada formulario
@@ -114,8 +115,9 @@ const ApprovalStepsScreen = () => {
 
   const handlerProfile = () => {
     setModalFinalVisible(false);
+    setWelcomeModalVisible(true);
     dispatch(resetValidations());
-    router.push("/(Users)/Home_Register");
+    //router.push("/(Users)/Home_Register");
   };
   const updateTestimonial = (index: number, field: string, value: string) => {
     const updated = [...testimonials];
@@ -466,97 +468,69 @@ const ApprovalStepsScreen = () => {
         </View>
       )}
 
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            {/* Botón cerrar en la esquina */}
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Ionicons name="close" size={28} color="#333" />
-            </TouchableOpacity>
-
-            {/* Ícono de alerta */}
-            <View style={styles.iconContainer}>
-              <View style={styles.alertIcon}>
-                <Text style={styles.alertIconText}>!</Text>
-              </View>
-            </View>
-
-            {/* Título centrado */}
-            <Text style={styles.modalTitle}>
-              ¿Qué documentos puedes utilizar para el background check?
-            </Text>
-
-            {/* Lista scrolleable */}
-            <ScrollView
-              style={styles.scrollContainer}
-              showsVerticalScrollIndicator={false}
-            >
-              {documents.map((doc, index) => (
-                <View key={index} style={styles.listItem}>
-                  <View style={styles.bulletContainer}>
-                    <View style={styles.bullet2} />
-                  </View>
-                  <Text style={styles.listText}>{doc}</Text>
-                </View>
-              ))}
-            </ScrollView>
-          </View>
-        </View>
-      </Modal>
-
-      {/* Modal final */}
-      <Modal
-        animationType="fade"
-        transparent={true}
+      <CustomModal
         visible={modalFinalVisible}
-        onRequestClose={() => setModalFinalVisible(false)}
+        onClose={() => setModalFinalVisible(false)}
+        title="   ¡Formulario enviado con éxito!"
+        primaryButton={{
+          text: "¡Entendido!",
+          onPress: () => handlerProfile(),
+        }}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            {/* Botón cerrar en la esquina */}
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalFinalVisible(false)}
-            >
-              <Ionicons name="close" size={28} color="#333" />
-            </TouchableOpacity>
-
-            {/* Título centrado */}
-            <Text style={styles.modalTitle}>
-              ¡Formulario enviado con éxito!
-            </Text>
-
-            {/* Contenido */}
-            <View style={styles.questionBlock}>
-              <Text style={styles.questionAnswer}>
-                Tu solicitud de aprobación ha sido enviada correctamente.
-              </Text>
-            </View>
-
-            <View style={styles.questionBlock}>
-              <Text style={styles.questionAnswer}>
-                Recibirás una respuesta en un plazo de 24 a 48 horas a través de
-                tu correo electrónico registrado.
-              </Text>
-            </View>
-
-            <TouchableOpacity
-              style={[styles.continueButtonModal]}
-              onPress={() => handlerProfile()}
-            >
-              <Text style={[styles.continueButtonTextModal]}>¡Entendido!</Text>
-            </TouchableOpacity>
-          </View>
+        <Ionicons
+          name="checkmark-circle-outline"
+          size={85}
+          style={styles.containerIcon}
+        />
+        <View style={styles.questionBlock}>
+          <Text style={styles.questionAnswer2}>
+            Tu solicitud de aprobación ha sido enviada correctamente.
+          </Text>
+          <Text style={styles.questionAnswer}>
+            Recibirás una respuesta en un plazo de 24 a 48 horas a través de tu
+            correo electrónico registrado.
+          </Text>
         </View>
-      </Modal>
+      </CustomModal>
+
+      <CustomModal
+        visible={welcomeModalVisible}
+        onClose={() => setWelcomeModalVisible(false)}
+        showCloseButton={false} // Sin botón X
+        primaryButton={{
+          text: "Iniciar",
+          onPress: () => {
+            setWelcomeModalVisible(false);
+            router.push("/(tabs)/perfil");
+          },
+          style: { backgroundColor: "#FF0000" }, // Botón rojo
+        }}
+      >
+        <View style={styles.welcomeContent}>
+          {/* Título */}
+          <Text style={styles.welcomeTitle}>¡Bienvenido a PuppyPo!</Text>
+
+          {/* Subtítulo */}
+          <Text style={styles.welcomeSubtitle}>
+            ¡Tu verificación fue aprobada con éxito!
+          </Text>
+
+          {/* Icono de celebración */}
+          <View style={styles.iconContainer}>
+            <Ionicons name="megaphone" size={80} color="#00D9C5" />
+          </View>
+
+          {/* Texto informativo */}
+          <Text style={styles.welcomeText}>
+            Ahora formas parte de nuestra comunidad de cuidadores de confianza.
+          </Text>
+
+          <Text style={styles.welcomeText}>
+            Completa tu perfil para que las familias puedan conocerte mejor y
+            empieces a ofrecer tus servicios.
+          </Text>
+        </View>
+      </CustomModal>
     </ScrollView>
   );
 
@@ -670,6 +644,41 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 };
 
 const styles = StyleSheet.create({
+  questionTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#1A1A1A",
+    marginBottom: 8,
+    lineHeight: 20,
+  },
+  welcomeContent: {
+    alignItems: "center",
+    paddingVertical: 20,
+  },
+  welcomeTitle: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#333",
+    textAlign: "center",
+    marginBottom: 16,
+  },
+  welcomeSubtitle: {
+    fontSize: 16,
+    color: "#666",
+    textAlign: "center",
+    marginBottom: 30,
+  },
+  iconContainer: {
+    marginVertical: 30,
+  },
+  welcomeText: {
+    fontSize: 14,
+    color: "#666",
+    textAlign: "center",
+    lineHeight: 22,
+    marginBottom: 16,
+    paddingHorizontal: 10,
+  },
   continueButtonModal: {
     backgroundColor: "#00D9C5",
     borderRadius: 25,
@@ -688,6 +697,20 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   questionAnswer: {
+    fontSize: 14,
+    color: "#666",
+    textAlign: "center",
+    lineHeight: 20,
+    marginTop: 20,
+  },
+
+  containerIcon: {
+    color: "#36EBD8",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+
+  questionAnswer2: {
     fontSize: 14,
     color: "#666",
     textAlign: "center",

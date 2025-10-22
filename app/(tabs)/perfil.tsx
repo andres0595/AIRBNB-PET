@@ -17,7 +17,7 @@ const ProfileScreen = () => {
     {
       id: 1,
       title: "Información personal",
-      route: "/(profile)/personal-info",
+      route: "/(Users)/PersonalInformation",
     },
     {
       id: 2,

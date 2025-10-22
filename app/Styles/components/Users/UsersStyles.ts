@@ -150,33 +150,33 @@ export const UsersStyles = StyleSheet.create({
   // Para Picker nativo
   pickerContainer: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderRadius: 8,
     marginBottom: 15,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   picker: {
     height: 50,
-    width: '100%',
+    width: "100%",
   },
 
   // Para CustomPicker
   pickerButton: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderRadius: 8,
     padding: 15,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     marginBottom: 15,
   },
   pickerButtonText: {
     fontSize: 16,
-    color: '#333',
+    color: "#333",
   },
   pickerPlaceholder: {
-    color: '#999',
+    color: "#999",
   },
 });

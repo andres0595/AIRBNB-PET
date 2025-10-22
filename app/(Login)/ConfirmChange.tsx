@@ -3,13 +3,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
-  Modal,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import CustomModal from "../(CustomModal)/CustomModal";
 import ArrobaIcon from "../../assets/Icons/arroba.svg";
 import FacebookIcon from "../../assets/Icons/Facebook.svg";
 import GoogleIcon from "../../assets/Icons/google.svg";
@@ -211,40 +211,20 @@ export default function ConfirmChange() {
         </View>
       </ScrollView>
       {/* Modal de información */}
-      <Modal
-        animationType="fade"
-        transparent={true}
+
+      <CustomModal
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+        onClose={() => setModalVisible(false)}
+        title=""
+        primaryButton={{
+          text: "Ok",
+          onPress: () => handleGoBack(),
+        }}
       >
-        <View style={changeStyles.modalOverlay}>
-          <View style={changeStyles.modalContent}>
-            {/* Botón cerrar en la esquina */}
-            <TouchableOpacity
-              style={changeStyles.closeButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Ionicons name="close" size={28} color="#333" />
-            </TouchableOpacity>
-
-            {/* Contenido */}
-            <View style={changeStyles.questionBlock}>
-              <Text style={changeStyles.questionAnswer}>
-                ¡Tu contraseña ha sido cambiada con éxito!
-              </Text>
-            </View>
-
-            <TouchableOpacity
-              style={[changeStyles.continueButton]}
-              onPress={() => handleGoBack()}
-            >
-              <Text style={[changeStyles.continueButtonText]}>
-                Iniciar sesión
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+        <Text style={changeStyles.questionAnswer}>
+          ¡Tu contraseña ha sido cambiada con éxito!
+        </Text>
+      </CustomModal>
     </AuthLayout>
   );
 }

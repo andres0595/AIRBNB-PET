@@ -1,13 +1,14 @@
 import { Dimensions, StyleSheet } from "react-native";
+import { generalStyles } from "../../GeneralStyles";
 const { width, height } = Dimensions.get("window");
 
 export const HomeRegisterStyles = StyleSheet.create({
- backgroundImage: {
+  backgroundImage: {
     flex: 1,
     width: "100%",
     height: "100%",
   },
-  
+
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0, 0, 0, 0.3)",
@@ -24,7 +25,7 @@ export const HomeRegisterStyles = StyleSheet.create({
     marginBottom: 50,
     marginTop: 40,
   },
-  
+
   title: {
     fontSize: 26,
     fontWeight: "bold",
@@ -61,20 +62,7 @@ export const HomeRegisterStyles = StyleSheet.create({
   },
 
   clientCard: {
-  // Efecto glassmorphism
-    backgroundColor: "rgba(255, 255, 255, 0.28)",
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.2)",
-    // Sombras para el efecto de profundidad
- shadowColor: "rgba(255, 255, 255, 0)",
-    shadowOffset: {
-      width: 0,
-      height: 10,
-  }
-},
-
-  caretakerCard: {
-  // Efecto glassmorphism
+    // Efecto glassmorphism
     backgroundColor: "rgba(255, 255, 255, 0.28)",
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.2)",
@@ -83,7 +71,20 @@ export const HomeRegisterStyles = StyleSheet.create({
     shadowOffset: {
       width: 0,
       height: 10,
-    }
+    },
+  },
+
+  caretakerCard: {
+    // Efecto glassmorphism
+    backgroundColor: "rgba(255, 255, 255, 0.28)",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.2)",
+    // Sombras para el efecto de profundidad
+    shadowColor: "rgba(255, 255, 255, 0)",
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
   },
 
   selectedCard: {
@@ -181,8 +182,5 @@ export const HomeRegisterStyles = StyleSheet.create({
     fontWeight: "500",
   },
 
-    inner: {
-    flex: 1,
-    justifyContent: "center",
-  },
+  inner: generalStyles.inner,
 });
