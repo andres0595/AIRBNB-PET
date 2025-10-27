@@ -31,6 +31,7 @@ export default function PersonalInformation() {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [showPhotoModal, setShowPhotoModal] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showEndModal, setShowEndModal] = useState(false);
 
   const handleGoBack = () => {
     router.push("/(tabs)/perfil");
@@ -38,6 +39,8 @@ export default function PersonalInformation() {
 
   const handleSave = () => {
     console.log("Guardando información...");
+    setShowEndModal(true);
+    router.push("/(tabs)/perfil");
   };
 
   // Función para formatear la fecha
@@ -354,6 +357,17 @@ export default function PersonalInformation() {
           ¿Cómo deseas agregar tu foto de perfil?
         </Text>
       </CustomModal>
+
+      {/* Modal para seleccionar foto */}
+      <CustomModal
+        visible={showEndModal}
+        onClose={() => setShowEndModal(false)}
+        title="¡Información personal guardada exitosamente!"
+        primaryButton={{
+          text: "Ok",
+          onPress: () => setShowEndModal(false),
+        }}
+      ></CustomModal>
     </AuthLayout>
   );
 }

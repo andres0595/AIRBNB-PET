@@ -22,7 +22,7 @@ const ProfileScreen = () => {
     {
       id: 2,
       title: "Configuración de servicios",
-      route: "/(profile)/services-config",
+      route: "/(Service)/ServiceConfiguration",
     },
     {
       id: 3,
