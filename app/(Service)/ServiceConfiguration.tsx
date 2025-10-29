@@ -17,19 +17,47 @@ import {
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 
-const services = ["Alojamiento", "Guardería", "Cuidado", "Paseos", "Baño"];
+const services = [
+  {
+    id: "Alojamiento",
+    name: "Alojamiento de mascotas",
+    subtitle: "en casa del cuidador",
+    type: "accommodation", // accommodation o time-slot
+  },
+  {
+    id: "Guardería",
+    name: "Guardería de día",
+    subtitle: "en casa del cuidador",
+    type: "accommodation",
+  },
+  {
+    id: "Cuidado",
+    name: "Cuidado en casa",
+    subtitle: "Atiende a la mascota en la comodidad de su hogar",
+    type: "accommodation",
+  },
+  {
+    id: "Paseos",
+    name: "Paseos en el barrio",
+    subtitle: "Paseos seguros y divertidos",
+    type: "time-slot",
+  },
+  {
+    id: "Baño",
+    name: "Baño a domicilio",
+    subtitle: "",
+    type: "time-slot",
+  },
+];
+const timeSlots = ["Mañana", "Tarde", "Noche"];
 
 export default function ServiceConfigScreen() {
   const handleGoBack = () => {
     router.push("/(tabs)/perfil");
   };
 
-  // Estado del paso principal (1: Calendario y tarifas, 2: Conocer tu perfil)
-  const [currentStep, setCurrentStep] = useState(1);
-
-  // Estados del calendario
-  const [selectedService, setSelectedService] = useState("Alojamiento");
-  const [calendarVisible, setCalendarVisible] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [selectedService, setSelectedService] = useState<string | null>(null);
   const [selectedDates, setSelectedDates] = useState<Record<string, any>>({});
   const [price, setPrice] = useState("");
   const [deliveryTime, setDeliveryTime] = useState(new Date());
@@ -37,8 +65,37 @@ export default function ServiceConfigScreen() {
   const [showDeliveryPicker, setShowDeliveryPicker] = useState(false);
   const [showPickupPicker, setShowPickupPicker] = useState(false);
   const [dayPrices, setDayPrices] = useState<Record<string, any>>({});
+  const [showConfigModal, setShowConfigModal] = useState(false);
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartDate, setDragStartDate] = useState<string | null>(null);
 
-  // Estados para el paso 2 - Perfil del cuidador
+  const [startHour, setStartHour] = useState("");
+  const [startMinute, setStartMinute] = useState("");
+  const [endHour, setEndHour] = useState("");
+  const [endMinute, setEndMinute] = useState("");
+
+  // Para servicios de franjas horarias (Paseo y Baño)
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("");
+  const [serviceDuration, setServiceDuration] = useState("");
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const [basePrice, setBasePrice] = useState("");
+
+  // Lista de franjas horarias guardadas
+  const [timeSlotSchedules, setTimeSlotSchedules] = useState<
+    Array<{
+      timeSlot: string;
+      duration: string;
+      startTime: string;
+      endTime: string;
+      price: string;
+    }>
+  >([]);
+
+  // Estados para el paso 2
   const [petType, setPetType] = useState("");
   const [experienceLevel, setExperienceLevel] = useState("");
   const [certifications, setCertifications] = useState<string[]>([]);
@@ -49,7 +106,6 @@ export default function ServiceConfigScreen() {
   const [peopleAtHome, setPeopleAtHome] = useState("");
   const [childrenAge, setChildrenAge] = useState("");
 
-  // Configuraciones guardadas por servicio
   const [serviceConfigs, setServiceConfigs] = useState<Record<string, any>>({});
 
   const today = dayjs().format("YYYY-MM-DD");
@@ -82,6 +138,12 @@ export default function ServiceConfigScreen() {
     });
   };
 
+  const getCurrentServiceType = () => {
+    if (!selectedService) return "accommodation";
+    const service = services.find((s) => s.id === selectedService);
+    return service?.type || "accommodation";
+  };
+
   const handleSaveCalendarConfig = () => {
     const dates = Object.keys(selectedDates);
     if (!dates.length) {
@@ -89,49 +151,108 @@ export default function ServiceConfigScreen() {
       return;
     }
 
-    if (!price) {
-      alert("Ingresa un precio");
-      return;
+    if (!selectedService) return;
+
+    const serviceType = getCurrentServiceType();
+
+    if (serviceType === "time-slot") {
+      // Validación para servicios de franja horaria
+      if (timeSlotSchedules.length === 0) {
+        alert("Agrega al menos una franja horaria");
+        return;
+      }
+
+      setServiceConfigs((prev) => ({
+        ...prev,
+        [selectedService]: {
+          dates,
+          type: "time-slot",
+          schedules: timeSlotSchedules,
+        },
+      }));
+    } else {
+      // Validación para servicios de alojamiento
+      if (!price) {
+        alert("Ingresa un precio");
+        return;
+      }
+
+      setServiceConfigs((prev) => ({
+        ...prev,
+        [selectedService]: {
+          dates,
+          price,
+          deliveryTime: formatTime(deliveryTime),
+          pickupTime: formatTime(pickupTime),
+          type: "accommodation",
+        },
+      }));
     }
 
-    // Guardar configuración del servicio
-    setServiceConfigs((prev) => ({
-      ...prev,
-      [selectedService]: {
-        dates,
-        price,
-        deliveryTime: formatTime(deliveryTime),
-        pickupTime: formatTime(pickupTime),
-      },
-    }));
-
     alert(`Configuración de ${selectedService} guardada 🎉`);
-    setCalendarVisible(false);
-    setSelectedDates({});
-    setPrice("");
-    setDeliveryTime(new Date());
-    setPickupTime(new Date());
-  };
 
-  const CloseCalendar = () => {
-    setCalendarVisible(false);
+    // Limpiar estado
+    setSelectedService(null);
     setSelectedDates({});
     setPrice("");
     setDeliveryTime(new Date());
     setPickupTime(new Date());
+    setShowConfigModal(false);
+    setTimeSlotSchedules([]);
   };
 
   const toggleDateSelection = (date: string) => {
     setSelectedDates((prev) => {
       const newDates = { ...prev };
-      if (newDates[date]) delete newDates[date];
-      else
+      if (newDates[date]) {
+        delete newDates[date];
+      } else {
         newDates[date] = {
           selected: true,
           selectedColor: "#00BFA6",
           textColor: "white",
         };
+      }
       return newDates;
+    });
+  };
+
+  const handleDayPress = (date: string, isDisabled: boolean) => {
+    if (isDisabled) return;
+    toggleDateSelection(date);
+    setIsDragging(true);
+    setDragStartDate(date);
+  };
+
+  const handleDayMove = (date: string, isDisabled: boolean) => {
+    if (!isDragging || isDisabled) return;
+
+    // Auto-seleccionar al arrastrar
+    setSelectedDates((prev) => {
+      const newDates = { ...prev };
+      if (!newDates[date]) {
+        newDates[date] = {
+          selected: true,
+          selectedColor: "#00BFA6",
+          textColor: "white",
+        };
+      }
+      return newDates;
+    });
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+    setDragStartDate(null);
+  };
+
+  const toggleServiceSelection = (serviceId: string) => {
+    setSelectedServices((prev) => {
+      if (prev.includes(serviceId)) {
+        return prev.filter((s) => s !== serviceId);
+      } else {
+        return [...prev, serviceId];
+      }
     });
   };
 
@@ -145,9 +266,49 @@ export default function ServiceConfigScreen() {
     });
   };
 
+  const handleAddTimeSlot = () => {
+    if (!selectedTimeSlot) {
+      alert("Selecciona una franja horaria");
+      return;
+    }
+
+    if (!basePrice) {
+      alert("Ingresa el precio base");
+      return;
+    }
+
+    const newSchedule = {
+      timeSlot: selectedTimeSlot,
+      duration: serviceDuration,
+      startTime: formatTime(startTime),
+      endTime: formatTime(endTime),
+      price: basePrice,
+    };
+
+    setTimeSlotSchedules([...timeSlotSchedules, newSchedule]);
+
+    // Limpiar formulario
+    setSelectedTimeSlot("");
+    setServiceDuration("");
+    setBasePrice("");
+    setStartTime(new Date());
+    setEndTime(new Date());
+  };
+
+  const handleRemoveTimeSlot = (index: number) => {
+    setTimeSlotSchedules(timeSlotSchedules.filter((_, i) => i !== index));
+  };
+
+  const handleNextFromSelection = () => {
+    if (selectedServices.length === 0) {
+      alert("Selecciona al menos un servicio");
+      return;
+    }
+    setCurrentStep(1);
+  };
+
   const handleNextStep = () => {
     if (currentStep === 1) {
-      // Validar que al menos un servicio esté configurado
       if (Object.keys(serviceConfigs).length === 0) {
         alert("Configura al menos un servicio antes de continuar");
         return;
@@ -157,7 +318,6 @@ export default function ServiceConfigScreen() {
   };
 
   const handleFinish = () => {
-    // Validar paso 2
     if (!petType) {
       alert("Selecciona el tipo de mascotas que hospedas");
       return;
@@ -191,7 +351,6 @@ export default function ServiceConfigScreen() {
       return;
     }
 
-    // Guardar toda la configuración
     console.log({
       services: serviceConfigs,
       profile: {
@@ -211,12 +370,6 @@ export default function ServiceConfigScreen() {
     router.push("/(tabs)/perfil");
   };
 
-  const getStepTitle = () => {
-    if (currentStep === 1) return "Calendario y tarifas";
-    if (currentStep === 2) return "Conocer tu perfil";
-    return "";
-  };
-
   return (
     <AuthLayout contentStyle={styles.container}>
       <ScrollView
@@ -234,13 +387,13 @@ export default function ServiceConfigScreen() {
             <View style={styles.headerSpacer} />
           </View>
 
-          {/* Indicador de progreso principal */}
+          {/* Indicador de progreso */}
           <View style={styles.progressContainer}>
             <View style={styles.progressHeader}>
               <Text
                 style={[
                   styles.progressStep,
-                  currentStep === 1 && styles.progressStepActive,
+                  currentStep === 0 && styles.progressStepActive,
                 ]}
               >
                 Seleccionar servicios
@@ -251,7 +404,7 @@ export default function ServiceConfigScreen() {
                   currentStep === 1 && styles.progressStepActive,
                 ]}
               >
-                {getStepTitle()}
+                Calendario y tarifas
               </Text>
               <Text
                 style={[
@@ -262,27 +415,79 @@ export default function ServiceConfigScreen() {
                 Conocer tu perfil
               </Text>
             </View>
-            <Text style={styles.progressText}>{currentStep} de 2</Text>
+            <Text style={styles.progressText}>{currentStep + 1} de 3</Text>
             <View style={styles.progressBarContainer}>
               <View
                 style={[
                   styles.progressBar,
-                  { width: `${(currentStep / 2) * 100}%` },
+                  { width: `${((currentStep + 1) / 3) * 100}%` },
                 ]}
               />
             </View>
           </View>
 
-          {/* PASO 1: Calendario y tarifas por servicios */}
+          {/* PASO 0: Selección de servicios */}
+          {currentStep === 0 && (
+            <View style={styles.stepContent}>
+              <Text style={styles.stepSubtitle}>
+                Selecciona los servicios que deseas ofrecer en PuppyPo
+              </Text>
+
+              <View style={styles.servicesGrid}>
+                {services.map((service) => (
+                  <TouchableOpacity
+                    key={service.id}
+                    style={[
+                      styles.serviceCard,
+                      selectedServices.includes(service.id) &&
+                        styles.serviceCardSelected,
+                    ]}
+                    onPress={() => toggleServiceSelection(service.id)}
+                  >
+                    <View style={styles.serviceImageContainer}>
+                      <View style={styles.serviceImagePlaceholder}>
+                        <Ionicons name="paw" size={32} color="#00BFA6" />
+                      </View>
+                      {selectedServices.includes(service.id) && (
+                        <View style={styles.selectedBadge}>
+                          <Ionicons
+                            name="checkmark-circle"
+                            size={24}
+                            color="#00BFA6"
+                          />
+                        </View>
+                      )}
+                    </View>
+                    <View style={styles.serviceInfo}>
+                      <Text style={styles.serviceName}>{service.name}</Text>
+                      {service.subtitle ? (
+                        <Text style={styles.serviceSubtitle}>
+                          {service.subtitle}
+                        </Text>
+                      ) : null}
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              <TouchableOpacity
+                style={styles.nextButton}
+                onPress={handleNextFromSelection}
+              >
+                <Text style={styles.nextButtonText}>Siguiente</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {/* PASO 1: Calendario y tarifas */}
           {currentStep === 1 && (
             <View style={styles.stepContent}>
-              {/* Tabs de servicios */}
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.tabScrollContainer}
               >
-                {services.map((srv) => (
+                {selectedServices.map((srv) => (
                   <TouchableOpacity
                     key={srv}
                     style={[
@@ -290,10 +495,7 @@ export default function ServiceConfigScreen() {
                       selectedService === srv && styles.tabActive,
                       serviceConfigs[srv] && styles.tabConfigured,
                     ]}
-                    onPress={() => {
-                      setSelectedService(srv);
-                      setCalendarVisible(true);
-                    }}
+                    onPress={() => setSelectedService(srv)}
                   >
                     <Text
                       style={[
@@ -306,7 +508,7 @@ export default function ServiceConfigScreen() {
                     {serviceConfigs[srv] && (
                       <Ionicons
                         name="checkmark-circle"
-                        size={16}
+                        size={14}
                         color="white"
                       />
                     )}
@@ -314,29 +516,126 @@ export default function ServiceConfigScreen() {
                 ))}
               </ScrollView>
 
-              {/* Fondo decorativo */}
-              <View style={styles.placeholderContainer}>
-                <Ionicons name="calendar-outline" size={130} color="#D1D5DB" />
-                <Text style={styles.placeholderText}>
-                  Selecciona un servicio para configurar
-                </Text>
+              {selectedService ? (
+                <View style={styles.calendarContainer}>
+                  <Text style={styles.calendarTitle}>{selectedService}</Text>
+                  <Text style={styles.calendarSubtitle}>
+                    Selecciona las fechas disponibles (puedes arrastrar para
+                    seleccionar varios días)
+                  </Text>
 
-                {Object.keys(serviceConfigs).length > 0 && (
-                  <View style={styles.configuredServicesInfo}>
-                    <Ionicons
-                      name="checkmark-circle"
-                      size={20}
-                      color="#00BFA6"
-                    />
-                    <Text style={styles.configuredServicesText}>
-                      {Object.keys(serviceConfigs).length} servicio(s)
-                      configurado(s)
-                    </Text>
-                  </View>
-                )}
-              </View>
+                  <Calendar
+                    onDayPress={(day) =>
+                      handleDayPress(day.dateString, day.dateString < today)
+                    }
+                    markedDates={{ ...dayPrices, ...selectedDates }}
+                    markingType={"custom"}
+                    minDate={today}
+                    disableAllTouchEventsForDisabledDays={true}
+                    theme={{
+                      textDayFontSize: 16,
+                      todayTextColor: "#00BFA6",
+                      arrowColor: "#00BFA6",
+                      monthTextColor: "#111827",
+                      textMonthFontSize: 18,
+                      textMonthFontWeight: "600",
+                    }}
+                    style={styles.calendar}
+                    dayComponent={({ date, state }) => {
+                      const price =
+                        dayPrices[date?.dateString ?? ""]?.price || "";
+                      const isSelected =
+                        !!selectedDates[date?.dateString ?? ""];
+                      const isDisabled = state === "disabled";
 
-              {/* Botón Siguiente */}
+                      return (
+                        <TouchableOpacity
+                          disabled={isDisabled}
+                          onPressIn={() =>
+                            handleDayPress(date?.dateString ?? "", isDisabled)
+                          }
+                          onPressOut={handleDragEnd}
+                          onLongPress={() =>
+                            handleDayPress(date?.dateString ?? "", isDisabled)
+                          }
+                          delayLongPress={100}
+                          style={[
+                            styles.dayContainer,
+                            isSelected && styles.dayContainerSelected,
+                            isDisabled && styles.dayContainerDisabled,
+                          ]}
+                        >
+                          <Text
+                            style={[
+                              styles.dayText,
+                              isSelected && styles.dayTextSelected,
+                              isDisabled && styles.dayTextDisabled,
+                            ]}
+                          >
+                            {date?.day ?? ""}
+                          </Text>
+                          <Text
+                            style={[
+                              styles.priceText,
+                              isSelected && styles.priceTextSelected,
+                            ]}
+                          >
+                            {price}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    }}
+                  />
+
+                  {Object.keys(selectedDates).length > 0 && (
+                    <TouchableOpacity
+                      style={styles.configureButton}
+                      onPress={() => {
+                        setPrice("");
+                        setDeliveryTime(new Date());
+                        setPickupTime(new Date());
+                        setTimeSlotSchedules([]);
+                        setShowConfigModal(true);
+                      }}
+                    >
+                      <Ionicons
+                        name="settings-outline"
+                        size={20}
+                        color="white"
+                      />
+                      <Text style={styles.configureButtonText}>
+                        Configurar ({Object.keys(selectedDates).length} días)
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              ) : (
+                <View style={styles.placeholderContainer}>
+                  <Ionicons
+                    name="calendar-outline"
+                    size={130}
+                    color="#D1D5DB"
+                  />
+                  <Text style={styles.placeholderText}>
+                    Selecciona un servicio para configurar
+                  </Text>
+
+                  {Object.keys(serviceConfigs).length > 0 && (
+                    <View style={styles.configuredServicesInfo}>
+                      <Ionicons
+                        name="checkmark-circle"
+                        size={20}
+                        color="#00BFA6"
+                      />
+                      <Text style={styles.configuredServicesText}>
+                        {Object.keys(serviceConfigs).length} servicio(s)
+                        configurado(s)
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              )}
+
               <TouchableOpacity
                 style={styles.nextButton}
                 onPress={handleNextStep}
@@ -533,52 +832,14 @@ export default function ServiceConfigScreen() {
                   <Text style={styles.checkboxLabel}>No tengo</Text>
                 </TouchableOpacity>
               </View>
-              <Text style={styles.label}>Eres fumador</Text>
-              <View style={styles.radioGroup}>
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => {
-                    setHasAllergies("Sí");
-                  }}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      hasAllergies === "Sí" && styles.radioCircleSelected,
-                    ]}
-                  >
-                    {hasAllergies === "Sí" && <View style={styles.radioDot} />}
-                  </View>
-                  <Text style={styles.radioLabel}>Sí</Text>
-                </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => {
-                    setHasAllergies("No");
-                    setAllergiesDetail("");
-                  }}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      hasAllergies === "No" && styles.radioCircleSelected,
-                    ]}
-                  >
-                    {hasAllergies === "No" && <View style={styles.radioDot} />}
-                  </View>
-                  <Text style={styles.radioLabel}>No</Text>
-                </TouchableOpacity>
-              </View>
               <Text style={styles.label}>
                 ¿Tienes alergias a algún tipo de mascota?
               </Text>
               <View style={styles.radioGroup}>
                 <TouchableOpacity
                   style={styles.radioOption}
-                  onPress={() => {
-                    setHasAllergies("Sí");
-                  }}
+                  onPress={() => setHasAllergies("Sí")}
                 >
                   <View
                     style={[
@@ -811,7 +1072,6 @@ export default function ServiceConfigScreen() {
                 </>
               )}
 
-              {/* Botones de navegación paso 2 */}
               <View style={styles.navigationButtons}>
                 <TouchableOpacity
                   style={styles.backStepButton}
@@ -832,12 +1092,12 @@ export default function ServiceConfigScreen() {
         </View>
       </ScrollView>
 
-      {/* Modal del calendario (solo para configurar servicios) */}
+      {/* Modal de configuración */}
       <Modal
-        visible={calendarVisible}
+        visible={showConfigModal}
         animationType="slide"
         transparent={true}
-        onRequestClose={() => setCalendarVisible(false)}
+        onRequestClose={() => setShowConfigModal(false)}
       >
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -849,75 +1109,187 @@ export default function ServiceConfigScreen() {
               keyboardShouldPersistTaps="handled"
             >
               <View style={styles.modalHeader}>
-                <Text style={styles.modalTitle}>{selectedService}</Text>
-                <Text style={styles.modalSubtitle}>
-                  Selecciona las fechas disponibles
+                <Text style={styles.modalTitle}>
+                  Configuración de {selectedService}
+                </Text>
+                <Text style={styles.modalSubtitleText}>
+                  {Object.keys(selectedDates).length} día(s) seleccionado(s)
                 </Text>
               </View>
 
-              <Calendar
-                onDayPress={(day) => toggleDateSelection(day.dateString)}
-                markedDates={{ ...dayPrices, ...selectedDates }}
-                markingType={"custom"}
-                minDate={today}
-                disableAllTouchEventsForDisabledDays={true}
-                theme={{
-                  textDayFontSize: 14,
-                  todayTextColor: "#00BFA6",
-                  arrowColor: "#00BFA6",
-                }}
-                dayComponent={({ date, state }) => {
-                  const price = dayPrices[date?.dateString ?? ""]?.price || "";
-                  const isSelected = !!selectedDates[date?.dateString ?? ""];
-                  const isDisabled = state === "disabled";
-                  return (
-                    <TouchableOpacity
-                      disabled={isDisabled}
-                      onPress={() =>
-                        toggleDateSelection(date?.dateString ?? "")
-                      }
-                      style={[
-                        styles.dayContainer,
-                        isSelected && { backgroundColor: "#00BFA6" },
-                        isDisabled && { opacity: 0.3 },
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.dayText,
-                          isSelected && { color: "white" },
-                        ]}
-                      >
-                        {date?.day ?? ""}
-                      </Text>
-                      <Text
-                        style={[
-                          styles.priceText,
-                          isSelected && { color: "white" },
-                        ]}
-                      >
-                        {price}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                }}
-              />
-
-              {Object.keys(selectedDates).length > 0 && (
+              {getCurrentServiceType() === "time-slot" ? (
+                // Configuración para Paseos y Baño
                 <View style={styles.formContainer}>
-                  <View style={styles.selectedDatesInfo}>
-                    <Ionicons
-                      name="checkmark-circle"
-                      size={20}
-                      color="#00BFA6"
-                    />
-                    <Text style={styles.selectedDatesText}>
-                      {Object.keys(selectedDates).length} día(s) seleccionado(s)
-                    </Text>
+                  <Text style={styles.infoText}>
+                    Por favor defina la franja horaria:
+                  </Text>
+
+                  <View style={styles.radioGroupCentered}>
+                    {timeSlots.map((slot) => (
+                      <TouchableOpacity
+                        key={slot}
+                        style={styles.radioOptionCentered}
+                        onPress={() => setSelectedTimeSlot(slot)}
+                      >
+                        <View
+                          style={[
+                            styles.radioCircle,
+                            selectedTimeSlot === slot &&
+                              styles.radioCircleSelected,
+                          ]}
+                        >
+                          {selectedTimeSlot === slot && (
+                            <View style={styles.radioDot} />
+                          )}
+                        </View>
+                        <Text style={styles.radioLabel}>{slot}</Text>
+                      </TouchableOpacity>
+                    ))}
                   </View>
 
-                  <Text style={styles.sectionTitle}>Configuración</Text>
+                  <View style={styles.timeRowCentered}>
+                    <View style={styles.timeInputGroup}>
+                      <Text style={styles.timeLabel}>Hora inicio:</Text>
+                      <TouchableOpacity
+                        style={styles.timePickerButtonLarge}
+                        onPress={() => setShowStartTimePicker(true)}
+                      >
+                        <Text style={styles.timePickerTextLarge}>
+                          {formatTime(startTime).split(" ")[0]}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
 
+                    <View style={styles.timeInputGroup}>
+                      <Text style={styles.timeLabel}>Hora Fin:</Text>
+                      <TouchableOpacity
+                        style={styles.timePickerButtonLarge}
+                        onPress={() => setShowEndTimePicker(true)}
+                      >
+                        <Text style={styles.timePickerTextLarge}>
+                          {formatTime(endTime).split(" ")[0]}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+
+                  {showStartTimePicker && (
+                    <DateTimePicker
+                      value={startTime}
+                      mode="time"
+                      is24Hour={false}
+                      display={Platform.OS === "ios" ? "spinner" : "default"}
+                      onChange={(event, selectedDate) => {
+                        setShowStartTimePicker(Platform.OS === "ios");
+                        if (selectedDate) {
+                          setStartTime(selectedDate);
+                        }
+                      }}
+                    />
+                  )}
+
+                  {showEndTimePicker && (
+                    <DateTimePicker
+                      value={endTime}
+                      mode="time"
+                      is24Hour={false}
+                      display={Platform.OS === "ios" ? "spinner" : "default"}
+                      onChange={(event, selectedDate) => {
+                        setShowEndTimePicker(Platform.OS === "ios");
+                        if (selectedDate) {
+                          setEndTime(selectedDate);
+                        }
+                      }}
+                    />
+                  )}
+
+                  <View style={styles.priceSection}>
+                    <View style={styles.priceTitleRow}>
+                      <Text style={styles.priceTitle}>
+                        Precio base en Dólares
+                      </Text>
+                      <Ionicons
+                        name="information-circle-outline"
+                        size={20}
+                        color="#EF4444"
+                      />
+                    </View>
+                    <View style={styles.priceDisplayContainer}>
+                      <TextInput
+                        style={styles.priceDisplayInput}
+                        keyboardType="numeric"
+                        value={basePrice}
+                        onChangeText={setBasePrice}
+                        placeholder="40"
+                        placeholderTextColor="#D1D5DB"
+                      />
+                      <Text style={styles.priceCurrencyLarge}>$</Text>
+                    </View>
+                  </View>
+
+                  <TouchableOpacity
+                    style={styles.addTimeSlotButton}
+                    onPress={handleAddTimeSlot}
+                  >
+                    <Text style={styles.addTimeSlotButtonText}>
+                      Guardar franja
+                    </Text>
+                  </TouchableOpacity>
+
+                  {/* Lista de franjas guardadas */}
+                  {timeSlotSchedules.length > 0 && (
+                    <View style={styles.savedSchedulesContainer}>
+                      <View style={styles.savedSchedulesHeader}>
+                        <Text style={styles.savedSchedulesDate}>
+                          Octubre 22 a Octubre 31
+                        </Text>
+                        <Text style={styles.savedSchedulesDays}>
+                          {Object.keys(selectedDates).length} día(s)
+                          disponible(s)
+                        </Text>
+                      </View>
+
+                      <View style={styles.scheduleTable}>
+                        <View style={styles.scheduleTableHeader}>
+                          <Text style={styles.tableHeaderText}>Horario</Text>
+                          <Text style={styles.tableHeaderText}>Tarifa</Text>
+                          <Text style={styles.tableHeaderText}>Eliminar</Text>
+                        </View>
+
+                        {timeSlotSchedules.map((schedule, index) => (
+                          <View key={index} style={styles.scheduleTableRow}>
+                            <Text style={styles.scheduleTimeText}>
+                              {schedule.startTime} - {schedule.endTime}
+                            </Text>
+                            <Text style={styles.schedulePriceText}>
+                              {schedule.price} $
+                            </Text>
+                            <TouchableOpacity
+                              onPress={() => handleRemoveTimeSlot(index)}
+                              style={styles.deleteIconButton}
+                            >
+                              <Ionicons
+                                name="close"
+                                size={20}
+                                color="#EF4444"
+                              />
+                            </TouchableOpacity>
+                          </View>
+                        ))}
+                      </View>
+                    </View>
+                  )}
+
+                  <TouchableOpacity
+                    style={styles.saveButton}
+                    onPress={handleSaveCalendarConfig}
+                  >
+                    <Text style={styles.saveButtonText}>Guardar cambios</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                // Configuración para Alojamiento, Guardería y Cuidado
+                <View style={styles.formContainer}>
                   <Text style={styles.label}>Precio (CAD)</Text>
                   <TextInput
                     style={styles.input}
@@ -984,7 +1356,6 @@ export default function ServiceConfigScreen() {
                     style={styles.saveButton}
                     onPress={handleSaveCalendarConfig}
                   >
-                    <Ionicons name="save-outline" size={20} color="white" />
                     <Text style={styles.saveButtonText}>Guardar cambios</Text>
                   </TouchableOpacity>
                 </View>
@@ -992,9 +1363,13 @@ export default function ServiceConfigScreen() {
 
               <TouchableOpacity
                 style={styles.closeButton}
-                onPress={() => CloseCalendar()}
+                onPress={() => {
+                  setShowConfigModal(false);
+                  setPrice("");
+                  setTimeSlotSchedules([]);
+                }}
               >
-                <Text style={styles.closeButtonText}>Cerrar</Text>
+                <Text style={styles.closeButtonText}>Cancelar</Text>
               </TouchableOpacity>
             </ScrollView>
           </View>
@@ -1052,7 +1427,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   progressStep: {
-    fontSize: 11,
+    fontSize: 9,
     color: "#9CA3AF",
     flex: 1,
     textAlign: "center",
@@ -1062,7 +1437,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   progressText: {
-    fontSize: 11,
+    fontSize: 10,
     color: "#9CA3AF",
     textAlign: "center",
     marginBottom: 8,
@@ -1081,24 +1456,84 @@ const styles = StyleSheet.create({
   stepContent: {
     flex: 1,
   },
-  tabScrollContainer: {
+  stepSubtitle: {
+    fontSize: 14,
+    color: "#6B7280",
+    textAlign: "center",
+    marginBottom: 24,
+    paddingHorizontal: 10,
+  },
+  servicesGrid: {
+    gap: 16,
+    marginBottom: 24,
+  },
+  serviceCard: {
+    backgroundColor: "white",
+    borderRadius: 12,
+    padding: 12,
     flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#E5E7EB",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  serviceCardSelected: {
+    borderColor: "#00BFA6",
+    backgroundColor: "#ECFDF5",
+  },
+  serviceImageContainer: {
+    position: "relative",
+    marginRight: 12,
+  },
+  serviceImagePlaceholder: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: "#F3F4F6",
     justifyContent: "center",
     alignItems: "center",
-    gap: 12,
+  },
+  selectedBadge: {
+    position: "absolute",
+    top: -4,
+    right: -4,
+    backgroundColor: "white",
+    borderRadius: 12,
+  },
+  serviceInfo: {
+    flex: 1,
+  },
+  serviceName: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "#111827",
+    marginBottom: 2,
+  },
+  serviceSubtitle: {
+    fontSize: 12,
+    color: "#6B7280",
+  },
+  tabScrollContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
     backgroundColor: "#E5E7EB",
     borderRadius: 12,
-    paddingHorizontal: 10,
+    paddingHorizontal: 8,
     paddingVertical: 8,
     marginBottom: 20,
   },
   tab: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 12,
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
+    gap: 4,
   },
   tabActive: {
     backgroundColor: "#00BFA6",
@@ -1109,9 +1544,32 @@ const styles = StyleSheet.create({
   tabText: {
     color: "#4B5563",
     fontWeight: "600",
+    fontSize: 11,
   },
   tabTextActive: {
     color: "white",
+  },
+  calendarContainer: {
+    backgroundColor: "white",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
+  },
+  calendarTitle: {
+    textAlign: "center",
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#111827",
+    marginBottom: 4,
+  },
+  calendarSubtitle: {
+    textAlign: "center",
+    fontSize: 12,
+    color: "#6B7280",
+    marginBottom: 16,
+  },
+  calendar: {
+    borderRadius: 8,
   },
   placeholderContainer: {
     alignItems: "center",
@@ -1154,6 +1612,26 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
   },
+  configureButton: {
+    backgroundColor: "#00BFA6",
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: "center",
+    marginTop: 16,
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 8,
+    shadowColor: "#00BFA6",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  configureButtonText: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: 14,
+  },
   profileBanner: {
     backgroundColor: "#FFB6C1",
     padding: 16,
@@ -1189,6 +1667,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 16,
     marginBottom: 8,
+    flexWrap: "wrap",
   },
   radioOption: {
     flexDirection: "row",
@@ -1243,6 +1722,14 @@ const styles = StyleSheet.create({
     color: "#4B5563",
     flex: 1,
   },
+  input: {
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 8,
+    padding: 12,
+    backgroundColor: "#F9FAFB",
+    fontSize: 15,
+  },
   navigationButtons: {
     flexDirection: "row",
     gap: 12,
@@ -1277,64 +1764,9 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
   },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContent: {
-    backgroundColor: "white",
-    borderRadius: 16,
-    width: "90%",
-    maxHeight: "90%",
-    padding: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  modalHeader: {
-    marginBottom: 16,
-  },
-  modalTitle: {
-    textAlign: "center",
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#111827",
-  },
-  modalSubtitle: {
-    textAlign: "center",
-    fontSize: 13,
-    color: "#6B7280",
-    marginTop: 4,
-  },
   formContainer: {
-    marginTop: 16,
+    marginTop: 8,
     paddingBottom: 8,
-  },
-  selectedDatesInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#ECFDF5",
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 16,
-    gap: 8,
-  },
-  selectedDatesText: {
-    fontSize: 14,
-    color: "#065F46",
-    fontWeight: "600",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#D1D5DB",
-    borderRadius: 8,
-    padding: 12,
-    backgroundColor: "#F9FAFB",
-    fontSize: 15,
   },
   timePickerButton: {
     flexDirection: "row",
@@ -1371,29 +1803,247 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
   },
-  closeButton: {
-    marginTop: 16,
-    alignSelf: "center",
-    paddingVertical: 8,
-  },
-  closeButtonText: {
-    color: "#6B7280",
-    fontSize: 15,
-  },
   dayContainer: {
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 8,
-    paddingVertical: 6,
-    width: 44,
-    height: 44,
+    paddingVertical: 8,
+    width: 50,
+    height: 50,
+    margin: 2,
+  },
+  dayContainerSelected: {
+    backgroundColor: "#00BFA6",
+  },
+  dayContainerDisabled: {
+    opacity: 0.3,
   },
   dayText: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "600",
+    color: "#111827",
+  },
+  dayTextSelected: {
+    color: "white",
+  },
+  dayTextDisabled: {
+    color: "#9CA3AF",
   },
   priceText: {
     fontSize: 10,
     color: "#6B7280",
+    marginTop: 2,
+  },
+  priceTextSelected: {
+    color: "white",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "flex-end",
+  },
+  modalContent: {
+    backgroundColor: "#FFF",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 24,
+    maxHeight: "90%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalHeader: {
+    marginBottom: 20,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E7EB",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#111827",
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  modalSubtitleText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#6B7280",
+    textAlign: "center",
+  },
+  closeButton: {
+    marginTop: 16,
+    alignSelf: "center",
+    paddingVertical: 12,
+  },
+  closeButtonText: {
+    color: "#6B7280",
+    fontSize: 15,
+    fontWeight: "600",
+  },
+  infoText: {
+    fontSize: 13,
+    color: "#1A1A1A",
+    textAlign: "center",
+    marginBottom: 16,
+    fontWeight: "500",
+  },
+  radioGroupCentered: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 24,
+    marginBottom: 24,
+  },
+  radioOptionCentered: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  timeRowCentered: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    gap: 20,
+    marginBottom: 24,
+  },
+  timeInputGroup: {
+    flex: 1,
+    alignItems: "center",
+  },
+  timeLabel: {
+    fontSize: 13,
+    color: "#1A1A1A",
+    marginBottom: 8,
+    fontWeight: "500",
+  },
+  timePickerButtonLarge: {
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    minWidth: 100,
+    alignItems: "center",
+  },
+  timePickerTextLarge: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#1A1A1A",
+  },
+  priceSection: {
+    alignItems: "center",
+    marginBottom: 24,
+  },
+  priceTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 12,
+  },
+  priceTitle: {
+    fontSize: 14,
+    color: "#1A1A1A",
+    fontWeight: "500",
+  },
+  priceDisplayContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  priceDisplayInput: {
+    fontSize: 48,
+    fontWeight: "300",
+    color: "#D1D5DB",
+    textAlign: "right",
+    minWidth: 100,
+  },
+  priceCurrencyLarge: {
+    fontSize: 48,
+    fontWeight: "300",
+    color: "#D1D5DB",
+  },
+  addTimeSlotButton: {
+    backgroundColor: "#00D4BA",
+    paddingVertical: 14,
+    borderRadius: 25,
+    alignItems: "center",
+    marginBottom: 24,
+  },
+  addTimeSlotButtonText: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: 15,
+  },
+  savedSchedulesContainer: {
+    backgroundColor: "white",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+  },
+  savedSchedulesHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 16,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E7EB",
+  },
+  savedSchedulesDate: {
+    fontSize: 13,
+    color: "#1A1A1A",
+    fontWeight: "500",
+  },
+  savedSchedulesDays: {
+    fontSize: 13,
+    color: "#6B7280",
+  },
+  scheduleTable: {
+    gap: 8,
+  },
+  scheduleTableHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E7EB",
+  },
+  tableHeaderText: {
+    flex: 1,
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#6B7280",
+    textAlign: "center",
+  },
+  scheduleTableRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F3F4F6",
+  },
+  scheduleTimeText: {
+    flex: 1,
+    fontSize: 13,
+    color: "#1A1A1A",
+    textAlign: "center",
+  },
+  schedulePriceText: {
+    flex: 1,
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#1A1A1A",
+    textAlign: "center",
+  },
+  deleteIconButton: {
+    flex: 1,
+    alignItems: "center",
   },
 });

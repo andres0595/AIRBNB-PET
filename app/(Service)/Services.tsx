@@ -15,6 +15,7 @@ import alojamientoMascotas from "../../assets/Icons/svg-servicios/Alojamiento.pn
 import Banio from "../../assets/Icons/svg-servicios/Banio.png";
 import Cuidado from "../../assets/Icons/svg-servicios/Cuidado.png";
 import Guarderia from "../../assets/Icons/svg-servicios/Guarderia.png";
+import Paseos from "../../assets/Icons/svg-servicios/Paseos.png";
 import { ServicesStyles } from "../Styles/components/Services/ServiceStyles";
 
 interface Service {
@@ -53,7 +54,7 @@ const services: Service[] = [
   },
   {
     id: "4",
-    icon: alojamientoMascotas,
+    icon: Paseos,
     title: "Paseos en el barrio",
     description: "Paseos seguros y divertidos",
     price: "Promedio $3000 / noche",
@@ -248,37 +249,62 @@ const ServiceSelectionScreen = () => {
 
         {/* Grid de servicios */}
         <View style={ServicesStyles.servicesGrid}>
-          {services.map((service) => (
-            <TouchableOpacity
-              key={service.id}
-              style={[
-                ServicesStyles.serviceCard,
-                selectedServices.includes(service.id) &&
-                  ServicesStyles.serviceCardSelected,
-              ]}
-              onPress={() => toggleService(service.id)}
-              activeOpacity={0.7}
-            >
-              {/* Icono */}
-              <View style={ServicesStyles.iconContainer}>
-                {service.isPng ? (
-                  <Image
-                    source={service.icon}
-                    style={{ width: 60, height: 60 }}
-                    resizeMode="contain"
-                  />
-                ) : (
-                  <service.icon width={60} height={60} />
-                )}
-              </View>
+          {services.map((service, index) => {
+            const isLastAndOdd =
+              index === services.length - 1 && services.length % 2 !== 0;
 
-              {/* Textos */}
-              <Text style={ServicesStyles.serviceTitle}>{service.title}</Text>
-              <Text style={ServicesStyles.serviceDescription}>
-                {service.description}
-              </Text>
-            </TouchableOpacity>
-          ))}
+            return (
+              <TouchableOpacity
+                key={service.id}
+                style={[
+                  ServicesStyles.serviceCard,
+                  isLastAndOdd && ServicesStyles.serviceCardFull,
+                ]}
+                onPress={() => toggleService(service.id)}
+                activeOpacity={0.7}
+              >
+                {/* Icono */}
+                <View
+                  style={[
+                    ServicesStyles.iconContainer,
+                    isLastAndOdd && ServicesStyles.serviceCardFullIcon,
+                  ]}
+                >
+                  {service.isPng ? (
+                    <Image
+                      source={service.icon}
+                      style={{ width: 80, height: 80 }}
+                      resizeMode="contain"
+                    />
+                  ) : (
+                    <service.icon width={60} height={60} />
+                  )}
+                </View>
+
+                {/* Textos - Envueltos en un View cuando es full */}
+                <View
+                  style={isLastAndOdd && ServicesStyles.serviceCardFullContent}
+                >
+                  <Text
+                    style={[
+                      ServicesStyles.serviceTitle,
+                      isLastAndOdd && ServicesStyles.serviceCardFullTitle,
+                    ]}
+                  >
+                    {service.title}
+                  </Text>
+                  <Text
+                    style={[
+                      ServicesStyles.serviceDescription,
+                      isLastAndOdd && ServicesStyles.serviceCardFullDescription,
+                    ]}
+                  >
+                    {service.description}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
         </View>
 
         {/* Link de ayuda */}

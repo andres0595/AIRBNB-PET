@@ -73,6 +73,7 @@ const ApprovalStepsScreen = () => {
   const [modalFinalVisible, setModalFinalVisible] = useState(false);
   const [welcomeModalVisible, setWelcomeModalVisible] = useState(false);
   const [showFirstContent, setShowFirstContent] = useState(true);
+  const [modalComprobanteVisible, setModalComprobante] = useState(false);
   const dispatch = useDispatch();
   // Estados para los porcentajes de cada formulario
   const [formProgress, setFormProgress] = useState({
@@ -109,8 +110,14 @@ const ApprovalStepsScreen = () => {
     }
   };
 
-  const handlerData = () => {
-    setModalVisible(true);
+  const handlerData = (paso: number) => () => {
+    if (paso == 1) {
+      setModalVisible(true);
+    } else {
+      setModalComprobante(true);
+    }
+    // Usa 'paso' aquí si lo necesitas
+    console.log("Paso:", paso);
   };
 
   const handlerProfile = () => {
@@ -408,7 +415,7 @@ const ApprovalStepsScreen = () => {
             nosotros!
           </Text>
 
-          <TouchableOpacity style={styles.linkButton} onPress={handlerData}>
+          <TouchableOpacity style={styles.linkButton} onPress={handlerData(1)}>
             <Text style={styles.linkText}>
               ¿Qué documentos puedes utilizar para el background check?
             </Text>
@@ -420,6 +427,12 @@ const ApprovalStepsScreen = () => {
           >
             <Text style={styles.backgroundCheckButtonText}>
               Background Check
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.linkButton} onPress={handlerData(2)}>
+            <Text style={styles.linkText2}>
+              ¿Ya cuentas con un comprobante background Check?
             </Text>
           </TouchableOpacity>
         </View>
@@ -619,26 +632,28 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   children,
 }) => {
   return (
-    <View style={styles.accordionWrapper}>
-      <TouchableOpacity
-        style={styles.accordionHeader}
-        onPress={onToggle}
-        activeOpacity={0.8}
-      >
-        <View style={styles.accordionLeft}>
+    <View style={styles.accordionContainer}>
+      <View style={styles.accordionWrapper}>
+        <TouchableOpacity
+          style={styles.accordionHeader}
+          onPress={onToggle}
+          activeOpacity={0.8}
+        >
           <Text style={styles.accordionTitle}>{title}</Text>
           <Ionicons
             name={isExpanded ? "chevron-up" : "chevron-down"}
             size={24}
             color="#333"
           />
-        </View>
-        <View style={styles.percentageCircle}>
-          <Text style={styles.percentageText}>{percentage}</Text>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
 
-      {isExpanded && <View style={styles.accordionContent}>{children}</View>}
+        {isExpanded && <View style={styles.accordionContent}>{children}</View>}
+      </View>
+
+      {/* Círculo de porcentaje posicionado absolutamente */}
+      <View style={styles.percentageCircle}>
+        <Text style={styles.percentageText}>{percentage}</Text>
+      </View>
     </View>
   );
 };
@@ -849,8 +864,9 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   accordionContainer: {
-    gap: 12,
-    paddingBottom: 20,
+    position: "relative",
+    marginBottom: 35,
+    paddingRight: 20,
   },
   accordionWrapper: {
     backgroundColor: "#FFF",
@@ -868,31 +884,35 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  accordionLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    flex: 1,
-  },
   accordionTitle: {
     fontSize: 15,
     color: "#1A1A1A",
     fontWeight: "500",
     flex: 1,
+    paddingRight: 12,
   },
   percentageCircle: {
+    position: "absolute",
+    right: -35, // Fuera de la card
+    top: 0, // Fijo desde arriba
     width: 50,
     height: 50,
     borderRadius: 25,
     borderWidth: 3,
     borderColor: "#FFE5E5",
+    backgroundColor: "#FFF",
     justifyContent: "center",
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   percentageText: {
     fontSize: 12,
     fontWeight: "600",
-    color: "#FF3B30",
+    color: "#000",
   },
   accordionContent: {
     paddingHorizontal: 16,
@@ -955,15 +975,23 @@ const styles = StyleSheet.create({
     color: "#333",
     textDecorationLine: "underline",
   },
+
+  linkText2: {
+    fontSize: 16,
+    color: "#333",
+    textDecorationLine: "underline",
+    textAlign: "center",
+    fontWeight: 700,
+  },
   backgroundCheckButton: {
-    backgroundColor: "#FFE5E5",
+    backgroundColor: "#f6c3cc",
     borderRadius: 28,
     paddingVertical: 16,
     alignItems: "center",
     marginTop: 12,
   },
   backgroundCheckButtonText: {
-    color: "#FF3B30",
+    color: "#000",
     fontSize: 16,
     fontWeight: "700",
   },
@@ -1082,10 +1110,10 @@ const styles = StyleSheet.create({
     color: "#000",
   },
 
-  iconContainer: {
-    alignItems: "center",
-    marginBottom: 16,
-  },
+  // iconContainer: {
+  //   alignItems: "center",
+  //   marginBottom: 16,
+  // },
   alertIcon: {
     width: 56,
     height: 56,

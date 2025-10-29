@@ -25,7 +25,14 @@ export default function ChangePassword() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const { showToast, ToastComponent } = useModalToast();
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisibleAlert, setModalVisibleAlert] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    title: "",
+    message: "",
+    iconName: null as keyof typeof Ionicons.glyphMap | null,
+    iconColor: "#00D9C5",
+    onPress: undefined as (() => void) | undefined,
+  });
 
   const googleAuth = useGoogleAuth(async (token: string) => {
     const data = await login("google", token);
@@ -47,17 +54,33 @@ export default function ChangePassword() {
 
   const handleChange = async () => {
     if (!email) {
-      showToast.info("Faltan datos", "Por favor digita tu correo");
+      showInfoModal(
+        "Por favor digita tu correo",
+        "information-circle",
+        "Faltan datos"
+      );
       return;
     }
     if (!validateEmail(email)) {
-      showToast.error("Correo inválido", "Por favor ingresa un correo válido");
+      showInfoModal(
+        "Por favor ingresa un correo válido",
+        "alert-circle",
+        "Correo inválido"
+      );
       return;
     }
 
     setLoading(true);
     try {
-      setModalVisible(true);
+      // setModalVisible(true);
+      showInfoModal(
+        `Te hemos enviado instrucciones para restablecer la contraseña, al correo ${maskEmail(
+          email
+        )} que se encuentra asociado a tu cuenta.`,
+        "",
+        "Restablecer contraseña",
+        true
+      );
       // await GenetateOtp(email);
       //router.replace("/(Login)/ValidateOtp");
     } catch (error: any) {
@@ -88,8 +111,26 @@ export default function ChangePassword() {
 
   const callFormOtp = async () => {
     setEmail("");
-    setModalVisible(false);
     router.replace("/(Login)/ValidateOtp");
+  };
+
+  const showInfoModal = (
+    message: string,
+    icon: any,
+    titulo: string,
+    shouldCall: boolean = false
+  ) => {
+    setModalConfig({
+      title: titulo,
+      message: message,
+      iconName: icon,
+      iconColor: "#00D9C5",
+      onPress: () => {
+        setModalVisibleAlert(false);
+        if (shouldCall) callFormOtp();
+      },
+    });
+    setModalVisibleAlert(true);
   };
 
   return (
@@ -187,20 +228,20 @@ export default function ChangePassword() {
           </View>
         </View>
       </ScrollView>
-
       <CustomModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        title="Restablecer contraseña"
+        visible={modalVisibleAlert}
+        onClose={() => setModalVisibleAlert(false)}
+        title={modalConfig.title}
+        iconName={
+          modalConfig.iconName as keyof typeof Ionicons.glyphMap | undefined
+        }
+        iconColor={modalConfig.iconColor}
         primaryButton={{
-          text: "Ok",
-          onPress: () => callFormOtp(),
+          text: "Entendido",
+          onPress: modalConfig.onPress || (() => setModalVisibleAlert(false)),
         }}
       >
-        <Text style={changeStyles.questionAnswer}>
-          Te hemos enviado instrucciones para restablecer la contraseña, al
-          correo {maskEmail(email)} que se encuentra asociado a tu cuenta.
-        </Text>
+        <Text style={changeStyles.questionAnswer}>{modalConfig.message}</Text>
       </CustomModal>
     </AuthLayout>
   );

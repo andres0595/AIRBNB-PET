@@ -57,6 +57,16 @@ export const loginStyles = StyleSheet.create({
     marginLeft: 10,
   },
 
+  textModal: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#333",
+    marginBottom: 8,
+    marginTop: 16,
+    marginLeft: 10,
+    textAlign: "center",
+  },
+
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",

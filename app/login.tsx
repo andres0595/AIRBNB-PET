@@ -1,4 +1,5 @@
 import { useGoogleAuth } from "@/hooks/useSocialAuth";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -12,6 +13,7 @@ import LlaveIcon from "../assets/Icons/Llave.svg";
 import PuppySvg from "../assets/Icons/PuppySvg.svg";
 import AuthLayout from "../components/AuthLayout";
 import { useModalToast } from "../components/ModalToast";
+import CustomModal from "./(CustomModal)/CustomModal";
 import { setCredentials } from "./(Store)/authSlice";
 import { login, loginGoogle } from "./Service/Service-Login/authService";
 import { loginStyles } from "./Styles/components/Login/loginStyles";
@@ -24,6 +26,13 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { showToast, ToastComponent } = useModalToast();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    title: "",
+    message: "",
+    iconName: null as keyof typeof Ionicons.glyphMap | null,
+    iconColor: "#00D9C5",
+  });
 
   const validateEmail = (email: string) => {
     if (!email) return false;
@@ -33,13 +42,32 @@ export default function Login() {
     return emailRegex.test(emailTrimmed);
   };
 
+  const showInfoModal = (message: string, icon: any, titulo: string) => {
+    setModalConfig({
+      title: titulo,
+      message: message,
+      iconName: icon,
+      iconColor: "#00D9C5",
+    });
+    setModalVisible(true);
+  };
+
   const handleLogin = async () => {
     if (!email || !password) {
-      showToast.info("Faltan datos", "Ingresa correo y contraseña");
+      //showToast.info("Faltan datos", "Ingresa correo y contraseña");
+      showInfoModal(
+        "Ingresa correo y contraseña",
+        "information-circle",
+        "Faltan datos"
+      );
       return;
     }
     if (!validateEmail(email)) {
-      showToast.error("Correo inválido", "Ingresa un correo válido");
+      showInfoModal(
+        "Por favor ingresa un correo válido",
+        "alert-circle",
+        "Correo inválido"
+      );
       return;
     }
 
@@ -176,6 +204,22 @@ export default function Login() {
           </TouchableOpacity>
         </View>
       </View>
+
+      <CustomModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        title={modalConfig.title}
+        iconName={
+          modalConfig.iconName as keyof typeof Ionicons.glyphMap | undefined
+        }
+        iconColor={modalConfig.iconColor}
+        primaryButton={{
+          text: "Entendido",
+          onPress: () => setModalVisible(false),
+        }}
+      >
+        <Text style={loginStyles.textModal}>{modalConfig.message}</Text>
+      </CustomModal>
     </AuthLayout>
   );
 }

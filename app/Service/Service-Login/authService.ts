@@ -35,10 +35,9 @@ export async function GenetateOtp(email: string): Promise<any> {
   return response.json();
 }
 
-
 export async function ChangePassword(
   otp: number,
-  email:string,
+  email: string,
   newPassword: string
 ): Promise<LoginResponse> {
   try {
@@ -47,7 +46,7 @@ export async function ChangePassword(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ otp, email,newPassword }),
+      body: JSON.stringify({ otp, email, newPassword }),
     });
 
     if (!response.ok) {
@@ -59,7 +58,6 @@ export async function ChangePassword(
     throw error;
   }
 }
-
 
 export async function loginGoogle(token: string): Promise<LoginResponse> {
   try {

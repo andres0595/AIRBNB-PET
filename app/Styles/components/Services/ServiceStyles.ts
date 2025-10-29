@@ -57,22 +57,22 @@ export const ServicesStyles = StyleSheet.create({
   },
   serviceCard: {
     width: "47%",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#f8f8f8",
     borderRadius: 20,
     padding: 16,
     paddingTop: 20,
     alignItems: "center",
     position: "relative",
-    borderWidth: 2,
+    borderWidth: 0.5,
     borderColor: "#E8E8E8",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    // shadowColor: "#000",
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.05,
+    // shadowRadius: 8,
+    //elevation: 2,
   },
   serviceCardSelected: {
     backgroundColor: "#F0FFFE",
@@ -99,14 +99,14 @@ export const ServicesStyles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   iconContainer: {
-    width: 68,
-    height: 68,
+    width: 80,
+    height: 60,
     borderRadius: 34,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 12,
-    borderWidth: 2.5,
-    borderColor: "#00D9C5",
+    //borderWidth: 2.5,
+    // borderColor: "#00D9C5",
   },
   serviceTitle: {
     fontSize: 14,
@@ -454,5 +454,38 @@ export const ServicesStyles = StyleSheet.create({
     color: "#333",
     fontSize: 16,
     fontWeight: "600",
+  },
+  // serviceCardFull: {
+  //   width: "100%", // Mantiene el mismo ancho que las demás
+  //   marginRight: "auto", // Alinea a la izquierda
+  //   alignItems: "flex-start",
+  // },
+
+  serviceCardFull: {
+    width: "100%",
+    flexDirection: "row", // Layout horizontal
+    alignItems: "center",
+    justifyContent: "flex-start",
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+  },
+
+  serviceCardFullIcon: {
+    marginBottom: 0, // Quita el margen inferior
+    marginRight: 16, // Espacio entre imagen y textos
+  },
+
+  serviceCardFullContent: {
+    flex: 1,
+    alignItems: "flex-start", // Textos alineados a la izquierda
+  },
+
+  serviceCardFullTitle: {
+    textAlign: "left",
+    marginBottom: 4,
+  },
+
+  serviceCardFullDescription: {
+    textAlign: "left",
   },
 });

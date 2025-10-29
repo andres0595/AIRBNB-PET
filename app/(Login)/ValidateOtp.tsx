@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useMemo, useRef, useState } from "react";
 import Toast from "react-native-toast-message";
+import CustomModal from "../(CustomModal)/CustomModal";
 import FacebookIcon from "../../assets/Icons/Facebook.svg";
 import GoogleIcon from "../../assets/Icons/google.svg";
 import IOSIconfrom from "../../assets/Icons/IOS.svg";
@@ -24,6 +25,14 @@ export default function ValidateOtp() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const inputRefs = useRef<(TextInput | null)[]>([]);
+  const [modalVisibleAlert, setModalVisibleAlert] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    title: "",
+    message: "",
+    iconName: null as keyof typeof Ionicons.glyphMap | null,
+    iconColor: "#00D9C5",
+    onPress: undefined as (() => void) | undefined,
+  });
 
   const googleAuth = useGoogleAuth(async (token: string) => {
     const data = await login("google", token);
@@ -57,6 +66,24 @@ export default function ValidateOtp() {
     }
   };
 
+  const showInfoModal = (
+    message: string,
+    icon: any,
+    titulo: string,
+    shouldCall: boolean = false
+  ) => {
+    setModalConfig({
+      title: titulo,
+      message: message,
+      iconName: icon,
+      iconColor: "#00D9C5",
+      onPress: () => {
+        setModalVisibleAlert(false);
+      },
+    });
+    setModalVisibleAlert(true);
+  };
+
   const handleVerify = async () => {
     const otpCode = otp.join("");
     if (otpCode.length !== 6) {
@@ -73,14 +100,15 @@ export default function ValidateOtp() {
       console.log("Código OTP:", otpCode);
       // Aquí va tu lógica de verificación
       // await verifyOTP(otpCode);
+      setOtp(["", "", "", "", "", ""]);
       router.push("/(Login)/ConfirmChange");
     } catch (error) {
       console.error("Error al verificar:", error);
-      Toast.show({
-        type: "error",
-        text1: "Error al verificar",
-        text2: "Por favor verifica tu conexión a internet",
-      });
+      showInfoModal(
+        "Por favor verifica tu conexión a internet",
+        "close-circle",
+        "Error al verificar"
+      );
     } finally {
       setLoading(false);
     }
@@ -90,13 +118,12 @@ export default function ValidateOtp() {
     console.log("Reenviar código");
     setOtp(["", "", "", "", "", ""]);
     inputRefs.current[0]?.focus();
-    Toast.show({
-      type: "success",
-      text1: "Código reenviado",
-      text2: "Revisa tu correo electrónico",
-    });
+    showInfoModal(
+      "Revisa tu correo electrónico",
+      "checkmark-circle",
+      "Código reenviado"
+    );
   };
-
   const handleGoBack = () => {
     router.push("/(Login)/ChangePassword");
   };
@@ -204,6 +231,22 @@ export default function ValidateOtp() {
           </View>
         </View>
       </ScrollView>
+
+      <CustomModal
+        visible={modalVisibleAlert}
+        onClose={() => setModalVisibleAlert(false)}
+        title={modalConfig.title}
+        iconName={
+          modalConfig.iconName as keyof typeof Ionicons.glyphMap | undefined
+        }
+        iconColor={modalConfig.iconColor}
+        primaryButton={{
+          text: "Entendido",
+          onPress: modalConfig.onPress || (() => setModalVisibleAlert(false)),
+        }}
+      >
+        <Text style={styles.dividerText}>{modalConfig.message}</Text>
+      </CustomModal>
     </AuthLayout>
   );
 }

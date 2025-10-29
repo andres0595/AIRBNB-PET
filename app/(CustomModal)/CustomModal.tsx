@@ -17,6 +17,11 @@ interface CustomModalProps {
   children?: React.ReactNode;
   showCloseButton?: boolean;
   animationType?: "none" | "slide" | "fade";
+  // Configuración del icono principal
+  iconName?: keyof typeof Ionicons.glyphMap;
+  iconSize?: number;
+  iconColor?: string;
+  iconBackgroundColor?: string;
   // Botones personalizables
   primaryButton?: {
     text: string;
@@ -34,6 +39,7 @@ interface CustomModalProps {
   modalContentStyle?: ViewStyle;
   titleStyle?: TextStyle;
   overlayStyle?: ViewStyle;
+  iconContainerStyle?: ViewStyle;
   // Configuración del icono de cerrar
   closeIconColor?: string;
   closeIconSize?: number;
@@ -46,11 +52,16 @@ export default function CustomModal({
   children,
   showCloseButton = true,
   animationType = "fade",
+  iconName,
+  iconSize = 70,
+  iconColor = "#00D9C5",
+  iconBackgroundColor = "#0000",
   primaryButton,
   secondaryButton,
   modalContentStyle,
   titleStyle,
   overlayStyle,
+  iconContainerStyle,
   closeIconColor = "#333",
   closeIconSize = 28,
 }: CustomModalProps) {
@@ -72,6 +83,24 @@ export default function CustomModal({
                 color={closeIconColor}
               />
             </TouchableOpacity>
+          )}
+
+          {/* Icono principal */}
+          {iconName && (
+            <View style={[styles.iconContainer, iconContainerStyle]}>
+              <View
+                style={[
+                  styles.iconCircle,
+                  { backgroundColor: iconBackgroundColor },
+                ]}
+              >
+                <Ionicons
+                  name={iconName}
+                  size={iconSize}
+                  color={iconColor || "#00D9C5"}
+                />
+              </View>
+            </View>
           )}
 
           {/* Título */}
@@ -153,14 +182,25 @@ const styles = StyleSheet.create({
     zIndex: 1,
     padding: 4,
   },
+  iconContainer: {
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  iconCircle: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: "#E6F9F7",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   modalTitle: {
     fontSize: 22,
     fontWeight: "700",
     color: "#333",
-    marginTop: 30,
     marginBottom: 20,
     textAlign: "center",
-    paddingRight: 40, // Espacio para el botón de cerrar
+    paddingHorizontal: 40,
   },
   content: {
     marginBottom: 20,

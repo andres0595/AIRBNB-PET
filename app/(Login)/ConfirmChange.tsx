@@ -14,6 +14,7 @@ import ArrobaIcon from "../../assets/Icons/arroba.svg";
 import FacebookIcon from "../../assets/Icons/Facebook.svg";
 import GoogleIcon from "../../assets/Icons/google.svg";
 import IOSIconfrom from "../../assets/Icons/IOS.svg";
+import LlaveIcon from "../../assets/Icons/Llave.svg";
 import PuppySvg from "../../assets/Icons/PuppySvg.svg";
 import AuthLayout from "../../components/AuthLayout";
 import { login } from "../Service/Service-Login/authService";
@@ -27,7 +28,13 @@ export default function ConfirmChange() {
   const [confirmpassword, setconfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [modalConfig, setModalConfig] = useState({
+    title: "",
+    message: "",
+    iconName: null as keyof typeof Ionicons.glyphMap | null,
+    iconColor: "#00D9C5",
+    onPress: undefined as (() => void) | undefined,
+  });
   const googleAuth = useGoogleAuth(async (token: string) => {
     const data = await login("google", token);
     console.log("Usuario Google:", data);
@@ -36,7 +43,6 @@ export default function ConfirmChange() {
 
   const handleGoBack = () => {
     router.push("/login");
-    setModalVisible(false);
   };
   const validateEmail = (email: string) => {
     if (!email) return false;
@@ -65,7 +71,13 @@ export default function ConfirmChange() {
     // }
 
     setLoading(true);
-    setModalVisible(true);
+    //setModalVisible(true);
+    showInfoModal(
+      " ¡Tu contraseña ha sido cambiada con éxito!",
+      "checkmark-circle",
+      "",
+      true
+    );
     // try {
     //   await ChangePassword(+otp, email,newpassword);
     //   router.replace("/login");
@@ -81,6 +93,26 @@ export default function ConfirmChange() {
     //   setLoading(false);
     //   setModalVisible(false);
     // }
+  };
+
+  const showInfoModal = (
+    message: string,
+    icon: any,
+    titulo: string,
+    shouldCall: boolean = false
+  ) => {
+    setModalConfig({
+      title: titulo,
+      message: message,
+      iconName: icon,
+      iconColor: "#00D9C5",
+      onPress: () => {
+        handleGoBack();
+        setModalVisible(false);
+        setLoading(false);
+      },
+    });
+    setModalVisible(true);
   };
 
   return (
@@ -114,7 +146,6 @@ export default function ConfirmChange() {
                 placeholder="Usuario"
                 value={email}
                 onChangeText={setEmail}
-                secureTextEntry
                 style={changeStyles.input}
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -129,7 +160,7 @@ export default function ConfirmChange() {
             </Text>
             <View style={changeStyles.inputContainer}>
               <Text style={changeStyles.inputIcon}>
-                <ArrobaIcon width={25} height={25} />
+                <LlaveIcon width={25} height={25} />
               </Text>
               <TextInput
                 placeholder="Contraseña"
@@ -152,7 +183,7 @@ export default function ConfirmChange() {
             <Text style={changeStyles.label}>Confirmar nueva contraseña *</Text>
             <View style={changeStyles.inputContainer}>
               <Text style={changeStyles.inputIcon}>
-                <ArrobaIcon width={25} height={25} />
+                <LlaveIcon width={25} height={25} />
               </Text>
               <TextInput
                 placeholder="Contraseña"
@@ -215,6 +246,22 @@ export default function ConfirmChange() {
       <CustomModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
+        title={modalConfig.title}
+        iconName={
+          modalConfig.iconName as keyof typeof Ionicons.glyphMap | undefined
+        }
+        iconColor={modalConfig.iconColor}
+        primaryButton={{
+          text: "Ok",
+          onPress: modalConfig.onPress || (() => setModalVisible(false)),
+        }}
+      >
+        <Text style={changeStyles.questionAnswer}>{modalConfig.message}</Text>
+      </CustomModal>
+
+      {/* <CustomModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
         title=""
         primaryButton={{
           text: "Ok",
@@ -224,7 +271,7 @@ export default function ConfirmChange() {
         <Text style={changeStyles.questionAnswer}>
           ¡Tu contraseña ha sido cambiada con éxito!
         </Text>
-      </CustomModal>
+      </CustomModal> */}
     </AuthLayout>
   );
 }
