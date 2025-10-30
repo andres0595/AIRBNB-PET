@@ -28,6 +28,7 @@ interface CustomModalProps {
     onPress: () => void;
     style?: ViewStyle;
     textStyle?: TextStyle;
+    disabled?: boolean;
   };
   secondaryButton?: {
     text: string;
@@ -133,12 +134,24 @@ export default function CustomModal({
 
               {primaryButton && (
                 <TouchableOpacity
-                  style={[styles.primaryButton, primaryButton.style]}
-                  onPress={primaryButton.onPress}
-                  activeOpacity={0.8}
+                  style={[
+                    styles.primaryButton,
+                    primaryButton.style,
+                    primaryButton.disabled && styles.primaryButtonDisabled,
+                  ]}
+                  onPress={
+                    primaryButton.disabled ? undefined : primaryButton.onPress
+                  }
+                  disabled={primaryButton.disabled} // 👈 AGREGAR
+                  activeOpacity={primaryButton.disabled ? 1 : 0.8} // 👈 MODIFICAR
                 >
                   <Text
-                    style={[styles.primaryButtonText, primaryButton.textStyle]}
+                    style={[
+                      styles.primaryButtonText,
+                      primaryButton.textStyle,
+                      primaryButton.disabled &&
+                        styles.primaryButtonTextDisabled,
+                    ]}
                   >
                     {primaryButton.text}
                   </Text>
@@ -230,5 +243,13 @@ const styles = StyleSheet.create({
     color: "#666",
     fontSize: 16,
     fontWeight: "600",
+  },
+
+  primaryButtonDisabled: {
+    backgroundColor: "#E0E0E0",
+    opacity: 0.6,
+  },
+  primaryButtonTextDisabled: {
+    color: "#9E9E9E",
   },
 });

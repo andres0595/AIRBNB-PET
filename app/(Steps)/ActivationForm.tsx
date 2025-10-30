@@ -49,7 +49,6 @@ export const ActivationForm: React.FC<ActivationFormProps> = ({
     dispatch(setActivationData(updated));
   };
 
-  // ✅ Ahora el componente sí retorna JSX correctamente
   return (
     <View style={styles.formContainer}>
       <Text style={styles.label}>16. Confirmación final *</Text>
@@ -146,7 +145,7 @@ const styles = StyleSheet.create({
   checkbox: {
     width: 24,
     height: 24,
-    borderRadius: 6,
+    borderRadius: 20,
     borderWidth: 2,
     borderColor: "#333",
     justifyContent: "center",

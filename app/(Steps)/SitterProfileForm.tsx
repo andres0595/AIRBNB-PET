@@ -109,17 +109,12 @@ export const SitterProfileForm: React.FC<SitterProfileFormProps> = ({
     }
   };
 
-  const jornadas = [
-    { id: "diurna", label: "Diurna (06:00 - 18:00)" },
-    { id: "nocturna", label: "Nocturna (18:00 - 06:00)" },
-  ];
-
   const serviceOptions = [
-    { id: "hospedaje", label: "Hospedaje (en tu casa)" },
-    { id: "paseos", label: "Paseos (en el barrio)" },
-    { id: "banos", label: "Baños a domicilios" },
-    { id: "daycare", label: "Cuidado de día (Day Care)" },
-    { id: "ninera", label: "Niñera de noche (en casa del dueño)" },
+    { id: "1", label: "Alojamiento" },
+    { id: "2", label: "Guardería" },
+    { id: "3", label: "Cuidado" },
+    { id: "4", label: "Paseos" },
+    { id: "5", label: "Baño" },
   ];
 
   return (
@@ -188,52 +183,9 @@ export const SitterProfileForm: React.FC<SitterProfileFormProps> = ({
           </TouchableOpacity>
         ))}
       </View>
-
-      {/* Disponibilidad horaria */}
-      <Text style={styles.label}>10. Disponibilidad horaria *</Text>
-      <View style={styles.row}>
-        <View style={styles.halfInput}>
-          <TouchableOpacity
-            style={styles.picker}
-            onPress={() => {
-              const nuevaJornada =
-                formData.scheduleDay === "diurna" ? "nocturna" : "diurna";
-              updateField("scheduleDay", nuevaJornada);
-            }}
-          >
-            <Text style={styles.pickerText}>
-              {formData.scheduleDay
-                ? jornadas.find((j) => j.id === formData.scheduleDay)?.label
-                : "Seleccionar jornada"}
-            </Text>
-            <Ionicons name="chevron-down" size={15} color="#666" />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.halfInput}>
-          <TouchableOpacity
-            style={styles.picker}
-            onPress={() => {
-              // ejemplo simple de rango por jornada
-              if (formData.scheduleDay === "diurna") {
-                updateField("scheduleHours", "08:00 - 16:00");
-              } else if (formData.scheduleDay === "nocturna") {
-                updateField("scheduleHours", "20:00 - 04:00");
-              } else {
-                updateField("scheduleHours", "Definir rango");
-              }
-            }}
-          >
-            <Text style={styles.pickerText}>
-              {formData.scheduleHours || "Rango en horas"}
-            </Text>
-            <Ionicons name="chevron-down" size={20} color="#666" />
-          </TouchableOpacity>
-        </View>
-      </View>
       {/* Experiencia con animales */}
       <Text style={styles.label}>
-        11. Experiencia con animales (años, razas, situaciones especiales) *
+        10. Experiencia con animales (años, razas, situaciones especiales) *
       </Text>
       <TextInput
         style={styles.textArea}
@@ -312,7 +264,7 @@ const styles = StyleSheet.create({
   checkbox: {
     width: 24,
     height: 24,
-    borderRadius: 6,
+    borderRadius: 20,
     borderWidth: 2,
     borderColor: "#333",
     justifyContent: "center",

@@ -135,76 +135,6 @@ export const ValidationsForm: React.FC<ValidationsProps> = ({
         </TouchableOpacity>
       </View>
 
-      {/* Información del comprobante - Solo visible si aceptó el background check */}
-      {backgroundCheckAccepted === true && (
-        <View style={styles.infoBox}>
-          <Text style={styles.infoTitle}>
-            13. Sube tu comprobante de antecedentes criminales (si ya lo tienes,
-            NO mayor a 60 días) si no lo tienes no hay te preocupes te dirigimos
-            al lugar correcto para que diligencies tu check background *
-          </Text>
-          <Text style={styles.infoSubtext}>
-            (Ejemplo: Sterling Backcheck, MyCRC, RCMP) (TRITON)
-          </Text>
-        </View>
-      )}
-
-      {/* Subida de documentos - Solo visible si aceptó el background check */}
-      {backgroundCheckAccepted === true && (
-        <>
-          <View style={styles.uploadHeader}>
-            <Text style={styles.uploadSectionTitle}>Agregar Documentos</Text>
-            {documents.length > 0 && (
-              <TouchableOpacity
-                onPress={clearAllDocuments}
-                style={styles.clearAllButton}
-              >
-                <Text style={styles.clearAllText}>Limpiar todo</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-
-          <View style={styles.documentsContainer}>
-            {/* Documentos ya subidos */}
-            {documents.map((fileName, index) => (
-              <View key={index} style={styles.documentCard}>
-                <Ionicons name="document-text" size={40} color="#00D9C5" />
-                <Text style={styles.documentName} numberOfLines={1}>
-                  {fileName}
-                </Text>
-                <TouchableOpacity
-                  style={styles.removeButton}
-                  onPress={() => removeDocument(index)}
-                >
-                  <Ionicons name="close-circle" size={20} color="#FF3B30" />
-                </TouchableOpacity>
-              </View>
-            ))}
-
-            {/* Botón agregar más archivos */}
-            <TouchableOpacity
-              style={styles.addDocumentCard}
-              onPress={pickDocument}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="add-circle" size={40} color="#00D9C5" />
-              <Text style={styles.addDocumentText}>Agregar</Text>
-              <Text style={styles.addDocumentText}>más archivos</Text>
-            </TouchableOpacity>
-          </View>
-        </>
-      )}
-
-      {/* Indicadores visuales de estado */}
-      {backgroundCheckAccepted === null && (
-        <View style={styles.infoBoxSmall}>
-          <Ionicons name="information-circle" size={20} color="#666" />
-          <Text style={styles.infoTextSmall}>
-            Selecciona una opción para continuar
-          </Text>
-        </View>
-      )}
-
       {backgroundCheckAccepted === false && (
         <View style={styles.warningBox}>
           <Ionicons name="warning" size={20} color="#FF3B30" />
@@ -214,28 +144,10 @@ export const ValidationsForm: React.FC<ValidationsProps> = ({
         </View>
       )}
 
-      {/* {backgroundCheckAccepted === true && documents.length === 0 && (
-        <View style={styles.infoBoxSmall}>
-          <Ionicons name="information-circle" size={20} color="#00D9C5" />
-          <Text style={styles.infoTextSmall}>
-            Agrega al menos un documento para completar este paso
-          </Text>
-        </View>
-      )} */}
-
-      {backgroundCheckAccepted === true && documents.length > 0 && (
-        <View style={styles.successBox}>
-          <Ionicons name="checkmark-circle" size={20} color="#00A896" />
-          <Text style={styles.successText}>
-            {documents.length} documento(s) cargado(s). Puedes agregar más si es
-            necesario.
-          </Text>
-        </View>
-      )}
       <View>
         <Text style={styles.label}>
-          14. ¿Tienes certificados relacionados con cuidado de mascotas o
-          primeros auxilios? *
+          13. ¿Tienes certificados relacionados con cuidado de mascotas o
+          primeros auxilios? (Opcional)
         </Text>
         <View style={styles.uploadHeader}>
           <Text style={styles.uploadSectionTitle}>Agregar Documentos</Text>
@@ -404,8 +316,9 @@ const styles = StyleSheet.create({
     gap: 8,
     backgroundColor: "#FFF3F3",
     borderRadius: 12,
-    padding: 12,
-    marginTop: 16,
+    padding: 13,
+    marginTop: -10,
+    marginBottom: 10,
     borderWidth: 1,
     borderColor: "#FFCCCB",
   },

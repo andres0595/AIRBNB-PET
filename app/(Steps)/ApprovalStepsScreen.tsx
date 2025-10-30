@@ -1,8 +1,10 @@
 import AuthLayout from "@/components/AuthLayout";
 import { Ionicons } from "@expo/vector-icons";
+import * as DocumentPicker from "expo-document-picker";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -13,13 +15,12 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import CustomModal from "../(CustomModal)/CustomModal";
 import { RootState } from "../(Store)/store";
-import { resetValidations } from "../(Store)/validationsSlice";
+import { resetValidations, setDocuments } from "../(Store)/validationsSlice";
 import { ActivationForm } from "./ActivationForm";
 import { LegalConsentsForm } from "./LegalConsentsForm";
 import { PersonalInfoForm } from "./PersonalInfoForm";
 import { SitterProfileForm } from "./SitterProfileForm";
 import { ValidationsForm } from "./ValidationsForm";
-
 const ApprovalStepsScreen = () => {
   // Obtener los porcentajes directamente de Redux
   const {
@@ -74,6 +75,15 @@ const ApprovalStepsScreen = () => {
   const [welcomeModalVisible, setWelcomeModalVisible] = useState(false);
   const [showFirstContent, setShowFirstContent] = useState(true);
   const [modalComprobanteVisible, setModalComprobante] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    title: "",
+    message: "",
+    onPress: undefined as (() => void) | undefined,
+  });
+  const document = useSelector(
+    (state: RootState) => state.validations.documents
+  );
+  const hasDocuments = document.length > 0;
   const dispatch = useDispatch();
   // Estados para los porcentajes de cada formulario
   const [formProgress, setFormProgress] = useState({
@@ -114,6 +124,14 @@ const ApprovalStepsScreen = () => {
     if (paso == 1) {
       setModalVisible(true);
     } else {
+      setModalConfig({
+        title: "Subir comprobante",
+        message:
+          "Sube tu comprobante de antecedentes criminales (si ya lo tienes, NO mayor a 60 días). \n\n(Ejemplo: Sterling Backcheck, MyCRC, RCMP) (TRITON)",
+        onPress: () => {
+          handleSaveBackground();
+        },
+      });
       setModalComprobante(true);
     }
     // Usa 'paso' aquí si lo necesitas
@@ -136,6 +154,11 @@ const ApprovalStepsScreen = () => {
     setExpandedAccordion(expandedAccordion === id ? null : id);
   };
 
+  const handleSaveBackground = () => {
+    setModalComprobante(false);
+    setShowFirstContent(false);
+  };
+
   // Funciones para actualizar el progreso de cada formulario
   const updatePersonalInfoProgress = (percentage: number) => {
     setFormProgress((prev) => ({ ...prev, personalInfo: percentage }));
@@ -155,6 +178,24 @@ const ApprovalStepsScreen = () => {
 
   const updateActivationProgress = (percentage: number) => {
     setFormProgress((prev) => ({ ...prev, activation: percentage }));
+  };
+
+  const pickDocument = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ["image/png", "image/jpeg", "image/jpg", "application/pdf"],
+        copyToCacheDirectory: true,
+      });
+
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        const file = result.assets[0];
+        dispatch(setDocuments([...documents, file.name]));
+        Alert.alert("Éxito", `Archivo "${file.name}" cargado correctamente`);
+      }
+    } catch (error) {
+      console.error("Error al seleccionar documento:", error);
+      Alert.alert("Error", "No se pudo cargar el archivo");
+    }
   };
 
   const renderProgressBar = () => {
@@ -472,12 +513,12 @@ const ApprovalStepsScreen = () => {
           </View>
 
           {/* Botón para volver */}
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.backgroundCheckButton}
             onPress={() => setShowFirstContent(true)}
           >
             <Text style={styles.backgroundCheckButtonText}>Volver</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       )}
 
@@ -543,6 +584,33 @@ const ApprovalStepsScreen = () => {
             empieces a ofrecer tus servicios.
           </Text>
         </View>
+      </CustomModal>
+
+      <CustomModal
+        visible={modalComprobanteVisible}
+        onClose={() => {
+          setModalComprobante(false);
+          // Opcional: limpiar documentos al cerrar
+          dispatch(setDocuments([]));
+        }}
+        title={modalConfig.title}
+        primaryButton={{
+          text: "Guardar",
+          onPress: modalConfig.onPress || (() => handleSaveBackground()),
+          disabled: !hasDocuments,
+        }}
+      >
+        <Text style={styles.TextInfoData}>{modalConfig.message}</Text>
+        <Text style={styles.questionAnswer}>Agregar Documentos</Text>
+
+        <TouchableOpacity
+          style={styles.addDocumentCard}
+          onPress={pickDocument}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="add-circle" size={40} color="#00D9C5" />
+          <Text style={styles.addDocumentText}>Agregar</Text>
+        </TouchableOpacity>
       </CustomModal>
     </ScrollView>
   );
@@ -715,6 +783,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#666",
     textAlign: "center",
+    lineHeight: 20,
+    marginTop: 20,
+  },
+
+  TextInfoData: {
+    fontSize: 14,
+    color: "#666",
+    textAlign: "left",
     lineHeight: 20,
     marginTop: 20,
   },
@@ -1128,6 +1204,27 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "700",
     color: "#00D9C5",
+  },
+
+  addDocumentCard: {
+    width: 100,
+    height: 120,
+    backgroundColor: "#F8F8F8",
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: "#00D9C5",
+    borderStyle: "dashed",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    gap: 4,
+    marginTop: 16,
+  },
+  addDocumentText: {
+    fontSize: 12,
+    color: "#00D9C5",
+    fontWeight: "500",
+    textAlign: "center",
   },
 });
 

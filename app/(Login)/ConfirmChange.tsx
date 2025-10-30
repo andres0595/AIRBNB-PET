@@ -258,20 +258,6 @@ export default function ConfirmChange() {
       >
         <Text style={changeStyles.questionAnswer}>{modalConfig.message}</Text>
       </CustomModal>
-
-      {/* <CustomModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        title=""
-        primaryButton={{
-          text: "Ok",
-          onPress: () => handleGoBack(),
-        }}
-      >
-        <Text style={changeStyles.questionAnswer}>
-          ¡Tu contraseña ha sido cambiada con éxito!
-        </Text>
-      </CustomModal> */}
     </AuthLayout>
   );
 }
