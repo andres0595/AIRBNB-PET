@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import {
+  Image,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -16,37 +17,47 @@ import {
   View,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
+import alojamientoMascotas from "../../assets/Icons/svg-servicios/Alojamiento.png";
+import Banio from "../../assets/Icons/svg-servicios/Banio.png";
+import Cuidado from "../../assets/Icons/svg-servicios/Cuidado.png";
+import Guarderia from "../../assets/Icons/svg-servicios/Guarderia.png";
+import Paseos from "../../assets/Icons/svg-servicios/Paseos.png";
 
 const services = [
   {
     id: "Alojamiento",
     name: "Alojamiento de mascotas",
     subtitle: "en casa del cuidador",
-    type: "accommodation", // accommodation o time-slot
+    type: "accommodation",
+    icon: alojamientoMascotas,
   },
   {
     id: "Guardería",
     name: "Guardería de día",
     subtitle: "en casa del cuidador",
     type: "accommodation",
+    icon: Guarderia,
   },
   {
     id: "Cuidado",
     name: "Cuidado en casa",
     subtitle: "Atiende a la mascota en la comodidad de su hogar",
     type: "accommodation",
+    icon: Cuidado,
   },
   {
     id: "Paseos",
     name: "Paseos en el barrio",
     subtitle: "Paseos seguros y divertidos",
     type: "time-slot",
+    icon: Paseos,
   },
   {
     id: "Baño",
     name: "Baño a domicilio",
     subtitle: "",
     type: "time-slot",
+    icon: Banio,
   },
 ];
 const timeSlots = ["Mañana", "Tarde", "Noche"];
@@ -446,15 +457,22 @@ export default function ServiceConfigScreen() {
                   >
                     <View style={styles.serviceImageContainer}>
                       <View style={styles.serviceImagePlaceholder}>
-                        <Ionicons name="paw" size={32} color="#00BFA6" />
+                        <Image
+                          source={service.icon}
+                          style={{ width: 60, height: 60 }}
+                          resizeMode="contain"
+                        />
+                        {/* <Ionicons name="paw" size={32} color="#00BFA6" /> */}
                       </View>
                       {selectedServices.includes(service.id) && (
                         <View style={styles.selectedBadge}>
-                          <Ionicons
-                            name="checkmark-circle"
-                            size={24}
-                            color="#00BFA6"
-                          />
+                          {
+                            <Ionicons
+                              name="checkmark-circle"
+                              size={24}
+                              color="#00BFA6"
+                            />
+                          }
                         </View>
                       )}
                     </View>

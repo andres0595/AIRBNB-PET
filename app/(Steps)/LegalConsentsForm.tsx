@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#D1D1D6",
+    borderColor: "#F3F4F6",
     justifyContent: "center",
     alignItems: "center",
     marginTop: 2,
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: "#333",
+    backgroundColor: "#00D9C5",
   },
   linkText: {
     fontSize: 14,

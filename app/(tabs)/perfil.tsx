@@ -1,6 +1,7 @@
 import AuthLayout from "@/components/AuthLayout";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import {
   Image,
   ScrollView,
@@ -9,8 +10,17 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
+import CustomModal from "../(CustomModal)/CustomModal";
+import configService from "../../assets/images/Image_config_service.png";
 const ProfileScreen = () => {
+  const [modalVisibleAlert, setModalVisibleAlert] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    title: "",
+    message: "",
+    iconName: null as keyof typeof Ionicons.glyphMap | null,
+    iconColor: "#00D9C5",
+    onPress: undefined as (() => void) | undefined,
+  });
   const router = useRouter();
 
   const menuItems = [
@@ -45,10 +55,42 @@ const ProfileScreen = () => {
     router.back();
   };
 
-  const handleMenuPress = (route: string) => {
-    router.push(route as any);
+  const handleMenuPress = (route: string, process: number) => {
+    console.log("route => ", route);
+    console.log("proceso => ", process);
+    if (process == 2) {
+      showInfoModal(
+        "En este paso podrás definir el calendario de tarifas para cada uno de los servicios que seleccionaste anteriormente. Solo elige los días en los que estarás disponible para ofrecer tus servicios y asigna el valor que prefieras a cada fecha.",
+        "",
+        "¡Configura tu calendario de tarifas!",
+        false,
+        route
+      );
+    }
   };
 
+  const showInfoModal = (
+    message: string,
+    icon: any,
+    titulo: string,
+    shouldCall: boolean = false,
+    route: any
+  ) => {
+    setModalConfig({
+      title: titulo,
+      message: message,
+      iconName: icon,
+      iconColor: "#00D9C5",
+      onPress: () => {
+        navigateTo(route);
+      },
+    });
+    setModalVisibleAlert(false);
+  };
+
+  const navigateTo = (route: any) => {
+    router.push(route as any);
+  };
   return (
     <AuthLayout>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -87,7 +129,7 @@ const ProfileScreen = () => {
                 styles.menuItem,
                 index === menuItems.length - 1 && styles.lastMenuItem,
               ]}
-              onPress={() => handleMenuPress(item.route)}
+              onPress={() => handleMenuPress(item.route, item.id)}
               activeOpacity={0.7}
             >
               <Text style={styles.menuItemText}>{item.title}</Text>
@@ -100,6 +142,29 @@ const ProfileScreen = () => {
         <TouchableOpacity style={styles.completeButton} activeOpacity={0.8}>
           <Text style={styles.completeButtonText}>Perfil completado</Text>
         </TouchableOpacity>
+
+        <CustomModal
+          visible={modalVisibleAlert}
+          onClose={() => setModalVisibleAlert(false)}
+          title={modalConfig.title}
+          primaryButton={{
+            text: "Aceptar",
+            onPress: modalConfig.onPress || (() => setModalVisibleAlert(false)),
+          }}
+        >
+          <Text style={styles.modalText}>{modalConfig.message}</Text>
+          <View style={styles.containerImge}>
+            <Image
+              source={configService}
+              style={{ width: 100, height: 100 }}
+              resizeMode="contain"
+            />
+          </View>
+          <Text style={styles.modalText}>
+            Una vez que configures todas las tarifas, el botón “Siguiente” se
+            activará automáticamente para que puedas continuar.
+          </Text>
+        </CustomModal>
       </ScrollView>
     </AuthLayout>
   );
@@ -194,6 +259,12 @@ const styles = StyleSheet.create({
     color: "#000",
     fontWeight: "400",
   },
+  modalText: {
+    fontSize: 12,
+    color: "#000",
+    fontWeight: "400",
+    textAlign: "justify",
+  },
   completeButton: {
     backgroundColor: "#E8E8E8",
     paddingVertical: 16,
@@ -208,6 +279,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "#666",
+  },
+
+  containerImge: {
+    alignItems: "center",
+    paddingVertical: 16,
   },
 });
 

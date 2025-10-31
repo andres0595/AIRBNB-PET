@@ -206,13 +206,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   radioCircleSelected: {
-    borderColor: "#333",
+    borderColor: "#F3F4F6",
   },
   radioSelected: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: "#333",
+    backgroundColor: "#00D9C5",
   },
   radioLabel: {
     fontSize: 14,

@@ -1,4 +1,9 @@
 import { SitterProfileData } from "@/Models/Models-Tabs/SitterProfileData";
+import { RootState } from "@/Store/store";
+import {
+  setSitterProfileData,
+  setSitterProfilePercentage,
+} from "@/Store/validationsSlice";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import React, { useEffect } from "react";
@@ -162,21 +167,27 @@ const SitterProfileForm: React.FC<SitterProfileFormProps> = ({
       {/* Servicios */}
       <Text style={styles.label}>9. Servicios que deseas ofrecer *</Text>
       <View style={styles.checkboxGroup}>
-        {serviceOptions.map((service) => (
-          <TouchableOpacity
-            key={service.id}
-            style={styles.checkboxOption}
-            onPress={() => toggleService(service.id)}
-            activeOpacity={0.7}
-          >
-            <View style={styles.checkbox}>
-              {formData.services.includes(service.id) && (
-                <Ionicons name="checkmark" size={18} color="#333" />
-              )}
-            </View>
-            <Text style={styles.checkboxLabel}>{service.label}</Text>
-          </TouchableOpacity>
-        ))}
+        {serviceOptions.map((service) => {
+          const isSelected = formData.services.includes(service.id);
+
+          return (
+            <TouchableOpacity
+              key={service.id}
+              style={styles.checkboxOption}
+              onPress={() => toggleService(service.id)}
+              activeOpacity={0.7}
+            >
+              <View
+                style={[styles.checkbox, isSelected && styles.checkboxSelected]}
+              >
+                {isSelected && (
+                  <Ionicons name="checkmark" size={18} color="#FFF" />
+                )}
+              </View>
+              <Text style={styles.checkboxLabel}>{service.label}</Text>
+            </TouchableOpacity>
+          );
+        })}
       </View>
       {/* Experiencia con animales */}
       <Text style={styles.label}>
@@ -269,6 +280,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#333",
     flex: 1,
+  },
+  checkboxSelected: {
+    backgroundColor: "#00D9C5",
+    borderColor: "#F3F4F6",
   },
   row: {
     flexDirection: "row",

@@ -702,28 +702,26 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   children,
 }) => {
   return (
-    <View style={styles.accordionContainer}>
-      <View style={styles.accordionWrapper}>
-        <TouchableOpacity
-          style={styles.accordionHeader}
-          onPress={onToggle}
-          activeOpacity={0.8}
-        >
+    <View style={styles.accordionWrapper}>
+      <TouchableOpacity
+        style={styles.accordionHeader}
+        onPress={onToggle}
+        activeOpacity={0.8}
+      >
+        <View style={styles.percentageCircle}>
+          <Text style={styles.percentageText}>{percentage}</Text>
+        </View>
+        <View style={styles.accordionLeft}>
           <Text style={styles.accordionTitle}>{title}</Text>
           <Ionicons
             name={isExpanded ? "chevron-up" : "chevron-down"}
             size={24}
             color="#333"
           />
-        </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
 
-        {isExpanded && <View style={styles.accordionContent}>{children}</View>}
-      </View>
-
-      {/* Círculo de porcentaje posicionado absolutamente */}
-      <View style={styles.percentageCircle}>
-        <Text style={styles.percentageText}>{percentage}</Text>
-      </View>
+      {isExpanded && <View style={styles.accordionContent}>{children}</View>}
     </View>
   );
 };
@@ -942,9 +940,8 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   accordionContainer: {
-    position: "relative",
-    marginBottom: 35,
-    paddingRight: 20,
+    gap: 12,
+    paddingBottom: 20,
   },
   accordionWrapper: {
     backgroundColor: "#FFF",
@@ -962,17 +959,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  accordionLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    flex: 1,
+  },
   accordionTitle: {
     fontSize: 15,
     color: "#1A1A1A",
     fontWeight: "500",
     flex: 1,
-    paddingRight: 12,
   },
   percentageCircle: {
-    position: "absolute",
-    right: -35, // Fuera de la card
-    top: 0, // Fijo desde arriba
     width: 50,
     height: 50,
     borderRadius: 25,
@@ -986,6 +985,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    marginRight: 16,
   },
   percentageText: {
     fontSize: 12,
@@ -998,6 +998,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "#F0F0F0",
   },
+
   placeholderText: {
     fontSize: 14,
     color: "#666",

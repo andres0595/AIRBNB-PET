@@ -59,9 +59,14 @@ const ActivationForm: React.FC<ActivationFormProps> = ({
         activeOpacity={0.7}
       >
         <View style={styles.checkboxRow}>
-          <View style={styles.checkbox}>
+          <View
+            style={[
+              styles.checkbox,
+              formData.finalConfirmation && styles.checkboxSelected,
+            ]}
+          >
             {formData.finalConfirmation && (
-              <Ionicons name="checkmark" size={20} color="#333" />
+              <Ionicons name="checkmark" size={20} color="#FFF" />
             )}
           </View>
           <Text style={styles.confirmationText}>
@@ -151,6 +156,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 2,
+  },
+
+  checkboxSelected: {
+    backgroundColor: "#00D9C5",
+    borderColor: "#F3F4F6",
   },
   confirmationText: {
     fontSize: 14,
