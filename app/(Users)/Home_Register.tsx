@@ -1,15 +1,10 @@
+import { HomeRegisterStyles } from "@/Styles/components/Users/Home_RegisterStyles";
 import { router } from "expo-router";
 import { useState } from "react";
-import {
-  ImageBackground,
-  SafeAreaView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import ClientIcon from "../../assets/Icons/Cliente.svg";
 import CaregiverIcon from "../../assets/Icons/Cuidador.svg";
-import { HomeRegisterStyles } from "../Styles/components/Users/Home_RegisterStyles";
 
 const UserTypeSelectionScreen = () => {
   const [selectedType, setSelectedType] = useState<string | null>(null);

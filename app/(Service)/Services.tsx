@@ -1,4 +1,5 @@
 import AuthLayout from "@/components/AuthLayout";
+import { ServicesStyles } from "@/Styles/components/Services/ServiceStyles";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -16,7 +17,6 @@ import Banio from "../../assets/Icons/svg-servicios/Banio.png";
 import Cuidado from "../../assets/Icons/svg-servicios/Cuidado.png";
 import Guarderia from "../../assets/Icons/svg-servicios/Guarderia.png";
 import Paseos from "../../assets/Icons/svg-servicios/Paseos.png";
-import { ServicesStyles } from "../Styles/components/Services/ServiceStyles";
 
 interface Service {
   id: string;

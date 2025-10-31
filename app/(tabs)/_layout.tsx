@@ -118,15 +118,6 @@ export default function TabLayout() {
           ),
         }}
       />
-
-      {/* Ocultar otros tabs */}
-
-      <Tabs.Screen
-        name="explore"
-        options={{
-          href: null,
-        }}
-      />
     </Tabs>
   );
 }

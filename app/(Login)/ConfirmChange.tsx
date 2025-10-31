@@ -1,4 +1,6 @@
 import { useGoogleAuth } from "@/hooks/useSocialAuth";
+import { login } from "@/Service/Service-Login/authService";
+import { changeStyles } from "@/Styles/components/ChangePassword/changeStyles";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -17,8 +19,6 @@ import IOSIconfrom from "../../assets/Icons/IOS.svg";
 import LlaveIcon from "../../assets/Icons/Llave.svg";
 import PuppySvg from "../../assets/Icons/PuppySvg.svg";
 import AuthLayout from "../../components/AuthLayout";
-import { login } from "../Service/Service-Login/authService";
-import { changeStyles } from "../Styles/components/ChangePassword/changeStyles";
 
 export default function ConfirmChange() {
   const router = useRouter();
@@ -38,7 +38,7 @@ export default function ConfirmChange() {
   const googleAuth = useGoogleAuth(async (token: string) => {
     const data = await login("google", token);
     console.log("Usuario Google:", data);
-    router.replace("/(tabs)/explore");
+    router.replace("/(tabs)/perfil");
   });
 
   const handleGoBack = () => {

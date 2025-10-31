@@ -1,4 +1,6 @@
 import AuthLayout from "@/components/AuthLayout";
+import { GetDocumentTypes } from "@/Service/Service-Users/UsersService";
+import { UsersStyles } from "@/Styles/components/Users/UsersStyles";
 import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
 import { router, useLocalSearchParams } from "expo-router";
@@ -12,8 +14,6 @@ import {
 } from "react-native";
 import ClientIcon from "../../assets/Icons/Cliente.svg";
 import CaregiverIcon from "../../assets/Icons/Cuidador.svg";
-import { GetDocumentTypes } from "../Service/Service-Users/UsersService";
-import { UsersStyles } from "../Styles/components/Users/UsersStyles";
 
 export default function UsersRegister() {
   const { userType } = useLocalSearchParams();
@@ -309,9 +309,8 @@ export default function UsersRegister() {
           </TouchableOpacity>
           {/* Enlace "¿Ya tienes una cuenta?" */}
           <View style={UsersStyles.loginLinkContainer}>
-            <Text style={UsersStyles.loginText}>¿Ya tienes una cuenta?</Text>
+            <Text style={UsersStyles.loginText}>¿Ya tienes una cuenta? </Text>
             <TouchableOpacity onPress={() => router.push("/login")}>
-              {" "}
               <Text style={UsersStyles.loginLink}>Inicia sesión</Text>
             </TouchableOpacity>
           </View>

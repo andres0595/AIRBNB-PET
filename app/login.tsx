@@ -1,4 +1,7 @@
 import { useGoogleAuth } from "@/hooks/useSocialAuth";
+import { login, loginGoogle } from "@/Service/Service-Login/authService";
+import { setCredentials } from "@/Store/authSlice";
+import { loginStyles } from "@/Styles/components/Login/loginStyles";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -14,9 +17,6 @@ import PuppySvg from "../assets/Icons/PuppySvg.svg";
 import AuthLayout from "../components/AuthLayout";
 import { useModalToast } from "../components/ModalToast";
 import CustomModal from "./(CustomModal)/CustomModal";
-import { setCredentials } from "./(Store)/authSlice";
-import { login, loginGoogle } from "./Service/Service-Login/authService";
-import { loginStyles } from "./Styles/components/Login/loginStyles";
 
 export default function Login() {
   const router = useRouter();
@@ -75,7 +75,7 @@ export default function Login() {
     try {
       const data = await login(email, password);
       dispatch(setCredentials({ token: data.token, user: data.user }));
-      router.replace("/(tabs)/explore");
+      router.replace("/(tabs)/perfil");
     } catch (error: any) {
       Toast.show({
         type: "error",
@@ -92,7 +92,7 @@ export default function Login() {
   const googleAuth = useGoogleAuth(async (token: string) => {
     const data = await loginGoogle(token);
     console.log("Usuario Google:", data);
-    router.replace("/(tabs)/explore");
+    router.replace("/(tabs)/perfil");
   });
 
   return (

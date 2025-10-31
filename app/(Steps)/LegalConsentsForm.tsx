@@ -1,19 +1,19 @@
-import React, { useEffect } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../(Store)/store";
+import { LegalConsentsData } from "@/Models/Models-Tabs/LegalConsentsData";
+import { RootState } from "@/Store/store";
 import {
   setLegalConsentsData,
   setLegalConsentsPercentage,
-} from "../(Store)/validationsSlice";
-import { LegalConsentsData } from "../Models/Models-Tabs/LegalConsentsData";
+} from "@/Store/validationsSlice";
+import React, { useEffect } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 interface LegalConsentsFormProps {
   onSave?: (data: LegalConsentsData) => void;
   onProgressChange?: (percentage: number) => void;
 }
 
-export const LegalConsentsForm: React.FC<LegalConsentsFormProps> = ({
+const LegalConsentsForm: React.FC<LegalConsentsFormProps> = ({
   onProgressChange,
 }) => {
   const dispatch = useDispatch();
@@ -152,3 +152,4 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+export default LegalConsentsForm;

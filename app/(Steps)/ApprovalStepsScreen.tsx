@@ -14,13 +14,15 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import CustomModal from "../(CustomModal)/CustomModal";
-import { RootState } from "../(Store)/store";
-import { resetValidations, setDocuments } from "../(Store)/validationsSlice";
-import { ActivationForm } from "./ActivationForm";
-import { LegalConsentsForm } from "./LegalConsentsForm";
-import { PersonalInfoForm } from "./PersonalInfoForm";
-import { SitterProfileForm } from "./SitterProfileForm";
-import { ValidationsForm } from "./ValidationsForm";
+
+import { RootState } from "@/Store/store";
+import { resetValidations, setDocuments } from "@/Store/validationsSlice";
+import ActivationForm from "./ActivationForm";
+import LegalConsentsForm from "./LegalConsentsForm";
+import PersonalInfoForm from "./PersonalInfoForm";
+import SitterProfileForm from "./SitterProfileForm";
+import ValidationsForm from "./ValidationsForm";
+
 const ApprovalStepsScreen = () => {
   // Obtener los porcentajes directamente de Redux
   const {

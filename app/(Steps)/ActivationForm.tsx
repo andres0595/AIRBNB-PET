@@ -1,20 +1,20 @@
+import { ActivationData } from "@/Models/Models-Tabs/ActivationData";
+import { RootState } from "@/Store/store";
+import {
+  setActivationData,
+  setActivationPercentage,
+} from "@/Store/validationsSlice";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../(Store)/store";
-import {
-  setActivationData,
-  setActivationPercentage,
-} from "../(Store)/validationsSlice";
-import { ActivationData } from "../Models/Models-Tabs/ActivationData";
 
 interface ActivationFormProps {
   onSave?: (data: ActivationData) => void;
   onProgressChange?: (percentage: number) => void;
 }
 
-export const ActivationForm: React.FC<ActivationFormProps> = ({
+const ActivationForm: React.FC<ActivationFormProps> = ({
   onSave,
   onProgressChange,
 }) => {
@@ -227,3 +227,4 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+export default ActivationForm;

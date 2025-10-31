@@ -1,4 +1,5 @@
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { persistor, store } from "@/Store/store";
 import { Ionicons } from "@expo/vector-icons";
 import {
   DarkTheme,
@@ -11,7 +12,6 @@ import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { persistor, store } from "./(Store)/store";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -58,17 +58,7 @@ export default function RootLayout() {
                 }}
               />
 
-              <Drawer.Screen
-                name="services"
-                options={{
-                  drawerLabel: "Nuestros Servicios",
-                  drawerIcon: ({ color, size }) => (
-                    <Ionicons name="paw-outline" size={size} color={color} />
-                  ),
-                }}
-              />
-
-              <Drawer.Screen
+              {/* <Drawer.Screen
                 name="blog"
                 options={{
                   drawerLabel: "Blog",
@@ -76,8 +66,8 @@ export default function RootLayout() {
                     <Ionicons name="book-outline" size={size} color={color} />
                   ),
                 }}
-              />
-
+              /> */}
+              {/* 
               <Drawer.Screen
                 name="support"
                 options={{
@@ -104,7 +94,7 @@ export default function RootLayout() {
                     />
                   ),
                 }}
-              />
+              /> */}
 
               <Drawer.Screen
                 name="login"
@@ -121,10 +111,7 @@ export default function RootLayout() {
                 name="(Login)/ChangePassword"
                 options={{ drawerItemStyle: { display: "none" } }}
               />
-              <Drawer.Screen
-                name="(Store)/authSlice"
-                options={{ drawerItemStyle: { display: "none" } }}
-              />
+
               <Drawer.Screen
                 name="(Users)/Users"
                 options={{ drawerItemStyle: { display: "none" } }}

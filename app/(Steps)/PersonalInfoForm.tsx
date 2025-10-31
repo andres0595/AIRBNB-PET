@@ -1,3 +1,9 @@
+import { RootState } from "@/Store/store";
+import {
+  setPersonalInfoData,
+  setPersonalInfoFiles,
+  setPersonalInfoPercentage,
+} from "@/Store/validationsSlice";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as DocumentPicker from "expo-document-picker";
@@ -13,19 +19,13 @@ import {
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../(Store)/store";
-import {
-  setPersonalInfoData,
-  setPersonalInfoFiles,
-  setPersonalInfoPercentage,
-} from "../(Store)/validationsSlice";
 
 interface PersonalInfoFormProps {
   onSave?: (data: any) => void;
   onProgressChange?: (percentage: number) => void;
 }
 
-export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
+const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
   onProgressChange,
 }) => {
   const dispatch = useDispatch();
@@ -458,3 +458,4 @@ const styles = StyleSheet.create({
     color: "#999",
   },
 });
+export default PersonalInfoForm;

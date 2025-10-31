@@ -9,6 +9,7 @@ import {
 
 import AuthLayout from "@/components/AuthLayout";
 import { useGoogleAuth } from "@/hooks/useSocialAuth";
+import { login } from "@/Service/Service-Login/authService";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useMemo, useRef, useState } from "react";
@@ -18,7 +19,6 @@ import FacebookIcon from "../../assets/Icons/Facebook.svg";
 import GoogleIcon from "../../assets/Icons/google.svg";
 import IOSIconfrom from "../../assets/Icons/IOS.svg";
 import PuppySvg from "../../assets/Icons/PuppySvg.svg";
-import { login } from "../Service/Service-Login/authService";
 
 export default function ValidateOtp() {
   const router = useRouter();
@@ -37,7 +37,7 @@ export default function ValidateOtp() {
   const googleAuth = useGoogleAuth(async (token: string) => {
     const data = await login("google", token);
     console.log("Usuario Google:", data);
-    router.replace("/(tabs)/explore");
+    router.replace("/(tabs)/perfil");
   });
 
   // Verificar si todos los dígitos están completos

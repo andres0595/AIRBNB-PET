@@ -1,13 +1,12 @@
-// components/AuthLayout.tsx
 import React, { useEffect, useState } from "react";
 import {
-  SafeAreaView,
   Keyboard,
   Platform,
   useWindowDimensions,
   ViewStyle,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -20,7 +19,6 @@ export default function AuthLayout({
 }: AuthLayoutProps) {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
-
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
@@ -45,7 +43,10 @@ export default function AuthLayout({
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+    <SafeAreaView
+      edges={["left", "right", "bottom"]}
+      style={{ flex: 1, backgroundColor: "#fff" }}
+    >
       <KeyboardAwareScrollView
         contentContainerStyle={[
           {
@@ -54,7 +55,7 @@ export default function AuthLayout({
           },
           contentStyle,
         ]}
-        enableOnAndroid={true}
+        enableOnAndroid
         extraScrollHeight={Platform.OS === "android" ? 100 : 20}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}

@@ -1,3 +1,4 @@
+import { SitterProfileData } from "@/Models/Models-Tabs/SitterProfileData";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import React, { useEffect } from "react";
@@ -11,19 +12,13 @@ import {
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../(Store)/store";
-import {
-  setSitterProfileData,
-  setSitterProfilePercentage,
-} from "../(Store)/validationsSlice";
-import { SitterProfileData } from "../Models/Models-Tabs/SitterProfileData";
 
 interface SitterProfileFormProps {
   onSave?: (data: any) => void;
   onProgressChange?: (percentage: number) => void;
 }
 
-export const SitterProfileForm: React.FC<SitterProfileFormProps> = ({
+const SitterProfileForm: React.FC<SitterProfileFormProps> = ({
   onSave,
   onProgressChange,
 }) => {
@@ -298,3 +293,4 @@ const styles = StyleSheet.create({
     color: "#999",
   },
 });
+export default SitterProfileForm;

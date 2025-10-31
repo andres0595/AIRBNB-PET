@@ -1,14 +1,14 @@
+import { RootState } from "@/Store/store";
+import {
+  setBackgroundCheck,
+  setDocuments,
+  setValidationsPercentage,
+} from "@/Store/validationsSlice";
 import { Ionicons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
 import { useEffect } from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../(Store)/store";
-import {
-  setBackgroundCheck,
-  setDocuments,
-  setValidationsPercentage,
-} from "../(Store)/validationsSlice";
 
 interface ValidationsProps {
   onSave?: (data: ValidationsData) => void;
@@ -20,7 +20,7 @@ interface ValidationsData {
   documents: string[];
 }
 
-export const ValidationsForm: React.FC<ValidationsProps> = ({
+const ValidationsForm: React.FC<ValidationsProps> = ({
   onSave,
   onProgressChange,
 }) => {
@@ -363,3 +363,4 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
+export default ValidationsForm;
