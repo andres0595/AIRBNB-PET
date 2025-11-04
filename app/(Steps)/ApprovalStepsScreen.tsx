@@ -17,6 +17,7 @@ import CustomModal from "../(CustomModal)/CustomModal";
 
 import { RootState } from "@/Store/store";
 import { resetValidations, setDocuments } from "@/Store/validationsSlice";
+import { fontFamily } from "../../Config/typography";
 import ActivationForm from "./ActivationForm";
 import LegalConsentsForm from "./LegalConsentsForm";
 import PersonalInfoForm from "./PersonalInfoForm";
@@ -733,6 +734,7 @@ const styles = StyleSheet.create({
     color: "#1A1A1A",
     marginBottom: 8,
     lineHeight: 20,
+    fontFamily: fontFamily.bold,
   },
   welcomeContent: {
     alignItems: "center",
@@ -744,12 +746,14 @@ const styles = StyleSheet.create({
     color: "#333",
     textAlign: "center",
     marginBottom: 16,
+    fontFamily: fontFamily.bold,
   },
   welcomeSubtitle: {
     fontSize: 16,
     color: "#666",
     textAlign: "center",
     marginBottom: 30,
+    fontFamily: fontFamily.medium,
   },
   iconContainer: {
     marginVertical: 30,
@@ -761,6 +765,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     marginBottom: 16,
     paddingHorizontal: 10,
+    fontFamily: fontFamily.medium,
   },
   continueButtonModal: {
     backgroundColor: "#00D9C5",
@@ -774,6 +779,7 @@ const styles = StyleSheet.create({
     color: "#000",
     fontSize: 16,
     fontWeight: "600",
+    fontFamily: fontFamily.medium,
   },
   questionBlock: {
     width: "100%",
@@ -785,6 +791,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     lineHeight: 20,
     marginTop: 20,
+    fontFamily: fontFamily.medium,
   },
 
   TextInfoData: {
@@ -793,6 +800,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     lineHeight: 20,
     marginTop: 20,
+    fontFamily: fontFamily.medium,
   },
 
   containerIcon: {
@@ -806,6 +814,7 @@ const styles = StyleSheet.create({
     color: "#666",
     textAlign: "center",
     lineHeight: 20,
+    fontFamily: fontFamily.medium,
   },
   successContainer: {
     flex: 1,
@@ -820,6 +829,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     marginBottom: 25,
     textAlign: "center",
+    fontFamily: fontFamily.medium,
   },
   documentsImageContainer: {
     position: "relative",
@@ -851,11 +861,13 @@ const styles = StyleSheet.create({
     color: "#333",
     marginTop: 10,
     textAlign: "center",
+    fontFamily: fontFamily.medium,
   },
   containerText: {
     flexDirection: "row",
     alignItems: "flex-start",
     paddingHorizontal: 16,
+    fontFamily: fontFamily.medium,
   },
   bullet: {
     color: "#00D9C5",
@@ -874,6 +886,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#666",
     marginBottom: 12,
+    fontFamily: fontFamily.medium,
   },
   progressContainer: {
     flexDirection: "row",
@@ -904,23 +917,27 @@ const styles = StyleSheet.create({
     color: "#1A1A1A",
     marginBottom: 10,
     textAlign: "center",
+    fontFamily: fontFamily.medium,
   },
   stepSubtitle: {
     fontSize: 18,
     color: "#666",
     marginBottom: 20,
     textAlign: "center",
+    fontFamily: fontFamily.medium,
   },
   infoText: {
     fontSize: 13,
     color: "#333",
     lineHeight: 20,
     marginBottom: 25,
+    fontFamily: fontFamily.medium,
   },
   infoText2: {
     fontSize: 13,
     color: "#333",
     lineHeight: 20,
+    fontFamily: fontFamily.medium,
   },
 
   step1ContinueButton: {
@@ -938,6 +955,7 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 16,
     fontWeight: "700",
+    fontFamily: fontFamily.medium,
   },
   accordionContainer: {
     gap: 12,
@@ -970,6 +988,7 @@ const styles = StyleSheet.create({
     color: "#1A1A1A",
     fontWeight: "500",
     flex: 1,
+    fontFamily: fontFamily.medium,
   },
   percentageCircle: {
     width: 50,
@@ -991,6 +1010,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "600",
     color: "#000",
+    fontFamily: fontFamily.medium,
   },
   accordionContent: {
     paddingHorizontal: 16,
@@ -1005,6 +1025,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingVertical: 20,
     fontStyle: "italic",
+    fontFamily: fontFamily.medium,
   },
   testimonialCard: {
     backgroundColor: "#FFF",
@@ -1028,6 +1049,7 @@ const styles = StyleSheet.create({
     color: "#333",
     marginBottom: 6,
     fontWeight: "500",
+    fontFamily: fontFamily.medium,
   },
   input: {
     backgroundColor: "#F8F8F8",
@@ -1053,6 +1075,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#333",
     textDecorationLine: "underline",
+    fontFamily: fontFamily.medium,
   },
 
   linkText2: {
@@ -1061,6 +1084,7 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
     textAlign: "center",
     fontWeight: 700,
+    fontFamily: fontFamily.medium,
   },
   backgroundCheckButton: {
     backgroundColor: "#f6c3cc",
@@ -1073,6 +1097,7 @@ const styles = StyleSheet.create({
     color: "#000",
     fontSize: 16,
     fontWeight: "700",
+    fontFamily: fontFamily.medium,
   },
   buttonsContainer: {
     flexDirection: "row",
@@ -1095,6 +1120,7 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 16,
     fontWeight: "600",
+    fontFamily: fontFamily.medium,
   },
   continueButton: {
     flex: 1,
@@ -1110,12 +1136,14 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 16,
     fontWeight: "700",
+    fontFamily: fontFamily.medium,
   },
   disabledButton: {
     backgroundColor: "#D3D3D3",
   },
   disabledButtonText: {
     color: "#888",
+    fontFamily: fontFamily.medium,
   },
 
   continueButton2: {
@@ -1132,6 +1160,7 @@ const styles = StyleSheet.create({
     color: "#000",
     fontSize: 16,
     fontWeight: "700",
+    fontFamily: fontFamily.medium,
   },
 
   // Estilos del Modal
@@ -1164,6 +1193,7 @@ const styles = StyleSheet.create({
     color: "#333",
     textAlign: "center",
     marginBottom: 25,
+    fontFamily: fontFamily.bold,
   },
 
   scrollContainer: {
@@ -1187,6 +1217,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 13,
     color: "#000",
+    fontFamily: fontFamily.medium,
   },
 
   // iconContainer: {
@@ -1207,6 +1238,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "700",
     color: "#00D9C5",
+    fontFamily: fontFamily.medium,
   },
 
   addDocumentCard: {
@@ -1228,6 +1260,7 @@ const styles = StyleSheet.create({
     color: "#00D9C5",
     fontWeight: "500",
     textAlign: "center",
+    fontFamily: fontFamily.medium,
   },
 });
 

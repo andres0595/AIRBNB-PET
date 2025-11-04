@@ -1,4 +1,5 @@
 import { Dimensions, StyleSheet } from "react-native";
+import { fontFamily } from "../Config/typography";
 const { width, height } = Dimensions.get("window");
 
 export const generalStyles = StyleSheet.create({
@@ -74,6 +75,7 @@ export const generalStyles = StyleSheet.create({
     textAlign: "center",
     color: "#333",
     marginBottom: 30,
+    fontFamily: fontFamily.bold,
   },
 
   titleSmall: {
@@ -82,6 +84,7 @@ export const generalStyles = StyleSheet.create({
     color: "#333",
     textAlign: "center",
     marginTop: 20,
+    fontFamily: fontFamily.medium,
   },
 
   // Inputs
@@ -90,6 +93,7 @@ export const generalStyles = StyleSheet.create({
     color: "#333",
     marginBottom: 6,
     fontWeight: "500",
+    fontFamily: fontFamily.medium,
   },
 
   input: {
@@ -103,6 +107,7 @@ export const generalStyles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     borderColor: "#E8E8E8",
+    fontFamily: fontFamily.medium,
   },
 
   inputContainer: {
@@ -137,6 +142,7 @@ export const generalStyles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
+    fontFamily: fontFamily.medium,
   },
 
   loginButton: {
@@ -159,6 +165,7 @@ export const generalStyles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
+    fontFamily: fontFamily.medium,
   },
 
   // Dividers
@@ -178,6 +185,7 @@ export const generalStyles = StyleSheet.create({
     marginHorizontal: 16,
     fontSize: 12,
     color: "#666",
+    fontFamily: fontFamily.medium,
   },
 
   // Social Buttons
@@ -275,6 +283,7 @@ export const generalStyles = StyleSheet.create({
     color: "#FFF",
     fontSize: 16,
     fontWeight: "600",
+    fontFamily: fontFamily.medium,
   },
 
   continueButtonTextDisabled: {
@@ -288,6 +297,7 @@ export const generalStyles = StyleSheet.create({
     color: "#666",
     marginBottom: 25,
     lineHeight: 17,
+    fontFamily: fontFamily.medium,
   },
 
   // Register Links
@@ -300,6 +310,7 @@ export const generalStyles = StyleSheet.create({
   registerText: {
     fontSize: 10,
     color: "#666",
+    fontFamily: fontFamily.medium,
   },
 
   registerLink: {
@@ -307,6 +318,7 @@ export const generalStyles = StyleSheet.create({
     color: "#ff0000",
     fontWeight: "600",
     textDecorationLine: "underline",
+    fontFamily: fontFamily.medium,
   },
 
   // Error
@@ -316,6 +328,7 @@ export const generalStyles = StyleSheet.create({
     marginBottom: 8,
     marginLeft: 8,
     marginTop: -5,
+    fontFamily: fontFamily.medium,
   },
 
   modalOverlay: {
@@ -354,6 +367,7 @@ export const generalStyles = StyleSheet.create({
     color: "#1A1A1A",
     textAlign: "center",
     marginBottom: 20,
+    fontFamily: fontFamily.bold,
   },
 
   modalScroll: {
@@ -374,6 +388,7 @@ export const generalStyles = StyleSheet.create({
     color: "#333",
     lineHeight: 20,
     marginBottom: 25,
+    fontFamily: fontFamily.medium,
   },
 
   infoTextCenter: {
@@ -382,6 +397,7 @@ export const generalStyles = StyleSheet.create({
     lineHeight: 20,
     marginBottom: 25,
     textAlign: "center",
+    fontFamily: fontFamily.medium,
   },
 
   // Button variants
@@ -399,6 +415,7 @@ export const generalStyles = StyleSheet.create({
     color: "#FFF",
     fontSize: 16,
     fontWeight: "700",
+    fontFamily: fontFamily.medium,
   },
 
   secondaryButton: {
@@ -415,6 +432,7 @@ export const generalStyles = StyleSheet.create({
     color: "#000",
     fontSize: 16,
     fontWeight: "700",
+    fontFamily: fontFamily.medium,
   },
 
   disabledButton: {
@@ -423,6 +441,7 @@ export const generalStyles = StyleSheet.create({
 
   disabledButtonText: {
     color: "#888",
+    fontFamily: fontFamily.medium,
   },
 
   // Layout

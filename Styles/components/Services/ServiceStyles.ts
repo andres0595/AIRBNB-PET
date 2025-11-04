@@ -1,4 +1,5 @@
 import { Dimensions, StyleSheet } from "react-native";
+import { fontFamily } from "../../../Config/typography";
 const { width, height } = Dimensions.get("window");
 
 export const ServicesStyles = StyleSheet.create({
@@ -28,10 +29,10 @@ export const ServicesStyles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-    fontWeight: "700",
     color: "#1A1A1A",
     marginBottom: 10,
     textAlign: "center",
+    fontFamily: fontFamily.bold,
   },
   subtitleContainer: {
     flexDirection: "row",
@@ -39,12 +40,14 @@ export const ServicesStyles = StyleSheet.create({
     justifyContent: "center",
     gap: 6,
     maxWidth: "90%",
+    fontFamily: fontFamily.medium,
   },
   subtitle: {
     fontSize: 13,
     color: "#666",
     textAlign: "center",
     lineHeight: 18,
+    fontFamily: fontFamily.medium,
   },
   infoButton: {
     padding: 2,
@@ -110,11 +113,12 @@ export const ServicesStyles = StyleSheet.create({
   },
   serviceTitle: {
     fontSize: 14,
-    fontWeight: "700",
     color: "#1A1A1A",
     textAlign: "center",
     marginBottom: 6,
     lineHeight: 18,
+    fontFamily: fontFamily.bold,
+    fontWeight: "700",
   },
   serviceDescription: {
     fontSize: 11,
@@ -122,11 +126,13 @@ export const ServicesStyles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 8,
     lineHeight: 15,
+    fontFamily: fontFamily.medium,
   },
   servicePrice: {
     fontSize: 11,
     color: "#999",
     textAlign: "center",
+    fontFamily: fontFamily.medium,
   },
   linkButton: {
     alignSelf: "center",
@@ -137,6 +143,7 @@ export const ServicesStyles = StyleSheet.create({
     fontSize: 13,
     color: "#666",
     textDecorationLine: "underline",
+    fontFamily: fontFamily.medium,
   },
   buttonContainer: {
     position: "absolute",
@@ -177,9 +184,11 @@ export const ServicesStyles = StyleSheet.create({
     color: "#000000",
     fontSize: 16,
     fontWeight: "700",
+    fontFamily: fontFamily.medium,
   },
   continueButtonTextDisabled: {
     color: "#888888",
+    fontFamily: fontFamily.medium,
   },
 
   // Estilos del Modal
@@ -223,6 +232,7 @@ export const ServicesStyles = StyleSheet.create({
     color: "#1A1A1A",
     textAlign: "center",
     marginBottom: 20,
+    fontFamily: fontFamily.bold,
   },
   modalScroll: {
     maxHeight: 400,
@@ -236,11 +246,13 @@ export const ServicesStyles = StyleSheet.create({
     color: "#1A1A1A",
     marginBottom: 8,
     lineHeight: 20,
+    fontFamily: fontFamily.bold,
   },
   questionAnswer: {
     fontSize: 13,
     color: "#666",
     lineHeight: 20,
+    fontFamily: fontFamily.medium,
   },
 
   tooltipWrapper: {
@@ -291,6 +303,7 @@ export const ServicesStyles = StyleSheet.create({
     fontSize: 12,
     color: "#333",
     lineHeight: 18,
+    fontFamily: fontFamily.medium,
   },
 
   // Estilos del Modal de Perfil
@@ -316,6 +329,7 @@ export const ServicesStyles = StyleSheet.create({
     color: "#1A1A1A",
     textAlign: "center",
     marginBottom: 16,
+    fontFamily: fontFamily.bold,
   },
   profileModalDescription: {
     fontSize: 13,
@@ -323,6 +337,7 @@ export const ServicesStyles = StyleSheet.create({
     lineHeight: 20,
     textAlign: "left",
     marginBottom: 20,
+    fontFamily: fontFamily.medium,
   },
   profileModalSubtitle: {
     fontSize: 14,
@@ -330,6 +345,7 @@ export const ServicesStyles = StyleSheet.create({
     color: "#1A1A1A",
     lineHeight: 20,
     marginBottom: 16,
+    fontFamily: fontFamily.medium,
   },
   requirementsList: {
     marginBottom: 24,
@@ -372,6 +388,7 @@ export const ServicesStyles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "700",
+    fontFamily: fontFamily.bold,
   },
 
   // Estilos del Modal de Aprobación
@@ -405,6 +422,7 @@ export const ServicesStyles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 20,
     lineHeight: 18,
+    fontFamily: fontFamily.medium,
   },
   approvalScroll: {
     maxHeight: 320,
@@ -416,6 +434,7 @@ export const ServicesStyles = StyleSheet.create({
     lineHeight: 20,
     marginBottom: 16,
     textAlign: "left",
+    fontFamily: fontFamily.medium,
   },
   approvalButtonsContainer: {
     gap: 12,
@@ -440,6 +459,7 @@ export const ServicesStyles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "700",
+    fontFamily: fontFamily.bold,
   },
   arrowIcon: {
     marginLeft: 8,
@@ -454,6 +474,7 @@ export const ServicesStyles = StyleSheet.create({
     color: "#333",
     fontSize: 16,
     fontWeight: "600",
+    fontFamily: fontFamily.bold,
   },
   // serviceCardFull: {
   //   width: "100%", // Mantiene el mismo ancho que las demás
@@ -483,9 +504,11 @@ export const ServicesStyles = StyleSheet.create({
   serviceCardFullTitle: {
     textAlign: "left",
     marginBottom: 4,
+    fontFamily: fontFamily.bold,
   },
 
   serviceCardFullDescription: {
     textAlign: "left",
+    fontFamily: fontFamily.medium,
   },
 });

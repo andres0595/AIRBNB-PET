@@ -18,6 +18,7 @@ import GuarderiaIcon from "../../assets/Icons/svg-banner/SubBanner2.svg";
 import CuidadoIcon from "../../assets/Icons/svg-banner/SubBanner3.svg";
 import PaseosIcon from "../../assets/Icons/svg-banner/SubBanner4.svg";
 import BañoIcon from "../../assets/Icons/svg-banner/SubBanner5.svg";
+import { fontFamily } from "../../Config/typography";
 
 const { width, height } = Dimensions.get("window");
 
@@ -277,6 +278,7 @@ const homeStyles = StyleSheet.create({
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
     lineHeight: 36,
+    fontFamily: fontFamily.medium,
   },
   carouselIndicators: {
     flexDirection: "row",
@@ -305,14 +307,16 @@ const homeStyles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 30,
     paddingHorizontal: 30,
+    fontFamily: fontFamily.medium,
   },
   mainTitle: {
     fontSize: 22,
-    fontWeight: "bold",
+    fontWeight: "normal",
     textAlign: "center",
     color: "#333",
     marginBottom: 15,
     lineHeight: 28,
+    fontFamily: fontFamily.bold,
   },
   subtitle: {
     fontSize: 16,
@@ -320,6 +324,7 @@ const homeStyles = StyleSheet.create({
     color: "#666",
     lineHeight: 22,
     marginTop: 15,
+    fontFamily: fontFamily.medium,
   },
   buttonsContainer: {
     flexDirection: "row",
@@ -339,7 +344,8 @@ const homeStyles = StyleSheet.create({
   registerButtonText: {
     color: "black",
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 700,
+    fontFamily: fontFamily.medium,
   },
   loginButton: {
     flex: 1,
@@ -353,6 +359,7 @@ const homeStyles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
+    fontFamily: fontFamily.medium,
   },
 });
 

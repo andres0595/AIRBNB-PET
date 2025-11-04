@@ -6,6 +6,7 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
+import { useFonts } from "expo-font";
 import { Drawer } from "expo-router/drawer";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
@@ -16,14 +17,31 @@ import { PersistGate } from "redux-persist/integration/react";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  // Cargar fuentes
+  const [fontsLoaded, fontError] = useFonts({
+    "Comfortaa-Regular": require("../assets/fonts/Comfortaa-Regular.ttf"),
+    "Comfortaa-Bold": require("../assets/fonts/Comfortaa-Bold.ttf"),
+    "Comfortaa-Light": require("../assets/fonts/Comfortaa-Light.ttf"),
+    "Comfortaa-Medium": require("../assets/fonts/Comfortaa-Medium.ttf"),
+    "Comfortaa-SemiBold": require("../assets/fonts/Comfortaa-SemiBold.ttf"),
+  });
+
   useEffect(() => {
     const hideSplash = async () => {
-      await SplashScreen.hideAsync();
+      // Esperar a que las fuentes carguen antes de ocultar el splash
+      if (fontsLoaded || fontError) {
+        await SplashScreen.hideAsync();
+      }
     };
     setTimeout(hideSplash, 2000);
-  }, []);
+  }, [fontsLoaded, fontError]);
 
   const colorScheme = useColorScheme();
+
+  // No renderizar hasta que las fuentes estén listas
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
 
   return (
     <Provider store={store}>
@@ -37,17 +55,6 @@ export default function RootLayout() {
                 headerShown: false,
               }}
             >
-              {/* <Drawer.Screen
-                name="index"
-                options={{
-                  drawerLabel: "Inicio",
-                  drawerIcon: ({ color, size }) => (
-                    <Ionicons name="home-outline" size={size} color={color} />
-                  ),
-                }}
-              /> */}
-
-              {/* NUEVO: Agregar las tabs al drawer */}
               <Drawer.Screen
                 name="(tabs)"
                 options={{
@@ -57,44 +64,6 @@ export default function RootLayout() {
                   ),
                 }}
               />
-
-              {/* <Drawer.Screen
-                name="blog"
-                options={{
-                  drawerLabel: "Blog",
-                  drawerIcon: ({ color, size }) => (
-                    <Ionicons name="book-outline" size={size} color={color} />
-                  ),
-                }}
-              /> */}
-              {/* 
-              <Drawer.Screen
-                name="support"
-                options={{
-                  drawerLabel: "Soporte",
-                  drawerIcon: ({ color, size }) => (
-                    <Ionicons
-                      name="help-circle-outline"
-                      size={size}
-                      color={color}
-                    />
-                  ),
-                }}
-              />
-
-              <Drawer.Screen
-                name="register"
-                options={{
-                  drawerLabel: "Registrarse",
-                  drawerIcon: ({ color, size }) => (
-                    <Ionicons
-                      name="person-add-outline"
-                      size={size}
-                      color={color}
-                    />
-                  ),
-                }}
-              /> */}
 
               <Drawer.Screen
                 name="login"

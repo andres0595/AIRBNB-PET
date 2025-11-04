@@ -7,6 +7,7 @@ import {
 import React, { useEffect } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { fontFamily } from "../../Config/typography";
 
 interface LegalConsentsFormProps {
   onSave?: (data: LegalConsentsData) => void;
@@ -118,6 +119,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontWeight: "500",
     lineHeight: 20,
+    fontFamily: fontFamily.medium,
   },
   consentsContainer: {
     gap: 14,
@@ -145,11 +147,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#00D9C5",
   },
   linkText: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#000",
     textDecorationLine: "underline",
     flex: 1,
     lineHeight: 20,
+    fontFamily: fontFamily.medium,
   },
 });
 export default LegalConsentsForm;

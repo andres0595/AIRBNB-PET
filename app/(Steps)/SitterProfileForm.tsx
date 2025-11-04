@@ -17,6 +17,7 @@ import {
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { fontFamily } from "../../Config/typography";
 
 interface SitterProfileFormProps {
   onSave?: (data: any) => void;
@@ -215,6 +216,7 @@ const styles = StyleSheet.create({
     color: "#333",
     marginBottom: 12,
     fontWeight: "500",
+    fontFamily: fontFamily.medium,
   },
   uploadCard: {
     backgroundColor: "#F8F8F8",
@@ -240,12 +242,14 @@ const styles = StyleSheet.create({
     color: "#00D9C5",
     fontWeight: "600",
     marginBottom: 8,
+    fontFamily: fontFamily.medium,
   },
   uploadHint: {
     fontSize: 12,
     color: "#999",
     textAlign: "center",
     lineHeight: 18,
+    fontFamily: fontFamily.medium,
   },
   textArea: {
     backgroundColor: "#F8F8F8",
@@ -257,6 +261,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E8E8E8",
     minHeight: 100,
+    fontFamily: fontFamily.medium,
   },
   checkboxGroup: {
     marginBottom: 20,
@@ -280,6 +285,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#333",
     flex: 1,
+    fontFamily: fontFamily.medium,
   },
   checkboxSelected: {
     backgroundColor: "#00D9C5",
@@ -306,6 +312,7 @@ const styles = StyleSheet.create({
   pickerText: {
     fontSize: 14,
     color: "#999",
+    fontFamily: fontFamily.medium,
   },
 });
 export default SitterProfileForm;

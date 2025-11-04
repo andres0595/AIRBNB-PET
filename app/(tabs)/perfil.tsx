@@ -12,6 +12,8 @@ import {
 } from "react-native";
 import CustomModal from "../(CustomModal)/CustomModal";
 import configService from "../../assets/images/Image_config_service.png";
+import { fontFamily } from "../../Config/typography";
+
 const ProfileScreen = () => {
   const [modalVisibleAlert, setModalVisibleAlert] = useState(false);
   const [modalConfig, setModalConfig] = useState({
@@ -194,6 +196,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
     color: "#000",
+    fontFamily: fontFamily.bold,
   },
   placeholder: {
     width: 40,
@@ -232,6 +235,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#000",
     marginBottom: 15,
+    fontFamily: fontFamily.medium,
   },
   menuItem: {
     flexDirection: "row",
@@ -258,12 +262,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000",
     fontWeight: "400",
+    fontFamily: fontFamily.medium,
   },
   modalText: {
     fontSize: 12,
     color: "#000",
     fontWeight: "400",
     textAlign: "justify",
+    fontFamily: fontFamily.medium,
   },
   completeButton: {
     backgroundColor: "#E8E8E8",
@@ -279,6 +285,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "#666",
+    fontFamily: fontFamily.medium,
   },
 
   containerImge: {

@@ -9,6 +9,7 @@ import * as DocumentPicker from "expo-document-picker";
 import { useEffect } from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { fontFamily } from "../../Config/typography";
 
 interface ValidationsProps {
   onSave?: (data: ValidationsData) => void;
@@ -185,6 +186,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     fontWeight: "500",
     lineHeight: 20,
+    fontFamily: fontFamily.medium,
   },
   radioGroup: {
     marginBottom: 24,
@@ -219,6 +221,7 @@ const styles = StyleSheet.create({
     color: "#333",
     flex: 1,
     lineHeight: 20,
+    fontFamily: fontFamily.medium,
   },
   infoBox: {
     backgroundColor: "#F8F8F8",
@@ -234,12 +237,14 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     marginBottom: 8,
     fontWeight: "500",
+    fontFamily: fontFamily.medium,
   },
   infoSubtext: {
     fontSize: 12,
     color: "#666",
     lineHeight: 18,
     fontStyle: "italic",
+    fontFamily: fontFamily.medium,
   },
   uploadHeader: {
     flexDirection: "row",
@@ -251,6 +256,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#333",
     fontWeight: "600",
+    fontFamily: fontFamily.medium,
   },
   clearAllButton: {
     paddingHorizontal: 12,
@@ -262,6 +268,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "white",
     fontWeight: "500",
+    fontFamily: fontFamily.medium,
   },
   documentsContainer: {
     flexDirection: "row",
@@ -286,6 +293,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     textAlign: "center",
     paddingHorizontal: 4,
+    fontFamily: fontFamily.medium,
   },
   removeButton: {
     position: "absolute",
@@ -309,6 +317,7 @@ const styles = StyleSheet.create({
     color: "#00D9C5",
     fontWeight: "500",
     textAlign: "center",
+    fontFamily: fontFamily.medium,
   },
   warningBox: {
     flexDirection: "row",
@@ -327,6 +336,7 @@ const styles = StyleSheet.create({
     color: "#FF3B30",
     flex: 1,
     lineHeight: 18,
+    fontFamily: fontFamily.medium,
   },
   infoBoxSmall: {
     flexDirection: "row",
@@ -344,6 +354,7 @@ const styles = StyleSheet.create({
     color: "#666",
     flex: 1,
     lineHeight: 18,
+    fontFamily: fontFamily.medium,
   },
   successBox: {
     flexDirection: "row",
@@ -361,6 +372,7 @@ const styles = StyleSheet.create({
     color: "#00A896",
     flex: 1,
     lineHeight: 18,
+    fontFamily: fontFamily.medium,
   },
 });
 export default ValidationsForm;

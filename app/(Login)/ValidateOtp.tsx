@@ -15,10 +15,8 @@ import { useRouter } from "expo-router";
 import { useMemo, useRef, useState } from "react";
 import Toast from "react-native-toast-message";
 import CustomModal from "../(CustomModal)/CustomModal";
-import FacebookIcon from "../../assets/Icons/Facebook.svg";
-import GoogleIcon from "../../assets/Icons/google.svg";
-import IOSIconfrom from "../../assets/Icons/IOS.svg";
 import PuppySvg from "../../assets/Icons/PuppySvg.svg";
+import { fontFamily } from "../../Config/typography";
 
 export default function ValidateOtp() {
   const router = useRouter();
@@ -200,14 +198,14 @@ export default function ValidateOtp() {
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.dividerContainer}>
+          {/* <View style={styles.dividerContainer}>
             <View style={styles.divider} />
             <Text style={styles.dividerText}>O Continuar con</Text>
             <View style={styles.divider} />
-          </View>
+          </View> */}
 
           {/* Social Buttons */}
-          <View style={styles.socialButtonsContainer}>
+          {/* <View style={styles.socialButtonsContainer}>
             <TouchableOpacity style={styles.socialButton}>
               <View style={styles.socialIconContainer}>
                 <FacebookIcon width={40} height={40} />
@@ -228,7 +226,7 @@ export default function ValidateOtp() {
                 <IOSIconfrom width={40} height={40} />
               </View>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
 
@@ -298,6 +296,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#333",
     marginBottom: 15,
+    fontFamily: fontFamily.bold,
   },
   description: {
     fontSize: 14,
@@ -306,6 +305,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     marginBottom: 30,
     paddingHorizontal: 10,
+    fontFamily: fontFamily.medium,
   },
   otpContainer: {
     flexDirection: "row",
@@ -324,6 +324,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     backgroundColor: "#fff",
     color: "#333",
+    fontFamily: fontFamily.medium,
   },
   otpInputFilled: {
     borderColor: "#FF0000",
@@ -334,14 +335,16 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   resendText: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#666",
+    fontFamily: fontFamily.medium,
   },
   resendLink: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#FF0000",
     fontWeight: "600",
     textDecorationLine: "underline",
+    fontFamily: fontFamily.medium,
   },
   verifyButton: {
     backgroundColor: "#FF0000",
@@ -358,9 +361,11 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
+    fontFamily: fontFamily.medium,
   },
   verifyButtonTextDisabled: {
     color: "#999",
+    fontFamily: fontFamily.medium,
   },
   separator: {
     textAlign: "center",

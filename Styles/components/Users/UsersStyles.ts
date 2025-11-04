@@ -1,4 +1,5 @@
 import { Dimensions, StyleSheet } from "react-native";
+import { fontFamily } from "../../../Config/typography";
 const { width, height } = Dimensions.get("window");
 
 export const UsersStyles = StyleSheet.create({
@@ -33,6 +34,7 @@ export const UsersStyles = StyleSheet.create({
     marginBottom: 5,
     color: "#333",
     lineHeight: 24,
+    fontFamily: fontFamily.bold,
   },
   label: {
     fontSize: 14,
@@ -40,6 +42,7 @@ export const UsersStyles = StyleSheet.create({
     marginBottom: 6,
     marginLeft: 8,
     fontWeight: "500",
+    fontFamily: fontFamily.medium,
   },
 
   input: {
@@ -51,6 +54,7 @@ export const UsersStyles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: "#f8f8f8",
     marginBottom: 15,
+    fontFamily: fontFamily.medium,
   },
   error: {
     color: "#e74c3c",
@@ -58,6 +62,7 @@ export const UsersStyles = StyleSheet.create({
     marginBottom: 8,
     marginLeft: 8,
     marginTop: -5,
+    fontFamily: fontFamily.medium,
   },
   checkboxContainer: {
     flexDirection: "row",
@@ -72,6 +77,7 @@ export const UsersStyles = StyleSheet.create({
     fontSize: 14,
     flex: 1,
     lineHeight: 18,
+    fontFamily: fontFamily.medium,
   },
   button: {
     paddingVertical: 13,
@@ -97,6 +103,7 @@ export const UsersStyles = StyleSheet.create({
     color: "#333",
     fontSize: 16,
     fontWeight: "600",
+    fontFamily: fontFamily.medium,
   },
   backButton: {
     position: "absolute",
@@ -122,11 +129,13 @@ export const UsersStyles = StyleSheet.create({
   loginText: {
     color: "#555",
     fontSize: 14,
+    fontFamily: fontFamily.medium,
   },
   loginLink: {
     color: "#e74c3c",
     fontSize: 14,
     fontWeight: "500",
+    fontFamily: fontFamily.medium,
   },
 
   scrollView: {
@@ -145,6 +154,7 @@ export const UsersStyles = StyleSheet.create({
     color: "#000000",
     fontSize: 16,
     fontWeight: "700",
+    fontFamily: fontFamily.medium,
   },
 
   // Para Picker nativo
@@ -175,6 +185,7 @@ export const UsersStyles = StyleSheet.create({
   pickerButtonText: {
     fontSize: 16,
     color: "#333",
+    fontFamily: fontFamily.medium,
   },
   pickerPlaceholder: {
     color: "#999",

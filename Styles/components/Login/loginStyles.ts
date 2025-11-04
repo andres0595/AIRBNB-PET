@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { fontFamily } from "../../../Config/typography";
 
 export const loginStyles = StyleSheet.create({
   container: {
@@ -27,11 +28,12 @@ export const loginStyles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: "600",
     color: "#333",
     textAlign: "center",
     marginTop: 20,
+    fontFamily: fontFamily.bold,
   },
 
   formContainer: {
@@ -55,6 +57,7 @@ export const loginStyles = StyleSheet.create({
     marginBottom: 8,
     marginTop: 16,
     marginLeft: 10,
+    fontFamily: fontFamily.medium,
   },
 
   textModal: {
@@ -89,6 +92,7 @@ export const loginStyles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
     paddingVertical: 12,
+    fontFamily: fontFamily.medium,
   },
 
   forgotPasswordContainer: {
@@ -100,6 +104,7 @@ export const loginStyles = StyleSheet.create({
     color: "#ff0000",
     fontSize: 12,
     textDecorationLine: "underline",
+    fontFamily: fontFamily.medium,
   },
 
   loginButton: {
@@ -120,8 +125,9 @@ export const loginStyles = StyleSheet.create({
 
   loginButtonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
+    fontFamily: fontFamily.medium,
   },
 
   dividerContainer: {
@@ -140,6 +146,7 @@ export const loginStyles = StyleSheet.create({
     marginHorizontal: 16,
     fontSize: 12,
     color: "#666",
+    fontFamily: fontFamily.medium,
   },
 
   socialButtonsContainer: {
@@ -183,6 +190,7 @@ export const loginStyles = StyleSheet.create({
   registerText: {
     fontSize: 10,
     color: "#666",
+    fontFamily: fontFamily.medium,
   },
 
   registerLink: {
@@ -190,5 +198,6 @@ export const loginStyles = StyleSheet.create({
     color: "#ff0000",
     fontWeight: "600",
     textDecorationLine: "underline",
+    fontFamily: fontFamily.medium,
   },
 });

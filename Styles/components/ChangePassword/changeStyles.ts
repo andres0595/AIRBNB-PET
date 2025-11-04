@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { fontFamily } from "../../../Config/typography";
 
 export const changeStyles = StyleSheet.create({
   formContainer: {
@@ -48,6 +49,7 @@ export const changeStyles = StyleSheet.create({
     textAlign: "center",
     color: "#333",
     marginBottom: 30,
+    fontFamily: fontFamily.bold,
   },
 
   description: {
@@ -56,12 +58,14 @@ export const changeStyles = StyleSheet.create({
     color: "#666",
     marginBottom: 25,
     lineHeight: 17,
+    fontFamily: fontFamily.medium,
   },
 
   label: {
     fontSize: 14,
     color: "#444",
     marginBottom: 8,
+    fontFamily: fontFamily.medium,
   },
 
   input: {
@@ -69,6 +73,7 @@ export const changeStyles = StyleSheet.create({
     fontSize: 16,
     color: "#000",
     paddingVertical: 12,
+    fontFamily: fontFamily.medium,
   },
 
   inputError: {
@@ -106,8 +111,9 @@ export const changeStyles = StyleSheet.create({
 
   loginButtonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
+    fontFamily: fontFamily.medium,
   },
 
   inputContainer: {
@@ -149,6 +155,7 @@ export const changeStyles = StyleSheet.create({
     marginHorizontal: 16,
     fontSize: 12,
     color: "#666",
+    fontFamily: fontFamily.medium,
   },
 
   socialButtonsContainer: {
@@ -246,6 +253,7 @@ export const changeStyles = StyleSheet.create({
     color: "#666",
     textAlign: "center",
     lineHeight: 20,
+    fontFamily: fontFamily.medium,
   },
   continueButton: {
     backgroundColor: "#00D9C5",
@@ -259,5 +267,18 @@ export const changeStyles = StyleSheet.create({
     color: "#FFF",
     fontSize: 16,
     fontWeight: "600",
+  },
+
+  errorsContainer: {
+    marginTop: 8,
+    paddingHorizontal: 12,
+    marginBottom: 8,
+  },
+  errorText: {
+    color: "#e74c3c", // Rojo para errores
+    fontSize: 12,
+    marginBottom: 4,
+    lineHeight: 16,
+    fontFamily: fontFamily.medium,
   },
 });

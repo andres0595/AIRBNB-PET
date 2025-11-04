@@ -8,6 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { fontFamily } from "../../Config/typography";
 
 interface ActivationFormProps {
   onSave?: (data: ActivationData) => void;
@@ -133,6 +134,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     fontWeight: "500",
     lineHeight: 20,
+    fontFamily: fontFamily.medium,
   },
   confirmationCard: {
     backgroundColor: "#fff",
@@ -167,6 +169,7 @@ const styles = StyleSheet.create({
     color: "#333",
     flex: 1,
     lineHeight: 22,
+    fontFamily: fontFamily.medium,
   },
   infoBox: {
     flexDirection: "row",
@@ -186,11 +189,13 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#00A896",
     marginBottom: 6,
+    fontFamily: fontFamily.medium,
   },
   infoText: {
     fontSize: 13,
     color: "#006B5F",
     lineHeight: 20,
+    fontFamily: fontFamily.medium,
   },
   warningBox: {
     flexDirection: "row",
@@ -213,12 +218,14 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#FF3B30",
     marginBottom: 8,
+    fontFamily: fontFamily.medium,
   },
   warningText: {
     fontSize: 13,
     color: "#C41E3A",
     lineHeight: 22,
     marginBottom: 4,
+    fontFamily: fontFamily.medium,
   },
   successBox: {
     flexDirection: "row",
@@ -235,6 +242,7 @@ const styles = StyleSheet.create({
     color: "#2E7D32",
     fontWeight: "500",
     flex: 1,
+    fontFamily: fontFamily.medium,
   },
 });
 export default ActivationForm;

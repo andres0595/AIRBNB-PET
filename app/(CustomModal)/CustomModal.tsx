@@ -9,6 +9,7 @@ import {
   View,
   ViewStyle,
 } from "react-native";
+import { fontFamily } from "../../Config/typography";
 
 interface CustomModalProps {
   visible: boolean;
@@ -187,6 +188,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    fontFamily: fontFamily.medium,
   },
   closeButton: {
     position: "absolute",
@@ -214,9 +216,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
     paddingHorizontal: 20,
+    fontFamily: fontFamily.bold,
   },
   content: {
     marginBottom: 20,
+    fontFamily: fontFamily.medium,
   },
   buttonsContainer: {
     flexDirection: "column",
@@ -232,6 +236,7 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 16,
     fontWeight: "600",
+    fontFamily: fontFamily.medium,
   },
   secondaryButton: {
     backgroundColor: "#F5F5F5",
@@ -243,6 +248,7 @@ const styles = StyleSheet.create({
     color: "#666",
     fontSize: 16,
     fontWeight: "600",
+    fontFamily: fontFamily.medium,
   },
 
   primaryButtonDisabled: {
@@ -251,5 +257,6 @@ const styles = StyleSheet.create({
   },
   primaryButtonTextDisabled: {
     color: "#9E9E9E",
+    fontFamily: fontFamily.medium,
   },
 });

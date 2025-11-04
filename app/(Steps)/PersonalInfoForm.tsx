@@ -19,6 +19,7 @@ import {
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { fontFamily } from "../../Config/typography";
 
 interface PersonalInfoFormProps {
   onSave?: (data: any) => void;
@@ -346,6 +347,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontWeight: "500",
     lineHeight: 20,
+    fontFamily: fontFamily.medium,
   },
   input: {
     backgroundColor: "#F8F8F8",
@@ -371,6 +373,7 @@ const styles = StyleSheet.create({
   pickerText: {
     fontSize: 14,
     color: "#999",
+    fontFamily: fontFamily.medium,
   },
   pickerTextFilled: {
     color: "#333",
@@ -403,6 +406,7 @@ const styles = StyleSheet.create({
   radioLabel: {
     fontSize: 14,
     color: "#333",
+    fontFamily: fontFamily.medium,
   },
   uploadButton: {
     flexDirection: "row",
@@ -415,11 +419,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#00D9C5",
     fontWeight: "500",
+    fontFamily: fontFamily.medium,
   },
   fileFormatHint: {
     fontSize: 12,
     color: "#999",
     marginBottom: 16,
+    fontFamily: fontFamily.medium,
   },
   uploadedFilesContainer: {
     gap: 8,
@@ -439,6 +445,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 13,
     color: "#333",
+    fontFamily: fontFamily.medium,
   },
 
   dateInput: {
@@ -453,9 +460,11 @@ const styles = StyleSheet.create({
   dateText: {
     fontSize: 14,
     color: "#333",
+    fontFamily: fontFamily.medium,
   },
   placeholder: {
     color: "#999",
+    fontFamily: fontFamily.medium,
   },
 });
 export default PersonalInfoForm;

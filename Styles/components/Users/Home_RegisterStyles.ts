@@ -1,5 +1,7 @@
 import { Dimensions, StyleSheet } from "react-native";
+import { fontFamily } from "../../../Config/typography";
 import { generalStyles } from "../../GeneralStyles";
+
 const { width, height } = Dimensions.get("window");
 
 export const HomeRegisterStyles = StyleSheet.create({
@@ -34,6 +36,7 @@ export const HomeRegisterStyles = StyleSheet.create({
     textShadowColor: "rgba(0, 0, 0, 0.5)",
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
+    fontFamily: fontFamily.bold,
   },
 
   optionsContainer: {
@@ -103,10 +106,12 @@ export const HomeRegisterStyles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
+    fontFamily: fontFamily.medium,
   },
 
   clientTitle: {
     color: "#F6C3CC",
+    fontFamily: fontFamily.medium,
   },
 
   caretakerTitle: {
@@ -164,6 +169,7 @@ export const HomeRegisterStyles = StyleSheet.create({
     fontSize: 10.7,
     fontWeight: "bold",
     textAlign: "center",
+    fontFamily: fontFamily.medium,
   },
 
   clientButtonText: {
@@ -180,6 +186,7 @@ export const HomeRegisterStyles = StyleSheet.create({
     lineHeight: 13,
     color: "#ffff",
     fontWeight: "500",
+    fontFamily: fontFamily.medium,
   },
 
   inner: generalStyles.inner,
