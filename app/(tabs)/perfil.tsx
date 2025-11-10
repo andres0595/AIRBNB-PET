@@ -68,6 +68,8 @@ const ProfileScreen = () => {
         false,
         route
       );
+    } else {
+      navigateTo(route);
     }
   };
 
@@ -87,11 +89,12 @@ const ProfileScreen = () => {
         navigateTo(route);
       },
     });
-    setModalVisibleAlert(false);
+    setModalVisibleAlert(true);
   };
 
   const navigateTo = (route: any) => {
     router.push(route as any);
+    setModalVisibleAlert(false);
   };
   return (
     <AuthLayout>

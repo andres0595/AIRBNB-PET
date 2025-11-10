@@ -22,6 +22,8 @@ import Banio from "../../assets/Icons/svg-servicios/Banio.png";
 import Cuidado from "../../assets/Icons/svg-servicios/Cuidado.png";
 import Guarderia from "../../assets/Icons/svg-servicios/Guarderia.png";
 import Paseos from "../../assets/Icons/svg-servicios/Paseos.png";
+import puppyPink from "../../assets/images/PuppyPink.png";
+import { fontFamily } from "../../Config/typography";
 
 const services = [
   {
@@ -60,10 +62,12 @@ const services = [
     icon: Banio,
   },
 ];
+
 const timeSlots = ["Mañana", "Tarde", "Noche"];
 
 export default function ServiceConfigScreen() {
   const handleGoBack = () => {
+    clearAllStates();
     router.push("/(tabs)/perfil");
   };
 
@@ -80,11 +84,6 @@ export default function ServiceConfigScreen() {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartDate, setDragStartDate] = useState<string | null>(null);
-
-  const [startHour, setStartHour] = useState("");
-  const [startMinute, setStartMinute] = useState("");
-  const [endHour, setEndHour] = useState("");
-  const [endMinute, setEndMinute] = useState("");
 
   // Para servicios de franjas horarias (Paseo y Baño)
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("");
@@ -116,11 +115,59 @@ export default function ServiceConfigScreen() {
   const [hasOutdoorSpace, setHasOutdoorSpace] = useState("");
   const [peopleAtHome, setPeopleAtHome] = useState("");
   const [childrenAge, setChildrenAge] = useState("");
-
   const [serviceConfigs, setServiceConfigs] = useState<Record<string, any>>({});
 
-  const today = dayjs().format("YYYY-MM-DD");
+  // Estados para selección de rango
+  const [selectionMode, setSelectionMode] = useState<"exact" | "range">(
+    "exact"
+  );
+  const [rangeStart, setRangeStart] = useState<string | null>(null);
+  const [rangeEnd, setRangeEnd] = useState<string | null>(null);
 
+  const today = dayjs().format("YYYY-MM-DD");
+  const clearAllStates = () => {
+    // Paso 1
+    setCurrentStep(0);
+    setSelectedService(null);
+    setSelectedDates({});
+    setPrice("");
+    setDeliveryTime(new Date());
+    setPickupTime(new Date());
+    setShowDeliveryPicker(false);
+    setShowPickupPicker(false);
+    setDayPrices({});
+    setShowConfigModal(false);
+    setSelectedServices([]);
+    setIsDragging(false);
+    setDragStartDate(null);
+
+    // Servicios de franjas horarias
+    setSelectedTimeSlot("");
+    setServiceDuration("");
+    setStartTime(new Date());
+    setEndTime(new Date());
+    setShowStartTimePicker(false);
+    setShowEndTimePicker(false);
+    setBasePrice("");
+    setTimeSlotSchedules([]);
+
+    // Paso 2
+    setPetType("");
+    setExperienceLevel("");
+    setCertifications([]);
+    setHasAllergies("");
+    setAllergiesDetail("");
+    setHomeType("");
+    setHasOutdoorSpace("");
+    setPeopleAtHome("");
+    setChildrenAge("");
+    setServiceConfigs({});
+
+    // Selección de rango
+    setSelectionMode("exact");
+    setRangeStart(null);
+    setRangeEnd(null);
+  };
   useEffect(() => {
     const today = dayjs();
     const prices: Record<string, { price: string }> = {};
@@ -167,7 +214,6 @@ export default function ServiceConfigScreen() {
     const serviceType = getCurrentServiceType();
 
     if (serviceType === "time-slot") {
-      // Validación para servicios de franja horaria
       if (timeSlotSchedules.length === 0) {
         alert("Agrega al menos una franja horaria");
         return;
@@ -182,7 +228,6 @@ export default function ServiceConfigScreen() {
         },
       }));
     } else {
-      // Validación para servicios de alojamiento
       if (!price) {
         alert("Ingresa un precio");
         return;
@@ -210,6 +255,8 @@ export default function ServiceConfigScreen() {
     setPickupTime(new Date());
     setShowConfigModal(false);
     setTimeSlotSchedules([]);
+    setRangeStart(null);
+    setRangeEnd(null);
   };
 
   const toggleDateSelection = (date: string) => {
@@ -220,7 +267,7 @@ export default function ServiceConfigScreen() {
       } else {
         newDates[date] = {
           selected: true,
-          selectedColor: "#00BFA6",
+          selectedColor: "#36ebd8",
           textColor: "white",
         };
       }
@@ -228,23 +275,82 @@ export default function ServiceConfigScreen() {
     });
   };
 
+  const handleRangeDatePress = (dateString: string) => {
+    if (!rangeStart) {
+      // Primera fecha seleccionada
+      setRangeStart(dateString);
+      setRangeEnd(null);
+      setSelectedDates({
+        [dateString]: {
+          selected: true,
+          selectedColor: "#36ebd8",
+          textColor: "white",
+        },
+      });
+    } else if (!rangeEnd) {
+      // Segunda fecha seleccionada - crear rango
+      const start = dayjs(rangeStart);
+      const end = dayjs(dateString);
+
+      if (end.isBefore(start)) {
+        // Si la segunda fecha es antes, intercambiar
+        setRangeStart(dateString);
+        setRangeEnd(rangeStart);
+      } else {
+        setRangeEnd(dateString);
+      }
+
+      // Seleccionar todas las fechas en el rango
+      const newDates: Record<string, any> = {};
+      let current = start.isBefore(end) ? start : end;
+      const endDate = start.isBefore(end) ? end : start;
+
+      while (current.isBefore(endDate) || current.isSame(endDate, "day")) {
+        newDates[current.format("YYYY-MM-DD")] = {
+          selected: true,
+          selectedColor: "#36ebd8",
+          textColor: "white",
+        };
+        current = current.add(1, "day");
+      }
+
+      setSelectedDates(newDates);
+    } else {
+      // Ya hay un rango, reiniciar
+      setRangeStart(dateString);
+      setRangeEnd(null);
+      setSelectedDates({
+        [dateString]: {
+          selected: true,
+          selectedColor: "#36ebd8",
+          textColor: "white",
+        },
+      });
+    }
+  };
+
   const handleDayPress = (date: string, isDisabled: boolean) => {
     if (isDisabled) return;
-    toggleDateSelection(date);
+
+    if (selectionMode === "range") {
+      handleRangeDatePress(date);
+    } else {
+      toggleDateSelection(date);
+    }
+
     setIsDragging(true);
     setDragStartDate(date);
   };
 
   const handleDayMove = (date: string, isDisabled: boolean) => {
-    if (!isDragging || isDisabled) return;
+    if (!isDragging || isDisabled || selectionMode === "range") return;
 
-    // Auto-seleccionar al arrastrar
     setSelectedDates((prev) => {
       const newDates = { ...prev };
       if (!newDates[date]) {
         newDates[date] = {
           selected: true,
-          selectedColor: "#00BFA6",
+          selectedColor: "#36ebd8",
           textColor: "white",
         };
       }
@@ -298,7 +404,6 @@ export default function ServiceConfigScreen() {
 
     setTimeSlotSchedules([...timeSlotSchedules, newSchedule]);
 
-    // Limpiar formulario
     setSelectedTimeSlot("");
     setServiceDuration("");
     setBasePrice("");
@@ -462,17 +567,14 @@ export default function ServiceConfigScreen() {
                           style={{ width: 60, height: 60 }}
                           resizeMode="contain"
                         />
-                        {/* <Ionicons name="paw" size={32} color="#00BFA6" /> */}
                       </View>
                       {selectedServices.includes(service.id) && (
                         <View style={styles.selectedBadge}>
-                          {
-                            <Ionicons
-                              name="checkmark-circle"
-                              size={24}
-                              color="#00BFA6"
-                            />
-                          }
+                          <Ionicons
+                            name="checkmark-circle"
+                            size={24}
+                            color="#00BFA6"
+                          />
                         </View>
                       )}
                     </View>
@@ -537,9 +639,62 @@ export default function ServiceConfigScreen() {
               {selectedService ? (
                 <View style={styles.calendarContainer}>
                   <Text style={styles.calendarTitle}>{selectedService}</Text>
+
+                  {/* Botones de modo de selección */}
+                  <View style={styles.selectionModeContainer}>
+                    <TouchableOpacity
+                      style={[
+                        styles.selectionModeButton,
+                        selectionMode === "exact" &&
+                          styles.selectionModeButtonActive,
+                      ]}
+                      onPress={() => {
+                        setSelectionMode("exact");
+                        setRangeStart(null);
+                        setRangeEnd(null);
+                        setSelectedDates({});
+                      }}
+                    >
+                      <Text
+                        style={[
+                          styles.selectionModeText,
+                          selectionMode === "exact" &&
+                            styles.selectionModeTextActive,
+                        ]}
+                      >
+                        Fechas exactas
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[
+                        styles.selectionModeButton,
+                        selectionMode === "range" &&
+                          styles.selectionModeButtonActive,
+                      ]}
+                      onPress={() => {
+                        setSelectionMode("range");
+                        setSelectedDates({});
+                        setRangeStart(null);
+                        setRangeEnd(null);
+                      }}
+                    >
+                      <Text
+                        style={[
+                          styles.selectionModeText,
+                          selectionMode === "range" &&
+                            styles.selectionModeTextActive,
+                        ]}
+                      >
+                        Rango de fechas
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
                   <Text style={styles.calendarSubtitle}>
-                    Selecciona las fechas disponibles (puedes arrastrar para
-                    seleccionar varios días)
+                    {selectionMode === "range"
+                      ? "Selecciona fecha de inicio y fin del rango"
+                      : "Selecciona las fechas disponibles (puedes arrastrar para seleccionar varios días)"}
                   </Text>
 
                   <Calendar
@@ -552,8 +707,8 @@ export default function ServiceConfigScreen() {
                     disableAllTouchEventsForDisabledDays={true}
                     theme={{
                       textDayFontSize: 16,
-                      todayTextColor: "#00BFA6",
-                      arrowColor: "#00BFA6",
+                      todayTextColor: "#36ebd8",
+                      arrowColor: "#36ebd8",
                       monthTextColor: "#111827",
                       textMonthFontSize: 18,
                       textMonthFontWeight: "600",
@@ -604,6 +759,22 @@ export default function ServiceConfigScreen() {
                       );
                     }}
                   />
+
+                  {/* Información del rango seleccionado */}
+                  {/* {rangeStart && rangeEnd && (
+                    <View style={styles.rangeInfoContainer}>
+                      <Ionicons
+                        name="calendar-outline"
+                        size={20}
+                        color="#36ebd8"
+                      />
+                      <Text style={styles.rangeInfoText}>
+                        {dayjs(rangeStart).format("DD MMM")} -{" "}
+                        {dayjs(rangeEnd).format("DD MMM YYYY")} (
+                        {dayjs(rangeEnd).diff(dayjs(rangeStart), "day")} dias)
+                      </Text>
+                    </View>
+                  )} */}
 
                   {Object.keys(selectedDates).length > 0 && (
                     <TouchableOpacity
@@ -666,12 +837,18 @@ export default function ServiceConfigScreen() {
           {/* PASO 2: Conocer tu perfil */}
           {currentStep === 2 && (
             <View style={styles.stepContent}>
-              <View style={styles.profileBanner}>
-                <Text style={styles.profileBannerText}>
-                  Queremos conocer tus habilidades y experiencia como cuidador
-                  para construir un perfil que refleje tu verdadero potencial.
-                </Text>
-                <Text style={styles.profileBannerIcon}>🐾</Text>
+              <View style={styles.profileBannerContainer}>
+                <View style={styles.profileBanner}>
+                  <Text style={styles.profileBannerText}>
+                    Queremos conocer tus habilidades y experiencia como cuidador
+                    para construir un perfil que refleje tu verdadero potencial.
+                  </Text>
+                </View>
+                <Image
+                  source={puppyPink}
+                  style={styles.profileBannerIcon}
+                  resizeMode="contain"
+                />
               </View>
 
               <Text style={styles.sectionTitle}>
@@ -1136,7 +1313,6 @@ export default function ServiceConfigScreen() {
               </View>
 
               {getCurrentServiceType() === "time-slot" ? (
-                // Configuración para Paseos y Baño
                 <View style={styles.formContainer}>
                   <Text style={styles.infoText}>
                     Por favor defina la franja horaria:
@@ -1195,6 +1371,7 @@ export default function ServiceConfigScreen() {
                     <DateTimePicker
                       value={startTime}
                       mode="time"
+                      themeVariant="light"
                       is24Hour={false}
                       display={Platform.OS === "ios" ? "spinner" : "default"}
                       onChange={(event, selectedDate) => {
@@ -1254,12 +1431,15 @@ export default function ServiceConfigScreen() {
                     </Text>
                   </TouchableOpacity>
 
-                  {/* Lista de franjas guardadas */}
                   {timeSlotSchedules.length > 0 && (
                     <View style={styles.savedSchedulesContainer}>
                       <View style={styles.savedSchedulesHeader}>
                         <Text style={styles.savedSchedulesDate}>
-                          Octubre 22 a Octubre 31
+                          {rangeStart && rangeEnd
+                            ? `${dayjs(rangeStart).format("DD MMM")} a ${dayjs(
+                                rangeEnd
+                              ).format("DD MMM")}`
+                            : "Fechas seleccionadas"}
                         </Text>
                         <Text style={styles.savedSchedulesDays}>
                           {Object.keys(selectedDates).length} día(s)
@@ -1306,7 +1486,6 @@ export default function ServiceConfigScreen() {
                   </TouchableOpacity>
                 </View>
               ) : (
-                // Configuración para Alojamiento, Guardería y Cuidado
                 <View style={styles.formContainer}>
                   <Text style={styles.label}>Precio (CAD)</Text>
                   <TextInput
@@ -1323,7 +1502,7 @@ export default function ServiceConfigScreen() {
                     style={styles.timePickerButton}
                     onPress={() => setShowDeliveryPicker(true)}
                   >
-                    <Ionicons name="time-outline" size={20} color="#00BFA6" />
+                    <Ionicons name="time-outline" size={20} color="#36ebd8" />
                     <Text style={styles.timePickerText}>
                       {formatTime(deliveryTime)}
                     </Text>
@@ -1349,7 +1528,7 @@ export default function ServiceConfigScreen() {
                     style={styles.timePickerButton}
                     onPress={() => setShowPickupPicker(true)}
                   >
-                    <Ionicons name="time-outline" size={20} color="#00BFA6" />
+                    <Ionicons name="time-outline" size={20} color="#36ebd8" />
                     <Text style={styles.timePickerText}>
                       {formatTime(pickupTime)}
                     </Text>
@@ -1432,6 +1611,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#333",
     textAlign: "center",
+    fontFamily: fontFamily.bold,
   },
   headerSpacer: {
     width: 40,
@@ -1449,6 +1629,7 @@ const styles = StyleSheet.create({
     color: "#9CA3AF",
     flex: 1,
     textAlign: "center",
+    fontFamily: fontFamily.medium,
   },
   progressStepActive: {
     color: "#4B5563",
@@ -1459,6 +1640,7 @@ const styles = StyleSheet.create({
     color: "#9CA3AF",
     textAlign: "center",
     marginBottom: 8,
+    fontFamily: fontFamily.medium,
   },
   progressBarContainer: {
     height: 4,
@@ -1480,6 +1662,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 24,
     paddingHorizontal: 10,
+    fontFamily: fontFamily.bold,
   },
   servicesGrid: {
     gap: 16,
@@ -1527,13 +1710,15 @@ const styles = StyleSheet.create({
   },
   serviceName: {
     fontSize: 15,
-    fontWeight: "600",
+    fontWeight: "700",
     color: "#111827",
     marginBottom: 2,
+    fontFamily: fontFamily.medium,
   },
   serviceSubtitle: {
     fontSize: 12,
     color: "#6B7280",
+    fontFamily: fontFamily.medium,
   },
   tabScrollContainer: {
     flexDirection: "row",
@@ -1563,9 +1748,11 @@ const styles = StyleSheet.create({
     color: "#4B5563",
     fontWeight: "600",
     fontSize: 11,
+    fontFamily: fontFamily.medium,
   },
   tabTextActive: {
     color: "white",
+    fontFamily: fontFamily.medium,
   },
   calendarContainer: {
     backgroundColor: "white",
@@ -1579,12 +1766,44 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#111827",
     marginBottom: 4,
+    fontFamily: fontFamily.bold,
+  },
+  selectionModeContainer: {
+    flexDirection: "row",
+    gap: 8,
+    marginBottom: 16,
+    marginTop: 12,
+  },
+  selectionModeButton: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    borderWidth: 1.5,
+    borderColor: "#E5E7EB",
+    alignItems: "center",
+    backgroundColor: "white",
+  },
+  selectionModeButtonActive: {
+    backgroundColor: "#36ebd8",
+    borderColor: "#36ebd8",
+  },
+  selectionModeText: {
+    fontSize: 10,
+    color: "#6B7280",
+    fontWeight: "600",
+    fontFamily: fontFamily.medium,
+  },
+  selectionModeTextActive: {
+    color: "white",
+    fontFamily: fontFamily.bold,
   },
   calendarSubtitle: {
     textAlign: "center",
     fontSize: 12,
     color: "#6B7280",
     marginBottom: 16,
+    fontFamily: fontFamily.medium,
   },
   calendar: {
     borderRadius: 8,
@@ -1599,6 +1818,7 @@ const styles = StyleSheet.create({
     color: "#9CA3AF",
     marginTop: 12,
     fontSize: 15,
+    fontFamily: fontFamily.medium,
   },
   configuredServicesInfo: {
     flexDirection: "row",
@@ -1613,11 +1833,30 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#065F46",
     fontWeight: "600",
+    fontFamily: fontFamily.medium,
+  },
+  rangeInfoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#E0F9F6",
+    padding: 12,
+    borderRadius: 10,
+    marginTop: 12,
+    gap: 8,
+    borderWidth: 1,
+    borderColor: "#36ebd8",
+  },
+  rangeInfoText: {
+    fontSize: 14,
+    color: "#1A1A1A",
+    fontWeight: "600",
+    fontFamily: fontFamily.semiBold,
+    flex: 1,
   },
   nextButton: {
     backgroundColor: "#00BFA6",
     paddingVertical: 14,
-    borderRadius: 10,
+    borderRadius: 20,
     alignItems: "center",
     shadowColor: "#00BFA6",
     shadowOffset: { width: 0, height: 2 },
@@ -1629,17 +1868,18 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "700",
     fontSize: 16,
+    fontFamily: fontFamily.medium,
   },
   configureButton: {
-    backgroundColor: "#00BFA6",
+    backgroundColor: "#36ebd8",
     paddingVertical: 12,
-    borderRadius: 10,
+    borderRadius: 20,
     alignItems: "center",
     marginTop: 16,
     flexDirection: "row",
     justifyContent: "center",
     gap: 8,
-    shadowColor: "#00BFA6",
+    shadowColor: "#36ebd8",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
@@ -1649,30 +1889,40 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "600",
     fontSize: 14,
+    fontFamily: fontFamily.medium,
+  },
+  profileBannerContainer: {
+    position: "relative",
+    marginBottom: 24,
+    width: "100%",
   },
   profileBanner: {
-    backgroundColor: "#FFB6C1",
+    backgroundColor: "#f6c3cc",
     padding: 16,
-    borderRadius: 12,
-    marginBottom: 24,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
+    paddingRight: 50, // Espacio para que el texto no se superponga con el ícono
+    borderRadius: 20,
+    width: "100%",
   },
   profileBannerText: {
-    flex: 1,
     fontSize: 13,
     color: "#4B1F3D",
     lineHeight: 18,
+    fontFamily: fontFamily.medium,
   },
   profileBannerIcon: {
-    fontSize: 32,
+    position: "absolute",
+    top: 40,
+    right: 8,
+    width: 70,
+    height: 70,
+    opacity: 0.6, // Para darle ese efecto translúcido como en la imagen
   },
   sectionTitle: {
     fontSize: 15,
     fontWeight: "700",
     marginBottom: 16,
     color: "#111827",
+    fontFamily: fontFamily.bold,
   },
   label: {
     fontSize: 13,
@@ -1680,6 +1930,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 8,
     fontWeight: "500",
+    fontFamily: fontFamily.medium,
   },
   radioGroup: {
     flexDirection: "row",
@@ -1702,17 +1953,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   radioCircleSelected: {
-    borderColor: "#00BFA6",
+    borderColor: "#36ebd8",
   },
   radioDot: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: "#00BFA6",
+    backgroundColor: "#36ebd8",
   },
   radioLabel: {
     fontSize: 14,
     color: "#4B5563",
+    fontFamily: fontFamily.medium,
   },
   checkboxGroup: {
     gap: 12,
@@ -1732,13 +1984,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   checkboxSelected: {
-    backgroundColor: "#00BFA6",
-    borderColor: "#00BFA6",
+    backgroundColor: "#36ebd8",
+    borderColor: "#36ebd8",
   },
   checkboxLabel: {
     fontSize: 14,
     color: "#4B5563",
     flex: 1,
+    fontFamily: fontFamily.medium,
   },
   input: {
     borderWidth: 1,
@@ -1747,6 +2000,7 @@ const styles = StyleSheet.create({
     padding: 12,
     backgroundColor: "#F9FAFB",
     fontSize: 15,
+    fontFamily: fontFamily.medium,
   },
   navigationButtons: {
     flexDirection: "row",
@@ -1764,14 +2018,15 @@ const styles = StyleSheet.create({
     color: "#4B5563",
     fontWeight: "600",
     fontSize: 16,
+    fontFamily: fontFamily.medium,
   },
   finishButton: {
     flex: 1,
-    backgroundColor: "#00BFA6",
+    backgroundColor: "#36ebd8",
     paddingVertical: 14,
     borderRadius: 10,
     alignItems: "center",
-    shadowColor: "#00BFA6",
+    shadowColor: "#36ebd8",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
@@ -1781,6 +2036,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "700",
     fontSize: 16,
+    fontFamily: fontFamily.medium,
   },
   formContainer: {
     marginTop: 8,
@@ -1800,9 +2056,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#111827",
     fontWeight: "500",
+    fontFamily: fontFamily.medium,
   },
   saveButton: {
-    backgroundColor: "#00BFA6",
+    backgroundColor: "#36ebd8",
     paddingVertical: 14,
     borderRadius: 10,
     alignItems: "center",
@@ -1810,7 +2067,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     gap: 8,
-    shadowColor: "#00BFA6",
+    shadowColor: "#36ebd8",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
@@ -1820,6 +2077,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "700",
     fontSize: 16,
+    fontFamily: fontFamily.medium,
   },
   dayContainer: {
     alignItems: "center",
@@ -1831,7 +2089,7 @@ const styles = StyleSheet.create({
     margin: 2,
   },
   dayContainerSelected: {
-    backgroundColor: "#00BFA6",
+    backgroundColor: "#36ebd8",
   },
   dayContainerDisabled: {
     opacity: 0.3,
@@ -1840,17 +2098,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "#111827",
+    fontFamily: fontFamily.medium,
   },
   dayTextSelected: {
     color: "white",
+    fontFamily: fontFamily.medium,
   },
   dayTextDisabled: {
     color: "#9CA3AF",
+    fontFamily: fontFamily.medium,
   },
   priceText: {
     fontSize: 10,
     color: "#6B7280",
     marginTop: 2,
+    fontFamily: fontFamily.medium,
   },
   priceTextSelected: {
     color: "white",
@@ -1887,12 +2149,14 @@ const styles = StyleSheet.create({
     color: "#111827",
     textAlign: "center",
     marginBottom: 8,
+    fontFamily: fontFamily.bold,
   },
   modalSubtitleText: {
     fontSize: 14,
     fontWeight: "600",
     color: "#6B7280",
     textAlign: "center",
+    fontFamily: fontFamily.medium,
   },
   closeButton: {
     marginTop: 16,
@@ -1903,6 +2167,7 @@ const styles = StyleSheet.create({
     color: "#6B7280",
     fontSize: 15,
     fontWeight: "600",
+    fontFamily: fontFamily.medium,
   },
   infoText: {
     fontSize: 13,
@@ -1910,6 +2175,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 16,
     fontWeight: "500",
+    fontFamily: fontFamily.medium,
   },
   radioGroupCentered: {
     flexDirection: "row",
@@ -1936,6 +2202,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#1A1A1A",
     marginBottom: 8,
+    fontFamily: fontFamily.medium,
     fontWeight: "500",
   },
   timePickerButtonLarge: {
@@ -1952,6 +2219,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: "#1A1A1A",
+    fontFamily: fontFamily.medium,
   },
   priceSection: {
     alignItems: "center",
@@ -1967,6 +2235,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#1A1A1A",
     fontWeight: "500",
+    fontFamily: fontFamily.medium,
   },
   priceDisplayContainer: {
     flexDirection: "row",
@@ -1984,9 +2253,10 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontWeight: "300",
     color: "#D1D5DB",
+    fontFamily: fontFamily.medium,
   },
   addTimeSlotButton: {
-    backgroundColor: "#00D4BA",
+    backgroundColor: "#36ebd8",
     paddingVertical: 14,
     borderRadius: 25,
     alignItems: "center",
@@ -1996,6 +2266,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "600",
     fontSize: 15,
+    fontFamily: fontFamily.medium,
   },
   savedSchedulesContainer: {
     backgroundColor: "white",
@@ -2017,10 +2288,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#1A1A1A",
     fontWeight: "500",
+    fontFamily: fontFamily.medium,
   },
   savedSchedulesDays: {
     fontSize: 13,
     color: "#6B7280",
+    fontFamily: fontFamily.medium,
   },
   scheduleTable: {
     gap: 8,
@@ -2038,6 +2311,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#6B7280",
     textAlign: "center",
+    fontFamily: fontFamily.medium,
   },
   scheduleTableRow: {
     flexDirection: "row",
@@ -2052,6 +2326,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#1A1A1A",
     textAlign: "center",
+    fontFamily: fontFamily.medium,
   },
   schedulePriceText: {
     flex: 1,
@@ -2059,6 +2334,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#1A1A1A",
     textAlign: "center",
+    fontFamily: fontFamily.medium,
   },
   deleteIconButton: {
     flex: 1,

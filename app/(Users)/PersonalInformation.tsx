@@ -17,6 +17,7 @@ import {
   View,
 } from "react-native";
 import CustomModal from "../(CustomModal)/CustomModal";
+import { fontFamily } from "../../Config/typography";
 
 export default function PersonalInformation() {
   const [fullName, setFullName] = useState("");
@@ -424,18 +425,21 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: "#000",
+    fontFamily: fontFamily.medium,
   },
   title: {
     fontSize: 18,
     fontWeight: "600",
     color: "#333",
     marginBottom: 8,
+    fontFamily: fontFamily.bold,
   },
   description: {
     fontSize: 13,
     color: "#666",
     marginBottom: 20,
     lineHeight: 18,
+    fontFamily: fontFamily.medium,
   },
   photoUploadSection: {
     flexDirection: "row",
@@ -456,23 +460,27 @@ export const styles = StyleSheet.create({
   },
   photoUploadTextContainer: {
     flex: 1,
+    fontFamily: fontFamily.medium,
   },
   photoUploadTitle: {
     fontSize: 16,
     fontWeight: "600",
     color: "#333",
     marginBottom: 4,
+    fontFamily: fontFamily.bold,
   },
   photoUploadSubtitle: {
     fontSize: 12,
     color: "#999",
     lineHeight: 16,
+    fontFamily: fontFamily.medium,
   },
   label: {
     fontSize: 14,
     color: "#333",
     marginBottom: 8,
     fontWeight: "500",
+    fontFamily: fontFamily.medium,
   },
   sectionTitle: {
     fontSize: 16,
@@ -480,6 +488,7 @@ export const styles = StyleSheet.create({
     color: "#333",
     marginTop: 20,
     marginBottom: 8,
+    fontFamily: fontFamily.bold,
   },
   input: {
     fontSize: 14,
@@ -491,6 +500,7 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
     paddingHorizontal: 15,
     paddingVertical: 12,
+    fontFamily: fontFamily.medium,
   },
   pickerContainer: {
     borderWidth: 1,
@@ -529,6 +539,7 @@ export const styles = StyleSheet.create({
   radioLabel: {
     fontSize: 14,
     color: "#333",
+    fontFamily: fontFamily.medium,
   },
   button: {
     paddingVertical: 15,
@@ -551,12 +562,14 @@ export const styles = StyleSheet.create({
     color: "#000",
     fontSize: 16,
     fontWeight: "700",
+    fontFamily: fontFamily.medium,
   },
   modalDescription: {
     fontSize: 15,
     color: "#666",
     textAlign: "center",
     lineHeight: 22,
+    fontFamily: fontFamily.medium,
   },
   dateInput: {
     backgroundColor: "#F8F8F8",
@@ -570,5 +583,6 @@ export const styles = StyleSheet.create({
   dateText: {
     fontSize: 14,
     color: "#333",
+    fontFamily: fontFamily.medium,
   },
 });
