@@ -28,7 +28,7 @@ import puppyPink from "../../assets/images/PuppyPink.png";
 import { fontFamily } from "../../Config/typography";
 const services = [
   {
-    id: "Alojamiento",
+    id: "1",
     name: "Alojamiento de mascotas",
     subtitle: "en casa del cuidador",
     type: "accommodation",
@@ -82,7 +82,7 @@ export default function ServiceConfigScreen() {
   const [showPickupPicker, setShowPickupPicker] = useState(false);
   const [dayPrices, setDayPrices] = useState<Record<string, any>>({});
   const [showConfigModal, setShowConfigModal] = useState(false);
-  const [selectedServices, setSelectedServices] = useState<typeof services>([]);
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartDate, setDragStartDate] = useState<string | null>(null);
 
@@ -117,6 +117,9 @@ export default function ServiceConfigScreen() {
   const [peopleAtHome, setPeopleAtHome] = useState("");
   const [childrenAge, setChildrenAge] = useState("");
   const [serviceConfigs, setServiceConfigs] = useState<Record<string, any>>({});
+  const selectedServicesFromRedux = useSelector(
+    (state: RootState) => state.services.selectedServices
+  );
 
   // Estados para selección de rango
   const [selectionMode, setSelectionMode] = useState<"exact" | "range">(
@@ -124,9 +127,7 @@ export default function ServiceConfigScreen() {
   );
   const [rangeStart, setRangeStart] = useState<string | null>(null);
   const [rangeEnd, setRangeEnd] = useState<string | null>(null);
-  const selectedServicesFromRedux = useSelector(
-    (state: RootState) => state.services.selectedServices
-  );
+
   const today = dayjs().format("YYYY-MM-DD");
   const clearAllStates = () => {
     // Paso 1
@@ -172,12 +173,9 @@ export default function ServiceConfigScreen() {
     setRangeEnd(null);
   };
   useEffect(() => {
+    console.log("Servicios seleccionados =>", selectedServicesFromRedux);
     // 🔹 Precargar servicios desde Redux al estado local
-    // const arrayServiceReduxComplete = services.filter((s) =>
-    //   selectedServicesFromRedux.includes(s.id)
-    // );
-
-    //  setSelectedServices(arrayServiceReduxComplete);
+    setSelectedServices(selectedServicesFromRedux);
     const today = dayjs();
     const prices: Record<string, { price: string }> = {};
     const monthsToGenerate = 6;
@@ -195,7 +193,7 @@ export default function ServiceConfigScreen() {
     }
 
     setDayPrices(prices);
-  }, []);
+  }, [selectedServicesFromRedux]);
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString("es-ES", {
@@ -374,11 +372,14 @@ export default function ServiceConfigScreen() {
 
   const toggleServiceSelection = (serviceId: string) => {
     setSelectedServices((prev) => {
-      if (prev.includes(serviceId)) {
-        return prev.filter((s) => s !== serviceId);
-      } else {
-        return [...prev, serviceId];
-      }
+      const updated = prev.includes(serviceId)
+        ? prev.filter((s) => s !== serviceId)
+        : [...prev, serviceId];
+
+      // 🔸 Actualiza Redux también
+      //    dispatch(setSelectedServices(updated));
+
+      return updated;
     });
   };
 
@@ -559,44 +560,47 @@ export default function ServiceConfigScreen() {
               </Text>
 
               <View style={styles.servicesGrid}>
-                {services.map((service) => (
-                  <TouchableOpacity
-                    key={service.id}
-                    style={[
-                      styles.serviceCard,
-                      selectedServices.includes(service.id) &&
-                        styles.serviceCardSelected,
-                    ]}
-                    onPress={() => toggleServiceSelection(service.id)}
-                  >
-                    <View style={styles.serviceImageContainer}>
-                      <View style={styles.serviceImagePlaceholder}>
+                {services.map((service) => {
+                  const isSelected = selectedServicesFromRedux.includes(
+                    service.id
+                  );
+
+                  return (
+                    <TouchableOpacity
+                      key={service.id}
+                      style={[
+                        styles.serviceCard,
+                        isSelected && styles.serviceCardSelected, // ✅ Aplica estilo si está en Redux
+                      ]}
+                      onPress={() => toggleServiceSelection(service.id)}
+                    >
+                      <View style={styles.serviceImageContainer}>
                         <Image
                           source={service.icon}
                           style={{ width: 60, height: 60 }}
                           resizeMode="contain"
                         />
+                        {isSelected && (
+                          <View style={styles.selectedBadge}>
+                            <Ionicons
+                              name="checkmark-circle"
+                              size={24}
+                              color="#00BFA6"
+                            />
+                          </View>
+                        )}
                       </View>
-                      {selectedServices.includes(service.id) && (
-                        <View style={styles.selectedBadge}>
-                          <Ionicons
-                            name="checkmark-circle"
-                            size={24}
-                            color="#00BFA6"
-                          />
-                        </View>
-                      )}
-                    </View>
-                    <View style={styles.serviceInfo}>
-                      <Text style={styles.serviceName}>{service.name}</Text>
-                      {service.subtitle ? (
-                        <Text style={styles.serviceSubtitle}>
-                          {service.subtitle}
-                        </Text>
-                      ) : null}
-                    </View>
-                  </TouchableOpacity>
-                ))}
+                      <View style={styles.serviceInfo}>
+                        <Text style={styles.serviceName}>{service.name}</Text>
+                        {service.subtitle ? (
+                          <Text style={styles.serviceSubtitle}>
+                            {service.subtitle}
+                          </Text>
+                        ) : null}
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
 
               <TouchableOpacity
