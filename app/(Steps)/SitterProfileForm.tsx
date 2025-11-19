@@ -1,4 +1,5 @@
 import { SitterProfileData } from "@/Models/Models-Tabs/SitterProfileData";
+import { toggleServiceRedux } from "@/Store/servicesSlice";
 import { RootState } from "@/Store/store";
 import {
   setSitterProfileData,
@@ -66,6 +67,8 @@ const SitterProfileForm: React.FC<SitterProfileFormProps> = ({
       dispatch(setSitterProfilePercentage(percentage));
       if (onProgressChange) onProgressChange(percentage);
     }
+
+    //dispatch(clearServices());
   }, [
     formData.profilePhoto,
     formData.description,
@@ -89,6 +92,8 @@ const SitterProfileForm: React.FC<SitterProfileFormProps> = ({
       : [...currentServices, service];
 
     updateField("services", services);
+    console.log("seleccion =>", service);
+    dispatch(toggleServiceRedux(service));
   };
 
   const handleTakePhoto = async () => {

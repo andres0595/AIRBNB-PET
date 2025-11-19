@@ -12,6 +12,7 @@ import {
   View,
 } from "react-native";
 import { SvgProps } from "react-native-svg";
+import { useDispatch } from "react-redux";
 import alojamientoMascotas from "../../assets/Icons/svg-servicios/Alojamiento.png";
 import Banio from "../../assets/Icons/svg-servicios/Banio.png";
 import Cuidado from "../../assets/Icons/svg-servicios/Cuidado.png";
@@ -80,6 +81,8 @@ const ServiceSelectionScreen = () => {
   const [modalVisiblePerfil, setModalVisiblePerfil] = useState(false);
   const [approvalModalVisible, setApprovalModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+
   // const [services, setServices] = useState<Service[]>([]);
 
   const toggleService = (serviceId: string) => {
