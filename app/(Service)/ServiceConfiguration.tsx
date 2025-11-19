@@ -1,4 +1,5 @@
 import AuthLayout from "@/components/AuthLayout";
+import { RootState } from "@/Store/store";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
@@ -17,6 +18,7 @@ import {
   View,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
+import { useSelector } from "react-redux";
 import alojamientoMascotas from "../../assets/Icons/svg-servicios/Alojamiento.png";
 import Banio from "../../assets/Icons/svg-servicios/Banio.png";
 import Cuidado from "../../assets/Icons/svg-servicios/Cuidado.png";
@@ -24,7 +26,6 @@ import Guarderia from "../../assets/Icons/svg-servicios/Guarderia.png";
 import Paseos from "../../assets/Icons/svg-servicios/Paseos.png";
 import puppyPink from "../../assets/images/PuppyPink.png";
 import { fontFamily } from "../../Config/typography";
-
 const services = [
   {
     id: "Alojamiento",
@@ -34,28 +35,28 @@ const services = [
     icon: alojamientoMascotas,
   },
   {
-    id: "Guardería",
+    id: "2",
     name: "Guardería de día",
     subtitle: "en casa del cuidador",
     type: "accommodation",
     icon: Guarderia,
   },
   {
-    id: "Cuidado",
+    id: "3",
     name: "Cuidado en casa",
     subtitle: "Atiende a la mascota en la comodidad de su hogar",
     type: "accommodation",
     icon: Cuidado,
   },
   {
-    id: "Paseos",
+    id: "4",
     name: "Paseos en el barrio",
     subtitle: "Paseos seguros y divertidos",
     type: "time-slot",
     icon: Paseos,
   },
   {
-    id: "Baño",
+    id: "5",
     name: "Baño a domicilio",
     subtitle: "",
     type: "time-slot",
@@ -81,7 +82,7 @@ export default function ServiceConfigScreen() {
   const [showPickupPicker, setShowPickupPicker] = useState(false);
   const [dayPrices, setDayPrices] = useState<Record<string, any>>({});
   const [showConfigModal, setShowConfigModal] = useState(false);
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [selectedServices, setSelectedServices] = useState<typeof services>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartDate, setDragStartDate] = useState<string | null>(null);
 
@@ -123,7 +124,9 @@ export default function ServiceConfigScreen() {
   );
   const [rangeStart, setRangeStart] = useState<string | null>(null);
   const [rangeEnd, setRangeEnd] = useState<string | null>(null);
-
+  const selectedServicesFromRedux = useSelector(
+    (state: RootState) => state.services.selectedServices
+  );
   const today = dayjs().format("YYYY-MM-DD");
   const clearAllStates = () => {
     // Paso 1
@@ -169,6 +172,12 @@ export default function ServiceConfigScreen() {
     setRangeEnd(null);
   };
   useEffect(() => {
+    // 🔹 Precargar servicios desde Redux al estado local
+    // const arrayServiceReduxComplete = services.filter((s) =>
+    //   selectedServicesFromRedux.includes(s.id)
+    // );
+
+    //  setSelectedServices(arrayServiceReduxComplete);
     const today = dayjs();
     const prices: Record<string, { price: string }> = {};
     const monthsToGenerate = 6;

@@ -78,3 +78,22 @@ export async function loginGoogle(token: string): Promise<LoginResponse> {
     throw error;
   }
 }
+export async function validateOtp(email:string,otp:number):Promise<Response>{
+  try {
+    const response = await fetch(`${apiUrl}auth/ConfirmOtp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email,otp }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Credenciales inválidas");
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+}

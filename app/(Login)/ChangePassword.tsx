@@ -1,6 +1,6 @@
 import { useModalToast } from "@/components/ModalToast";
 import { useGoogleAuth } from "@/hooks/useSocialAuth";
-import { login } from "@/Service/Service-Login/authService";
+import { GenetateOtp, login } from "@/Service/Service-Login/authService";
 import { changeStyles } from "@/Styles/components/ChangePassword/changeStyles";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -19,7 +19,6 @@ import GoogleIcon from "../../assets/Icons/google.svg";
 import IOSIconfrom from "../../assets/Icons/IOS.svg";
 import PuppySvg from "../../assets/Icons/PuppySvg.svg";
 import AuthLayout from "../../components/AuthLayout";
-
 export default function ChangePassword() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -72,7 +71,7 @@ export default function ChangePassword() {
 
     setLoading(true);
     try {
-      // setModalVisible(true);
+      /// setModalVisible(true);
       showInfoModal(
         `Te hemos enviado instrucciones para restablecer la contraseña, al correo ${maskEmail(
           email
@@ -81,8 +80,8 @@ export default function ChangePassword() {
         "Restablecer contraseña",
         true
       );
-      // await GenetateOtp(email);
-      //router.replace("/(Login)/ValidateOtp");
+    await GenetateOtp(email);
+    router.replace("/(Login)/ValidateOtp");
     } catch (error: any) {
       showToast.error(
         "Error al intentar cambiar contraseña",

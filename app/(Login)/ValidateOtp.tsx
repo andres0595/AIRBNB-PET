@@ -9,7 +9,7 @@ import {
 
 import AuthLayout from "@/components/AuthLayout";
 import { useGoogleAuth } from "@/hooks/useSocialAuth";
-import { login } from "@/Service/Service-Login/authService";
+import { login, validateOtp } from "@/Service/Service-Login/authService";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useMemo, useRef, useState } from "react";
@@ -97,7 +97,7 @@ export default function ValidateOtp() {
     try {
       console.log("Código OTP:", otpCode);
       // Aquí va tu lógica de verificación
-      // await verifyOTP(otpCode);
+       await validateOtp(otpCode);
       setOtp(["", "", "", "", "", ""]);
       router.push("/(Login)/ConfirmChange");
     } catch (error) {
