@@ -1,0 +1,273 @@
+{
+  "general": {
+    "accept": "Accept",
+    "cancel": "Cancel",
+    "save": "Save",
+    "close": "Close",
+    "log_in": "Log In",
+    "logging_in": "Logging In",
+    "continue": "O Continue with",
+    "register": "Sign up",
+    "sending": "Sending",
+    "send": "Send",
+    "Data_missing": "Data missing",
+    "understood": "Understood",
+    "reservation": "Reservation"
+  },
+  "home": {
+    "welcome": "¡The peace of mind of knowing your pet is in good hands!",
+    "subtitle": "Find trusted caregivers and accommodations for your companion"
+  },
+  "login": {
+    "email": "Email",
+    "password": "Password",
+    "loginButton": "Login",
+    "forgotPassword": "Forgot your password?",
+    "title": "Sign in",
+    "account": "¿Don't have an account?",
+    "forgotPasswordChange": "¿Forgot your password?",
+    "textChangeDescription": " To reset your password, enter the full email address you used to register with PuppyPo.com, and we will send you an email that will help you reset your password step by step.",
+    "errorlogin": "Error logging in"
+  },
+  "alerts": {
+    "locationDenied": "You must enable location to continue",
+    "error": "An unexpected error occurred",
+    "nodata": "Enter email and password",
+    "emailInvalid": "Invalid email",
+    "alertemailInvalid": "Please enter a valid email address",
+    "passwordResetSent": "We have sent instructions to reset your password to the email {{email}} associated with your account.",
+    "userNotFound": "User not found",
+    "errorChangePassword": "Error trying to change password",
+    "checkInternetConnection": "Please check your internet connection",
+    "docTypesLoad": "Document types could not be loaded"
+  },
+  "slides": {
+    "petLodging": "Pet boarding",
+    "daycare": "Daycare",
+    "homeCare": "Home care",
+    "neighborhoodWalks": "Neighborhood walks",
+    "homeBath": "Home bath service"
+  },
+  "user": {
+    "textdescription": "Find trusted pet sitters and accommodations for your furry friend, right where you are.",
+    "caregiver": "Caregiver",
+    "descriptionCaregiver": "I want to be a caregiver",
+    "subtitle": "Join us as a caregiver and offer a safe and loving home for pets in your city.",
+    "registeras": "Sign me up",
+    "registergeneral": "Sign up for PuppyPo",
+    "descriptionCustomer": "I want to become a customer",
+    "firstName": "First name",
+    "IdentityDocument": "Identity document",
+    "Documentnumber": "Document number",
+    "lastName": "Last name",
+    "zipCode": "ZIP code",
+    "email": "Email",
+    "password": "Password",
+    "acceptPolicy": "Accept privacy policy",
+    "requiredName": "First name is required",
+    "requiredLastName": "Last name is required",
+    "requiredPostal": "ZIP code is required",
+    "requiredPassword": "Password is required",
+    "minPassword": "Password must be at least 6 characters",
+    "repeatPassword": "You must repeat the password",
+    "passwordNotMatch": "Passwords do not match",
+    "acceptPolicyD": "You must accept the privacy policy",
+    "passwordMin": "Must be at least 6 characters.",
+    "confirmPasswordRequired": "You must repeat the password.",
+    "passwordMatch": "Passwords do not match.",
+    "register": "Register",
+    "registerAsCustomer": "Register as customer",
+    "registerAsCaregiver": "Register as caregiver",
+    "titleprofilephoto": "Profile photo",
+    "subtitlephoto": "This is the first photo pet owners will see. We recommend using a well-lit and clear photo of your face (without sunglasses).",
+    "addPhoto": "Add photo",
+    "fileSize": "File size",
+    "fileTypes": "PNG, JPG",
+    "legalFullName": "Legal full name",
+    "birthDate": "Date of birth",
+    "identityNumber": "Identity number",
+    "addAddress": "Add address",
+    "addressInfo": "Your address is only shown to your client when their pet or service is at your home.",
+    "currentAddress": "Current address",
+    "city": "City",
+    "province": "Province",
+    "housingType": "Housing type",
+    "house": "House",
+    "apartment": "Apartment"
+  },
+  "servicios": {
+    "header": {
+      "titulo": "Service selection",
+      "subtitulo": "Select any service you are interested in"
+    },
+    "tooltip": {
+      "texto": "You can always add more later. To start using this service, you will only see one during self-registration."
+    },
+    "link": {
+      "que_servicio": "Which service should I choose?"
+    },
+    "botones": {
+      "guardar_continuar": "Save and continue"
+    },
+
+    "alojamiento": {
+      "titulo": "Pet boarding",
+      "descripcion": "at the sitter's home",
+      "precio": "Average $3000 / night"
+    },
+    "guarderia": {
+      "titulo": "Day care",
+      "descripcion": "at the sitter's home",
+      "precio": "Average $3000 / night"
+    },
+    "cuidado": {
+      "titulo": "Home care",
+      "descripcion": "Care for your pet in the comfort of your home",
+      "precio": "Average $3000 / night"
+    },
+    "paseos": {
+      "titulo": "Neighborhood walks",
+      "descripcion": "Safe and fun walks",
+      "precio": "Average $3000 / night"
+    },
+    "banio": {
+      "titulo": "Bathing at home",
+      "descripcion": "Mobile bath service",
+      "precio": "Average $3000 / night"
+    },
+
+    "modal1": {
+      "titulo": "Which services should I choose?",
+      "p1": {
+        "titulo": "Can you host pets at your home?",
+        "descripcion": "We recommend boarding and daycare to maximize your earnings."
+      },
+      "p2": {
+        "titulo": "Can't receive pets at home?",
+        "descripcion": "We suggest home care, drop-in visits and dog walking."
+      },
+      "p3": {
+        "titulo": "Do you occasionally have free days?",
+        "descripcion": "Ideal for dog walking and drop-in visits."
+      }
+    },
+
+    "modal2": {
+      "titulo": "Let's create your profile!",
+      "descripcion": "We will request some information to verify your identity.",
+      "subtitulo": "Have the following information at hand:",
+      "req1": "Photos with pets and your home.",
+      "req2": "Government-issued ID.",
+      "req3": "Bank account details for payments."
+    },
+
+    "modal3": {
+      "titulo": "How does approval work?",
+      "subtitulo": "Steps to be approved and become part of PuppyPo",
+      "texto1": "PuppyPo selects one service for you to complete during registration.",
+      "texto2": "Your profile will be reviewed within 24–48 hours.",
+      "texto3": "Upload high-quality photos to speed up the process.",
+      "boton_continuar": "Proceed with steps",
+      "boton_cancelar": "Cancel"
+    }
+  },
+  "configservice": {
+    "selectAtLeastOneDay": "Select at least one day",
+    "addAtLeastOneTimeRange": "Add at least one time range",
+    "configSavedFor": "Configuration for {{selectedService}} saved",
+    "selectTimeRange": "Select a time range",
+    "enterBasePrice": "Enter the base price",
+    "selectAtLeastOneService": "Select at least one service",
+    "configureServiceBeforeContinue": "Configure at least one service before continuing",
+
+    "selectPetType": "Select the type of pets you host",
+    "selectExperienceLevel": "Select your experience level",
+    "indicateAllergies": "Indicate if you have allergies to any type of pet",
+    "specifyAllergies": "Please specify your allergies",
+    "selectHomeType": "Select your type of housing",
+    "indicateOutdoorSpace": "Indicate if you have a yard or outdoor space",
+    "indicatePeopleAtHome": "Indicate the number of people at home",
+    "specifyChildrenAge": "Specify the age of the children",
+
+    "fullConfigSaved": "Full configuration saved!",
+    "serviceConfiguration": "Service configuration",
+    "selectServices": "Select services",
+    "calendarAndRates": "Calendar and rates",
+    "knowYourProfile": "Get to know your profile",
+    "selectServicesOffer": "Select the services you want to offer in PuppyPo",
+    "next": "Next",
+
+    "dateRange": "Date range",
+    "exactDates": "Exact dates",
+    "configureDays": "Configure ({{days}} days)",
+    "selectServiceToConfigure": "Select a service to configure",
+    "servicesConfigured": "{{count}} service(s) configured",
+
+    "caregiverSkillsTitle": "We want to learn about your skills and experience as a caregiver",
+    "caregiverSkillsDescription": "to build a profile that reflects your true potential.",
+
+    "caregiverGeneralInfo": "Caregiver general information",
+    "petTypesYouHost": "What types of pets do you host?",
+    "experienceLevel": "Experience level:",
+    "experienceBeginner": "Beginner",
+    "experienceIntermediate": "Intermediate",
+    "experienceSenior": "Senior",
+
+    "certificationsOptional": "Certifications or courses (optional):",
+    "certificationVetStudent": "Veterinary student",
+    "certificationGroomingFirstAid": "Grooming or first aid course",
+    "certificationNone": "I have none",
+
+    "allergiesQuestion": "Do you have allergies to any type of pet?",
+    "yes": "Yes",
+    "no": "No",
+    "specifyAllergiesLabel": "Specify:",
+    "allergiesPlaceholder": "E.g., cat hair, large dogs...",
+
+    "homeInfoTitle": "Home information",
+    "selectHomeTypeLabel": "Select the type of housing where you host:",
+    "open": "Open",
+    "homeTypeFarm": "Farm",
+    "hasOutdoorSpace": "Do you have a yard or outdoor space?",
+    "closed": "Closed",
+    "peopleAtHome": "People at home:",
+    "liveAlone": "I live alone",
+    "liveWithFamily": "With family",
+    "liveWithChildren": "With children",
+
+    "childrenAge": "Children's age:",
+
+    "back": "Back",
+    "finish": "Finish",
+    "dogs": "Dogs",
+    "cats": "Cats",
+    "both": "Both",
+    "daysSelected": "{{count}} day(s) selected",
+    "defineTimeRange": "Please define the time range:",
+    "startTime": "Start time:",
+    "endTime": "End time:",
+    "schedule": "Schedule",
+    "rate": "Rate",
+    "delete": "Delete",
+    "saveChanges": "Save changes",
+    "priceCAD": "Price (CAD)",
+    "dropOffTime": "Drop-off time",
+    "pickUpTime": "Pick-up time",
+    "cancel": "Cancel",
+    "addTimeSlotButtonText": "Save time slot"
+  },
+  "profile": {
+    "title": "Profile",
+    "personalInformation": "Personal information",
+    "serviceConfiguration": "Service configuration",
+    "wallet": "Wallet",
+    "pets": "Your pets",
+    "photos": "Photos",
+    "configuration": "Configuration",
+    "completedProfile": "Completed profile",
+    "modalAccept": "Accept",
+    "modalMessage1": "In this step, you can define the rate calendar for each of the services you previously selected. Simply choose the days you’ll be available to offer your services and assign the rate you prefer to each date.",
+    "modalTitle": "Set your rate calendar!",
+    "modalMessage2": "Once you configure all the rates, the “Next” button will be automatically enabled so you can continue."
+  }
+}

@@ -1,4 +1,5 @@
 import AuthLayout from "@/components/AuthLayout";
+import { i18n } from "@/i18n/translations";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -23,32 +24,33 @@ const ProfileScreen = () => {
     iconColor: "#00D9C5",
     onPress: undefined as (() => void) | undefined,
   });
+
   const router = useRouter();
 
   const menuItems = [
     {
       id: 1,
-      title: "Información personal",
+      title: i18n.t("profile.personalInformation"),
       route: "/(Users)/PersonalInformation",
     },
     {
       id: 2,
-      title: "Configuración de servicios",
+      title: i18n.t("profile.serviceConfiguration"),
       route: "/(Service)/ServiceConfiguration",
     },
     {
       id: 3,
-      title: "Billetera",
+      title: i18n.t("profile.wallet"),
       route: "/(profile)/wallet",
     },
     {
       id: 4,
-      title: "Tus mascotas",
+      title: i18n.t("profile.pets"),
       route: "/(profile)/pets",
     },
     {
       id: 5,
-      title: "Fotos",
+      title: i18n.t("profile.photos"),
       route: "/(profile)/photos",
     },
   ];
@@ -58,19 +60,18 @@ const ProfileScreen = () => {
   };
 
   const handleMenuPress = (route: string, process: number) => {
-    console.log("route => ", route);
-    console.log("proceso => ", process);
-    if (process == 2) {
-      showInfoModal(
-        "En este paso podrás definir el calendario de tarifas para cada uno de los servicios que seleccionaste anteriormente. Solo elige los días en los que estarás disponible para ofrecer tus servicios y asigna el valor que prefieras a cada fecha.",
-        "",
-        "¡Configura tu calendario de tarifas!",
-        false,
-        route
-      );
-    } else {
-      navigateTo(route);
-    }
+    navigateTo(route);
+    // if (process === 2) {
+    //   showInfoModal(
+    //     i18n.t("profile.modalMessage1"),
+    //     "",
+    //     i18n.t("profile.modalTitle"),
+    //     false,
+    //     route
+    //   );
+    // } else {
+    //   navigateTo(route);
+    // }
   };
 
   const showInfoModal = (
@@ -96,6 +97,7 @@ const ProfileScreen = () => {
     router.push(route as any);
     setModalVisibleAlert(false);
   };
+
   return (
     <AuthLayout>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -104,7 +106,7 @@ const ProfileScreen = () => {
           <TouchableOpacity onPress={handleBack} style={styles.backButton}>
             <Ionicons name="chevron-back" size={28} color="#000" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Perfil</Text>
+          <Text style={styles.headerTitle}>{i18n.t("profile.title")}</Text>
           <View style={styles.placeholder} />
         </View>
 
@@ -113,9 +115,7 @@ const ProfileScreen = () => {
           <View style={styles.profileContent}>
             <View style={styles.avatarContainer}>
               <Image
-                source={{
-                  uri: "https://via.placeholder.com/70",
-                }}
+                source={{ uri: "https://via.placeholder.com/70" }}
                 style={styles.avatar}
               />
             </View>
@@ -125,7 +125,9 @@ const ProfileScreen = () => {
 
         {/* Configuration Section */}
         <View style={styles.configSection}>
-          <Text style={styles.sectionTitle}>Configuración</Text>
+          <Text style={styles.sectionTitle}>
+            {i18n.t("profile.configuration")}
+          </Text>
 
           {menuItems.map((item, index) => (
             <TouchableOpacity
@@ -145,19 +147,23 @@ const ProfileScreen = () => {
 
         {/* Complete Profile Button */}
         <TouchableOpacity style={styles.completeButton} activeOpacity={0.8}>
-          <Text style={styles.completeButtonText}>Perfil completado</Text>
+          <Text style={styles.completeButtonText}>
+            {i18n.t("profile.completedProfile")}
+          </Text>
         </TouchableOpacity>
 
+        {/* Modal */}
         <CustomModal
           visible={modalVisibleAlert}
           onClose={() => setModalVisibleAlert(false)}
           title={modalConfig.title}
           primaryButton={{
-            text: "Aceptar",
+            text: i18n.t("profile.modalAccept"),
             onPress: modalConfig.onPress || (() => setModalVisibleAlert(false)),
           }}
         >
           <Text style={styles.modalText}>{modalConfig.message}</Text>
+
           <View style={styles.containerImge}>
             <Image
               source={configService}
@@ -165,9 +171,9 @@ const ProfileScreen = () => {
               resizeMode="contain"
             />
           </View>
+
           <Text style={styles.modalText}>
-            Una vez que configures todas las tarifas, el botón “Siguiente” se
-            activará automáticamente para que puedas continuar.
+            {i18n.t("profile.modalMessage2")}
           </Text>
         </CustomModal>
       </ScrollView>

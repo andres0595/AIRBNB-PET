@@ -6,6 +6,7 @@ import { SitterProfileData } from "../Models/Models-Tabs/SitterProfileData";
 
 interface ValidationsState {
   backgroundCheckAccepted: boolean | null;
+  authorization: string | null;
   documents: string[];
   personalInfoData: PersonalInfoData;
   sitterProfileData: SitterProfileData;
@@ -57,6 +58,7 @@ const initialActivationData: ActivationData = {
 const initialState: ValidationsState = {
   backgroundCheckAccepted: null,
   documents: [],
+  authorization: null,
   personalInfoData: initialPersonalInfoData,
   sitterProfileData: initialSitterProfileData,
   legalConsentData: initialLegalConsentData,
@@ -77,6 +79,10 @@ export const validationsSlice = createSlice({
     },
     setDocuments: (state, action: PayloadAction<string[]>) => {
       state.documents = action.payload;
+    },
+
+    setauthorization: (state, action: PayloadAction<string | null>) => {
+      state.authorization = action.payload;
     },
     setPersonalInfoData: (
       state,
@@ -146,6 +152,7 @@ export const validationsSlice = createSlice({
 export const {
   setBackgroundCheck,
   setDocuments,
+  setauthorization,
   setPersonalInfoData,
   setSitterProfileData,
   setLegalConsentsData,

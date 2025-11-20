@@ -1,4 +1,5 @@
 import AuthLayout from "@/components/AuthLayout";
+import { i18n } from "@/i18n/translations";
 import { RootState } from "@/Store/store";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -26,6 +27,7 @@ import Guarderia from "../../assets/Icons/svg-servicios/Guarderia.png";
 import Paseos from "../../assets/Icons/svg-servicios/Paseos.png";
 import puppyPink from "../../assets/images/PuppyPink.png";
 import { fontFamily } from "../../Config/typography";
+
 const services = [
   {
     id: "Alojamiento",
@@ -106,7 +108,7 @@ export default function ServiceConfigScreen() {
     }>
   >([]);
 
-  // Estados para el paso 2
+  // Estados para el paso 1 (antes era paso 2)
   const [petType, setPetType] = useState("");
   const [experienceLevel, setExperienceLevel] = useState("");
   const [certifications, setCertifications] = useState<string[]>([]);
@@ -128,8 +130,9 @@ export default function ServiceConfigScreen() {
     (state: RootState) => state.services.selectedServices
   );
   const today = dayjs().format("YYYY-MM-DD");
+
   const clearAllStates = () => {
-    // Paso 1
+    // Paso 0
     setCurrentStep(0);
     setSelectedService(null);
     setSelectedDates({});
@@ -154,7 +157,7 @@ export default function ServiceConfigScreen() {
     setBasePrice("");
     setTimeSlotSchedules([]);
 
-    // Paso 2
+    // Paso 1 (perfil)
     setPetType("");
     setExperienceLevel("");
     setCertifications([]);
@@ -171,13 +174,8 @@ export default function ServiceConfigScreen() {
     setRangeStart(null);
     setRangeEnd(null);
   };
-  useEffect(() => {
-    // 🔹 Precargar servicios desde Redux al estado local
-    // const arrayServiceReduxComplete = services.filter((s) =>
-    //   selectedServicesFromRedux.includes(s.id)
-    // );
 
-    //  setSelectedServices(arrayServiceReduxComplete);
+  useEffect(() => {
     const today = dayjs();
     const prices: Record<string, { price: string }> = {};
     const monthsToGenerate = 6;
@@ -254,8 +252,11 @@ export default function ServiceConfigScreen() {
       }));
     }
 
-    alert(`Configuración de ${selectedService} guardada 🎉`);
-
+    alert(
+      i18n.t("configservice.configSavedFor", {
+        selectedService: selectedService,
+      })
+    );
     // Limpiar estado
     setSelectedService(null);
     setSelectedDates({});
@@ -286,7 +287,6 @@ export default function ServiceConfigScreen() {
 
   const handleRangeDatePress = (dateString: string) => {
     if (!rangeStart) {
-      // Primera fecha seleccionada
       setRangeStart(dateString);
       setRangeEnd(null);
       setSelectedDates({
@@ -297,19 +297,16 @@ export default function ServiceConfigScreen() {
         },
       });
     } else if (!rangeEnd) {
-      // Segunda fecha seleccionada - crear rango
       const start = dayjs(rangeStart);
       const end = dayjs(dateString);
 
       if (end.isBefore(start)) {
-        // Si la segunda fecha es antes, intercambiar
         setRangeStart(dateString);
         setRangeEnd(rangeStart);
       } else {
         setRangeEnd(dateString);
       }
 
-      // Seleccionar todas las fechas en el rango
       const newDates: Record<string, any> = {};
       let current = start.isBefore(end) ? start : end;
       const endDate = start.isBefore(end) ? end : start;
@@ -325,7 +322,6 @@ export default function ServiceConfigScreen() {
 
       setSelectedDates(newDates);
     } else {
-      // Ya hay un rango, reiniciar
       setRangeStart(dateString);
       setRangeEnd(null);
       setSelectedDates({
@@ -394,12 +390,12 @@ export default function ServiceConfigScreen() {
 
   const handleAddTimeSlot = () => {
     if (!selectedTimeSlot) {
-      alert("Selecciona una franja horaria");
+      alert(i18n.t("configservice.selectTimeRange"));
       return;
     }
 
     if (!basePrice) {
-      alert("Ingresa el precio base");
+      alert(i18n.t("configservice.enterBasePrice"));
       return;
     }
 
@@ -426,53 +422,51 @@ export default function ServiceConfigScreen() {
 
   const handleNextFromSelection = () => {
     if (selectedServices.length === 0) {
-      alert("Selecciona al menos un servicio");
+      alert(i18n.t("configservice.selectAtLeastOneService"));
       return;
     }
     setCurrentStep(1);
   };
 
-  const handleNextStep = () => {
-    if (currentStep === 1) {
-      if (Object.keys(serviceConfigs).length === 0) {
-        alert("Configura al menos un servicio antes de continuar");
-        return;
-      }
-      setCurrentStep(2);
-    }
-  };
-
-  const handleFinish = () => {
+  const handleNextFromProfile = () => {
     if (!petType) {
-      alert("Selecciona el tipo de mascotas que hospedas");
+      alert(i18n.t("configservice.selectPetType"));
       return;
     }
     if (!experienceLevel) {
-      alert("Selecciona tu nivel de experiencia");
+      alert(i18n.t("configservice.selectExperienceLevel"));
       return;
     }
     if (!hasAllergies) {
-      alert("Indica si tienes alergias a algún tipo de mascota");
+      alert(i18n.t("configservice.indicateAllergies"));
       return;
     }
     if (hasAllergies === "Sí" && !allergiesDetail) {
-      alert("Especifica tus alergias");
+      alert(i18n.t("configservice.specifyAllergies"));
       return;
     }
     if (!homeType) {
-      alert("Selecciona el tipo de vivienda");
+      alert(i18n.t("configservice.selectHomeType"));
       return;
     }
     if (!hasOutdoorSpace) {
-      alert("Indica si tienes yarda o espacio exterior");
+      alert(i18n.t("configservice.indicateOutdoorSpace"));
       return;
     }
     if (!peopleAtHome) {
-      alert("Indica las personas en casa");
+      alert(i18n.t("configservice.indicatePeopleAtHome"));
       return;
     }
     if (peopleAtHome === "Con niños" && !childrenAge) {
-      alert("Especifica la edad de los niños");
+      alert(i18n.t("configservice.specifyChildrenAge"));
+      return;
+    }
+    setCurrentStep(2);
+  };
+
+  const handleFinish = () => {
+    if (Object.keys(serviceConfigs).length === 0) {
+      alert(i18n.t("configservice.configureServiceBeforeContinue"));
       return;
     }
 
@@ -491,7 +485,7 @@ export default function ServiceConfigScreen() {
       },
     });
 
-    alert("¡Configuración completa guardada! 🎉");
+    alert(i18n.t("configservice.fullConfigSaved"));
     router.push("/(tabs)/perfil");
   };
 
@@ -508,7 +502,9 @@ export default function ServiceConfigScreen() {
             <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
               <Ionicons name="chevron-back" size={24} color="#333" />
             </TouchableOpacity>
-            <Text style={styles.title}>Configuración del servicio</Text>
+            <Text style={styles.title}>
+              {i18n.t("configservice.serviceConfiguration")}
+            </Text>
             <View style={styles.headerSpacer} />
           </View>
 
@@ -521,7 +517,7 @@ export default function ServiceConfigScreen() {
                   currentStep === 0 && styles.progressStepActive,
                 ]}
               >
-                Seleccionar servicios
+                {i18n.t("configservice.selectServices")}
               </Text>
               <Text
                 style={[
@@ -529,7 +525,7 @@ export default function ServiceConfigScreen() {
                   currentStep === 1 && styles.progressStepActive,
                 ]}
               >
-                Calendario y tarifas
+                {i18n.t("configservice.knowYourProfile")}
               </Text>
               <Text
                 style={[
@@ -537,7 +533,7 @@ export default function ServiceConfigScreen() {
                   currentStep === 2 && styles.progressStepActive,
                 ]}
               >
-                Conocer tu perfil
+                {i18n.t("configservice.calendarAndRates")}
               </Text>
             </View>
             <Text style={styles.progressText}>{currentStep + 1} de 3</Text>
@@ -555,7 +551,7 @@ export default function ServiceConfigScreen() {
           {currentStep === 0 && (
             <View style={styles.stepContent}>
               <Text style={styles.stepSubtitle}>
-                Selecciona los servicios que deseas ofrecer en PuppyPo
+                {i18n.t("configservice.selectServicesOffer")}
               </Text>
 
               <View style={styles.servicesGrid}>
@@ -603,13 +599,518 @@ export default function ServiceConfigScreen() {
                 style={styles.nextButton}
                 onPress={handleNextFromSelection}
               >
-                <Text style={styles.nextButtonText}>Siguiente</Text>
+                <Text style={styles.nextButtonText}>
+                  {i18n.t("configservice.next")}
+                </Text>
               </TouchableOpacity>
             </View>
           )}
 
-          {/* PASO 1: Calendario y tarifas */}
+          {/* PASO 1: Conocer tu perfil (antes era paso 2) */}
           {currentStep === 1 && (
+            <View style={styles.stepContent}>
+              <View style={styles.profileBannerContainer}>
+                <View style={styles.profileBanner}>
+                  <Text style={styles.profileBannerText}>
+                    {i18n.t("configservice.caregiverSkillsTitle")}
+                    {i18n.t("configservice.caregiverSkillsDescription")}
+                  </Text>
+                </View>
+                <Image
+                  source={puppyPink}
+                  style={styles.profileBannerIcon}
+                  resizeMode="contain"
+                />
+              </View>
+
+              <Text style={styles.sectionTitle}>
+                {i18n.t("configservice.caregiverGeneralInfo")}
+              </Text>
+
+              <Text style={styles.label}>
+                {i18n.t("configservice.petTypesYouHost")}
+              </Text>
+              <View style={styles.radioGroup}>
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => setPetType("Perros")}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      petType === "Perros" && styles.radioCircleSelected,
+                    ]}
+                  >
+                    {petType === "Perros" && <View style={styles.radioDot} />}
+                  </View>
+                  <Text style={styles.radioLabel}>
+                    {i18n.t("configservice.dogs")}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => setPetType("Gatos")}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      petType === "Gatos" && styles.radioCircleSelected,
+                    ]}
+                  >
+                    {petType === "Gatos" && <View style={styles.radioDot} />}
+                  </View>
+                  <Text style={styles.radioLabel}>
+                    {i18n.t("configservice.cats")}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => setPetType("Ambos")}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      petType === "Ambos" && styles.radioCircleSelected,
+                    ]}
+                  >
+                    {petType === "Ambos" && <View style={styles.radioDot} />}
+                  </View>
+                  <Text style={styles.radioLabel}>
+                    {i18n.t("configservice.both")}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <Text style={styles.label}>
+                {i18n.t("configservice.experienceLevel")}
+              </Text>
+              <View style={styles.radioGroup}>
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => setExperienceLevel("Aprendiz")}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      experienceLevel === "Aprendiz" &&
+                        styles.radioCircleSelected,
+                    ]}
+                  >
+                    {experienceLevel === "Aprendiz" && (
+                      <View style={styles.radioDot} />
+                    )}
+                  </View>
+                  <Text style={styles.radioLabel}>
+                    {i18n.t("configservice.experienceBeginner")}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => setExperienceLevel("Intermedio")}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      experienceLevel === "Intermedio" &&
+                        styles.radioCircleSelected,
+                    ]}
+                  >
+                    {experienceLevel === "Intermedio" && (
+                      <View style={styles.radioDot} />
+                    )}
+                  </View>
+                  <Text style={styles.radioLabel}>
+                    {i18n.t("configservice.experienceIntermediate")}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => setExperienceLevel("Senior")}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      experienceLevel === "Senior" &&
+                        styles.radioCircleSelected,
+                    ]}
+                  >
+                    {experienceLevel === "Senior" && (
+                      <View style={styles.radioDot} />
+                    )}
+                  </View>
+                  <Text style={styles.radioLabel}>
+                    {i18n.t("configservice.experienceSenior")}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <Text style={styles.label}>
+                {i18n.t("configservice.certificationsOptional")}
+              </Text>
+              <View style={styles.checkboxGroup}>
+                <TouchableOpacity
+                  style={styles.checkboxOption}
+                  onPress={() =>
+                    toggleCertification("Estudiante de veterinaria")
+                  }
+                >
+                  <View
+                    style={[
+                      styles.checkbox,
+                      certifications.includes("Estudiante de veterinaria") &&
+                        styles.checkboxSelected,
+                    ]}
+                  >
+                    {certifications.includes("Estudiante de veterinaria") && (
+                      <Ionicons name="checkmark" size={16} color="white" />
+                    )}
+                  </View>
+                  <Text style={styles.checkboxLabel}>
+                    {i18n.t("configservice.certificationVetStudent")}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.checkboxOption}
+                  onPress={() =>
+                    toggleCertification("Curso en grooming o primeros auxilios")
+                  }
+                >
+                  <View
+                    style={[
+                      styles.checkbox,
+                      certifications.includes(
+                        "Curso en grooming o primeros auxilios"
+                      ) && styles.checkboxSelected,
+                    ]}
+                  >
+                    {certifications.includes(
+                      "Curso en grooming o primeros auxilios"
+                    ) && <Ionicons name="checkmark" size={16} color="white" />}
+                  </View>
+                  <Text style={styles.checkboxLabel}>
+                    {i18n.t("configservice.certificationGroomingFirstAid")}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.checkboxOption}
+                  onPress={() => toggleCertification("No tengo")}
+                >
+                  <View
+                    style={[
+                      styles.checkbox,
+                      certifications.includes("No tengo") &&
+                        styles.checkboxSelected,
+                    ]}
+                  >
+                    {certifications.includes("No tengo") && (
+                      <Ionicons name="checkmark" size={16} color="white" />
+                    )}
+                  </View>
+                  <Text style={styles.checkboxLabel}>
+                    {i18n.t("configservice.certificationNone")}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <Text style={styles.label}>
+                {i18n.t("configservice.allergiesQuestion")}
+              </Text>
+              <View style={styles.radioGroup}>
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => setHasAllergies("Sí")}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      hasAllergies === "Sí" && styles.radioCircleSelected,
+                    ]}
+                  >
+                    {hasAllergies === "Sí" && <View style={styles.radioDot} />}
+                  </View>
+                  <Text style={styles.radioLabel}>
+                    {i18n.t("configservice.yes")}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => {
+                    setHasAllergies("No");
+                    setAllergiesDetail("");
+                  }}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      hasAllergies === "No" && styles.radioCircleSelected,
+                    ]}
+                  >
+                    {hasAllergies === "No" && <View style={styles.radioDot} />}
+                  </View>
+                  <Text style={styles.radioLabel}>
+                    {i18n.t("configservice.no")}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              {hasAllergies === "Sí" && (
+                <>
+                  <Text style={styles.label}>
+                    {i18n.t("configservice.specifyAllergiesLabel")}
+                  </Text>
+                  <TextInput
+                    style={styles.input}
+                    value={allergiesDetail}
+                    onChangeText={setAllergiesDetail}
+                    placeholder={i18n.t("configservice.allergiesPlaceholder")}
+                    placeholderTextColor="#9CA3AF"
+                  />
+                </>
+              )}
+
+              <Text style={styles.sectionTitle}>
+                {i18n.t("configservice.homeInfoTitle")}
+              </Text>
+
+              <Text style={styles.label}>
+                {i18n.t("configservice.selectHomeTypeLabel")}
+              </Text>
+              <View style={styles.radioGroup}>
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => setHomeType("Casa")}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      homeType === "Casa" && styles.radioCircleSelected,
+                    ]}
+                  >
+                    {homeType === "Casa" && <View style={styles.radioDot} />}
+                  </View>
+                  <Text style={styles.radioLabel}>{i18n.t("user.house")}</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => setHomeType("Apartamento")}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      homeType === "Apartamento" && styles.radioCircleSelected,
+                    ]}
+                  >
+                    {homeType === "Apartamento" && (
+                      <View style={styles.radioDot} />
+                    )}
+                  </View>
+                  <Text style={styles.radioLabel}>
+                    {i18n.t("user.apartment")}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => setHomeType("Finca")}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      homeType === "Finca" && styles.radioCircleSelected,
+                    ]}
+                  >
+                    {homeType === "Finca" && <View style={styles.radioDot} />}
+                  </View>
+                  <Text style={styles.radioLabel}>
+                    {i18n.t("configservice.homeTypeFarm")}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <Text style={styles.label}>
+                {i18n.t("configservice.hasOutdoorSpace")}
+              </Text>
+              <View style={styles.radioGroup}>
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => setHasOutdoorSpace("No")}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      hasOutdoorSpace === "No" && styles.radioCircleSelected,
+                    ]}
+                  >
+                    {hasOutdoorSpace === "No" && (
+                      <View style={styles.radioDot} />
+                    )}
+                  </View>
+                  <Text style={styles.radioLabel}>
+                    {i18n.t("configservice.no")}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => setHasOutdoorSpace("Sí, abierto")}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      hasOutdoorSpace === "Sí, abierto" &&
+                        styles.radioCircleSelected,
+                    ]}
+                  >
+                    {hasOutdoorSpace === "Sí, abierto" && (
+                      <View style={styles.radioDot} />
+                    )}
+                  </View>
+                  <Text style={styles.radioLabel}>
+                    {i18n.t("configservice.yes")},{" "}
+                    {i18n.t("configservice.open")}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => setHasOutdoorSpace("Sí, cerrado")}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      hasOutdoorSpace === "Sí, cerrado" &&
+                        styles.radioCircleSelected,
+                    ]}
+                  >
+                    {hasOutdoorSpace === "Sí, cerrado" && (
+                      <View style={styles.radioDot} />
+                    )}
+                  </View>
+                  <Text style={styles.radioLabel}>
+                    {i18n.t("configservice.yes")},{" "}
+                    {i18n.t("configservice.closed")}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <Text style={styles.label}>
+                {i18n.t("configservice.peopleAtHome")}
+              </Text>
+              <View style={styles.radioGroup}>
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => {
+                    setPeopleAtHome("Vivo solo(a)");
+                    setChildrenAge("");
+                  }}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      peopleAtHome === "Vivo solo(a)" &&
+                        styles.radioCircleSelected,
+                    ]}
+                  >
+                    {peopleAtHome === "Vivo solo(a)" && (
+                      <View style={styles.radioDot} />
+                    )}
+                  </View>
+                  <Text style={styles.radioLabel}>
+                    {i18n.t("configservice.liveAlone")}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => {
+                    setPeopleAtHome("Con familia");
+                    setChildrenAge("");
+                  }}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      peopleAtHome === "Con familia" &&
+                        styles.radioCircleSelected,
+                    ]}
+                  >
+                    {peopleAtHome === "Con familia" && (
+                      <View style={styles.radioDot} />
+                    )}
+                  </View>
+                  <Text style={styles.radioLabel}>
+                    {i18n.t("configservice.liveWithFamily")}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.radioOption}
+                  onPress={() => setPeopleAtHome("Con niños")}
+                >
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      peopleAtHome === "Con niños" &&
+                        styles.radioCircleSelected,
+                    ]}
+                  >
+                    {peopleAtHome === "Con niños" && (
+                      <View style={styles.radioDot} />
+                    )}
+                  </View>
+                  <Text style={styles.radioLabel}>
+                    {i18n.t("configservice.liveWithChildren")}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              {peopleAtHome === "Con niños" && (
+                <>
+                  <Text style={styles.label}>
+                    {i18n.t("configservice.childrenAge")}
+                  </Text>
+                  <TextInput
+                    style={styles.input}
+                    value={childrenAge}
+                    onChangeText={setChildrenAge}
+                    placeholder="Ej: 5 y 8 años"
+                    placeholderTextColor="#9CA3AF"
+                  />
+                </>
+              )}
+
+              <View style={styles.navigationButtons}>
+                <TouchableOpacity
+                  style={styles.backStepButton}
+                  onPress={() => setCurrentStep(0)}
+                >
+                  <Text style={styles.backStepButtonText}>
+                    {i18n.t("configservice.back")}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.nextButton}
+                  onPress={handleNextFromProfile}
+                >
+                  <Text style={styles.nextButtonText}>
+                    {i18n.t("configservice.next")}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+
+          {/* PASO 2: Calendario y tarifas (antes era paso 1) */}
+          {currentStep === 2 && (
             <View style={styles.stepContent}>
               <ScrollView
                 horizontal
@@ -671,7 +1172,7 @@ export default function ServiceConfigScreen() {
                             styles.selectionModeTextActive,
                         ]}
                       >
-                        Fechas exactas
+                        {i18n.t("configservice.exactDates")}
                       </Text>
                     </TouchableOpacity>
 
@@ -695,7 +1196,7 @@ export default function ServiceConfigScreen() {
                             styles.selectionModeTextActive,
                         ]}
                       >
-                        Rango de fechas
+                        {i18n.t("configservice.dateRange")}
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -769,22 +1270,6 @@ export default function ServiceConfigScreen() {
                     }}
                   />
 
-                  {/* Información del rango seleccionado */}
-                  {/* {rangeStart && rangeEnd && (
-                    <View style={styles.rangeInfoContainer}>
-                      <Ionicons
-                        name="calendar-outline"
-                        size={20}
-                        color="#36ebd8"
-                      />
-                      <Text style={styles.rangeInfoText}>
-                        {dayjs(rangeStart).format("DD MMM")} -{" "}
-                        {dayjs(rangeEnd).format("DD MMM YYYY")} (
-                        {dayjs(rangeEnd).diff(dayjs(rangeStart), "day")} dias)
-                      </Text>
-                    </View>
-                  )} */}
-
                   {Object.keys(selectedDates).length > 0 && (
                     <TouchableOpacity
                       style={styles.configureButton}
@@ -802,7 +1287,9 @@ export default function ServiceConfigScreen() {
                         color="white"
                       />
                       <Text style={styles.configureButtonText}>
-                        Configurar ({Object.keys(selectedDates).length} días)
+                        {i18n.t("configservice.configureDays", {
+                          days: Object.keys(selectedDates).length,
+                        })}
                       </Text>
                     </TouchableOpacity>
                   )}
@@ -815,7 +1302,7 @@ export default function ServiceConfigScreen() {
                     color="#D1D5DB"
                   />
                   <Text style={styles.placeholderText}>
-                    Selecciona un servicio para configurar
+                    {i18n.t("configservice.selectServiceToConfigure")}
                   </Text>
 
                   {Object.keys(serviceConfigs).length > 0 && (
@@ -826,454 +1313,13 @@ export default function ServiceConfigScreen() {
                         color="#00BFA6"
                       />
                       <Text style={styles.configuredServicesText}>
-                        {Object.keys(serviceConfigs).length} servicio(s)
-                        configurado(s)
+                        {i18n.t("configservice.servicesConfigured", {
+                          count: Object.keys(serviceConfigs).length,
+                        })}
                       </Text>
                     </View>
                   )}
                 </View>
-              )}
-
-              <TouchableOpacity
-                style={styles.nextButton}
-                onPress={handleNextStep}
-              >
-                <Text style={styles.nextButtonText}>Siguiente</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-
-          {/* PASO 2: Conocer tu perfil */}
-          {currentStep === 2 && (
-            <View style={styles.stepContent}>
-              <View style={styles.profileBannerContainer}>
-                <View style={styles.profileBanner}>
-                  <Text style={styles.profileBannerText}>
-                    Queremos conocer tus habilidades y experiencia como cuidador
-                    para construir un perfil que refleje tu verdadero potencial.
-                  </Text>
-                </View>
-                <Image
-                  source={puppyPink}
-                  style={styles.profileBannerIcon}
-                  resizeMode="contain"
-                />
-              </View>
-
-              <Text style={styles.sectionTitle}>
-                Información general del cuidador
-              </Text>
-
-              <Text style={styles.label}>¿Tipo de mascotas que hospedas?</Text>
-              <View style={styles.radioGroup}>
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => setPetType("Perros")}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      petType === "Perros" && styles.radioCircleSelected,
-                    ]}
-                  >
-                    {petType === "Perros" && <View style={styles.radioDot} />}
-                  </View>
-                  <Text style={styles.radioLabel}>Perros</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => setPetType("Gatos")}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      petType === "Gatos" && styles.radioCircleSelected,
-                    ]}
-                  >
-                    {petType === "Gatos" && <View style={styles.radioDot} />}
-                  </View>
-                  <Text style={styles.radioLabel}>Gatos</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => setPetType("Ambos")}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      petType === "Ambos" && styles.radioCircleSelected,
-                    ]}
-                  >
-                    {petType === "Ambos" && <View style={styles.radioDot} />}
-                  </View>
-                  <Text style={styles.radioLabel}>Ambos</Text>
-                </TouchableOpacity>
-              </View>
-
-              <Text style={styles.label}>Nivel de experiencia:</Text>
-              <View style={styles.radioGroup}>
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => setExperienceLevel("Aprendiz")}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      experienceLevel === "Aprendiz" &&
-                        styles.radioCircleSelected,
-                    ]}
-                  >
-                    {experienceLevel === "Aprendiz" && (
-                      <View style={styles.radioDot} />
-                    )}
-                  </View>
-                  <Text style={styles.radioLabel}>Aprendiz</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => setExperienceLevel("Intermedio")}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      experienceLevel === "Intermedio" &&
-                        styles.radioCircleSelected,
-                    ]}
-                  >
-                    {experienceLevel === "Intermedio" && (
-                      <View style={styles.radioDot} />
-                    )}
-                  </View>
-                  <Text style={styles.radioLabel}>Intermedio</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => setExperienceLevel("Senior")}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      experienceLevel === "Senior" &&
-                        styles.radioCircleSelected,
-                    ]}
-                  >
-                    {experienceLevel === "Senior" && (
-                      <View style={styles.radioDot} />
-                    )}
-                  </View>
-                  <Text style={styles.radioLabel}>Senior</Text>
-                </TouchableOpacity>
-              </View>
-
-              <Text style={styles.label}>
-                Certificaciones o cursos (opcional):
-              </Text>
-              <View style={styles.checkboxGroup}>
-                <TouchableOpacity
-                  style={styles.checkboxOption}
-                  onPress={() =>
-                    toggleCertification("Estudiante de veterinaria")
-                  }
-                >
-                  <View
-                    style={[
-                      styles.checkbox,
-                      certifications.includes("Estudiante de veterinaria") &&
-                        styles.checkboxSelected,
-                    ]}
-                  >
-                    {certifications.includes("Estudiante de veterinaria") && (
-                      <Ionicons name="checkmark" size={16} color="white" />
-                    )}
-                  </View>
-                  <Text style={styles.checkboxLabel}>
-                    Estudiante de veterinaria
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.checkboxOption}
-                  onPress={() =>
-                    toggleCertification("Curso en grooming o primeros auxilios")
-                  }
-                >
-                  <View
-                    style={[
-                      styles.checkbox,
-                      certifications.includes(
-                        "Curso en grooming o primeros auxilios"
-                      ) && styles.checkboxSelected,
-                    ]}
-                  >
-                    {certifications.includes(
-                      "Curso en grooming o primeros auxilios"
-                    ) && <Ionicons name="checkmark" size={16} color="white" />}
-                  </View>
-                  <Text style={styles.checkboxLabel}>
-                    Curso en grooming o primeros auxilios
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.checkboxOption}
-                  onPress={() => toggleCertification("No tengo")}
-                >
-                  <View
-                    style={[
-                      styles.checkbox,
-                      certifications.includes("No tengo") &&
-                        styles.checkboxSelected,
-                    ]}
-                  >
-                    {certifications.includes("No tengo") && (
-                      <Ionicons name="checkmark" size={16} color="white" />
-                    )}
-                  </View>
-                  <Text style={styles.checkboxLabel}>No tengo</Text>
-                </TouchableOpacity>
-              </View>
-
-              <Text style={styles.label}>
-                ¿Tienes alergias a algún tipo de mascota?
-              </Text>
-              <View style={styles.radioGroup}>
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => setHasAllergies("Sí")}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      hasAllergies === "Sí" && styles.radioCircleSelected,
-                    ]}
-                  >
-                    {hasAllergies === "Sí" && <View style={styles.radioDot} />}
-                  </View>
-                  <Text style={styles.radioLabel}>Sí</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => {
-                    setHasAllergies("No");
-                    setAllergiesDetail("");
-                  }}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      hasAllergies === "No" && styles.radioCircleSelected,
-                    ]}
-                  >
-                    {hasAllergies === "No" && <View style={styles.radioDot} />}
-                  </View>
-                  <Text style={styles.radioLabel}>No</Text>
-                </TouchableOpacity>
-              </View>
-
-              {hasAllergies === "Sí" && (
-                <>
-                  <Text style={styles.label}>Especificar:</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={allergiesDetail}
-                    onChangeText={setAllergiesDetail}
-                    placeholder="Ej: Pelo de gato, perros grandes..."
-                    placeholderTextColor="#9CA3AF"
-                  />
-                </>
-              )}
-
-              <Text style={styles.sectionTitle}>Información del hogar</Text>
-
-              <Text style={styles.label}>
-                Selecciona el tipo de vivienda donde hospedas:
-              </Text>
-              <View style={styles.radioGroup}>
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => setHomeType("Casa")}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      homeType === "Casa" && styles.radioCircleSelected,
-                    ]}
-                  >
-                    {homeType === "Casa" && <View style={styles.radioDot} />}
-                  </View>
-                  <Text style={styles.radioLabel}>Casa</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => setHomeType("Apartamento")}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      homeType === "Apartamento" && styles.radioCircleSelected,
-                    ]}
-                  >
-                    {homeType === "Apartamento" && (
-                      <View style={styles.radioDot} />
-                    )}
-                  </View>
-                  <Text style={styles.radioLabel}>Apartamento</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => setHomeType("Finca")}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      homeType === "Finca" && styles.radioCircleSelected,
-                    ]}
-                  >
-                    {homeType === "Finca" && <View style={styles.radioDot} />}
-                  </View>
-                  <Text style={styles.radioLabel}>Finca</Text>
-                </TouchableOpacity>
-              </View>
-
-              <Text style={styles.label}>
-                ¿Tienes yarda o espacio exterior?
-              </Text>
-              <View style={styles.radioGroup}>
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => setHasOutdoorSpace("No")}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      hasOutdoorSpace === "No" && styles.radioCircleSelected,
-                    ]}
-                  >
-                    {hasOutdoorSpace === "No" && (
-                      <View style={styles.radioDot} />
-                    )}
-                  </View>
-                  <Text style={styles.radioLabel}>No</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => setHasOutdoorSpace("Sí, abierto")}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      hasOutdoorSpace === "Sí, abierto" &&
-                        styles.radioCircleSelected,
-                    ]}
-                  >
-                    {hasOutdoorSpace === "Sí, abierto" && (
-                      <View style={styles.radioDot} />
-                    )}
-                  </View>
-                  <Text style={styles.radioLabel}>Sí, abierto</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => setHasOutdoorSpace("Sí, cerrado")}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      hasOutdoorSpace === "Sí, cerrado" &&
-                        styles.radioCircleSelected,
-                    ]}
-                  >
-                    {hasOutdoorSpace === "Sí, cerrado" && (
-                      <View style={styles.radioDot} />
-                    )}
-                  </View>
-                  <Text style={styles.radioLabel}>Sí, cerrado</Text>
-                </TouchableOpacity>
-              </View>
-
-              <Text style={styles.label}>Personas en casa:</Text>
-              <View style={styles.radioGroup}>
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => {
-                    setPeopleAtHome("Vivo solo(a)");
-                    setChildrenAge("");
-                  }}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      peopleAtHome === "Vivo solo(a)" &&
-                        styles.radioCircleSelected,
-                    ]}
-                  >
-                    {peopleAtHome === "Vivo solo(a)" && (
-                      <View style={styles.radioDot} />
-                    )}
-                  </View>
-                  <Text style={styles.radioLabel}>Vivo solo(a)</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => {
-                    setPeopleAtHome("Con familia");
-                    setChildrenAge("");
-                  }}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      peopleAtHome === "Con familia" &&
-                        styles.radioCircleSelected,
-                    ]}
-                  >
-                    {peopleAtHome === "Con familia" && (
-                      <View style={styles.radioDot} />
-                    )}
-                  </View>
-                  <Text style={styles.radioLabel}>Con familia</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.radioOption}
-                  onPress={() => setPeopleAtHome("Con niños")}
-                >
-                  <View
-                    style={[
-                      styles.radioCircle,
-                      peopleAtHome === "Con niños" &&
-                        styles.radioCircleSelected,
-                    ]}
-                  >
-                    {peopleAtHome === "Con niños" && (
-                      <View style={styles.radioDot} />
-                    )}
-                  </View>
-                  <Text style={styles.radioLabel}>Con niños</Text>
-                </TouchableOpacity>
-              </View>
-
-              {peopleAtHome === "Con niños" && (
-                <>
-                  <Text style={styles.label}>Edad de los niños:</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={childrenAge}
-                    onChangeText={setChildrenAge}
-                    placeholder="Ej: 5 y 8 años"
-                    placeholderTextColor="#9CA3AF"
-                  />
-                </>
               )}
 
               <View style={styles.navigationButtons}>
@@ -1281,14 +1327,18 @@ export default function ServiceConfigScreen() {
                   style={styles.backStepButton}
                   onPress={() => setCurrentStep(1)}
                 >
-                  <Text style={styles.backStepButtonText}>Atrás</Text>
+                  <Text style={styles.backStepButtonText}>
+                    {i18n.t("configservice.back")}
+                  </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={styles.finishButton}
                   onPress={handleFinish}
                 >
-                  <Text style={styles.finishButtonText}>Finalizar</Text>
+                  <Text style={styles.finishButtonText}>
+                    {i18n.t("configservice.finish")}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -1317,14 +1367,18 @@ export default function ServiceConfigScreen() {
                   Configuración de {selectedService}
                 </Text>
                 <Text style={styles.modalSubtitleText}>
-                  {Object.keys(selectedDates).length} día(s) seleccionado(s)
+                  <Text style={styles.modalSubtitleText}>
+                    {i18n.t("configservice.daysSelected", {
+                      count: Object.keys(selectedDates).length,
+                    })}
+                  </Text>
                 </Text>
               </View>
 
               {getCurrentServiceType() === "time-slot" ? (
                 <View style={styles.formContainer}>
                   <Text style={styles.infoText}>
-                    Por favor defina la franja horaria:
+                    {i18n.t("configservice.defineTimeRange")}
                   </Text>
 
                   <View style={styles.radioGroupCentered}>
@@ -1352,7 +1406,9 @@ export default function ServiceConfigScreen() {
 
                   <View style={styles.timeRowCentered}>
                     <View style={styles.timeInputGroup}>
-                      <Text style={styles.timeLabel}>Hora inicio:</Text>
+                      <Text style={styles.timeLabel}>
+                        {i18n.t("configservice.startTime")}
+                      </Text>
                       <TouchableOpacity
                         style={styles.timePickerButtonLarge}
                         onPress={() => setShowStartTimePicker(true)}
@@ -1364,7 +1420,9 @@ export default function ServiceConfigScreen() {
                     </View>
 
                     <View style={styles.timeInputGroup}>
-                      <Text style={styles.timeLabel}>Hora Fin:</Text>
+                      <Text style={styles.timeLabel}>
+                        {i18n.t("configservice.endTime")}
+                      </Text>
                       <TouchableOpacity
                         style={styles.timePickerButtonLarge}
                         onPress={() => setShowEndTimePicker(true)}
@@ -1410,7 +1468,7 @@ export default function ServiceConfigScreen() {
                   <View style={styles.priceSection}>
                     <View style={styles.priceTitleRow}>
                       <Text style={styles.priceTitle}>
-                        Precio base en Dólares
+                        {i18n.t("configservice.priceCAD")}
                       </Text>
                       <Ionicons
                         name="information-circle-outline"
@@ -1436,7 +1494,7 @@ export default function ServiceConfigScreen() {
                     onPress={handleAddTimeSlot}
                   >
                     <Text style={styles.addTimeSlotButtonText}>
-                      Guardar franja
+                      {i18n.t("configservice.addTimeSlotButtonText")}
                     </Text>
                   </TouchableOpacity>
 
@@ -1458,9 +1516,17 @@ export default function ServiceConfigScreen() {
 
                       <View style={styles.scheduleTable}>
                         <View style={styles.scheduleTableHeader}>
-                          <Text style={styles.tableHeaderText}>Horario</Text>
-                          <Text style={styles.tableHeaderText}>Tarifa</Text>
-                          <Text style={styles.tableHeaderText}>Eliminar</Text>
+                          <Text style={styles.tableHeaderText}>
+                            {i18n.t("configservice.schedule")}
+                          </Text>
+
+                          <Text style={styles.tableHeaderText}>
+                            {i18n.t("configservice.rate")}
+                          </Text>
+
+                          <Text style={styles.tableHeaderText}>
+                            {i18n.t("configservice.delete")}
+                          </Text>
                         </View>
 
                         {timeSlotSchedules.map((schedule, index) => (
@@ -1491,12 +1557,16 @@ export default function ServiceConfigScreen() {
                     style={styles.saveButton}
                     onPress={handleSaveCalendarConfig}
                   >
-                    <Text style={styles.saveButtonText}>Guardar cambios</Text>
+                    <Text style={styles.saveButtonText}>
+                      {i18n.t("configservice.saveChanges")}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               ) : (
                 <View style={styles.formContainer}>
-                  <Text style={styles.label}>Precio (CAD)</Text>
+                  <Text style={styles.label}>
+                    {i18n.t("configservice.priceCAD")}
+                  </Text>
                   <TextInput
                     style={styles.input}
                     keyboardType="numeric"
@@ -1506,7 +1576,9 @@ export default function ServiceConfigScreen() {
                     placeholderTextColor="#9CA3AF"
                   />
 
-                  <Text style={styles.label}>Hora de entrega</Text>
+                  <Text style={styles.label}>
+                    {i18n.t("configservice.dropOffTime")}
+                  </Text>
                   <TouchableOpacity
                     style={styles.timePickerButton}
                     onPress={() => setShowDeliveryPicker(true)}
@@ -1532,7 +1604,9 @@ export default function ServiceConfigScreen() {
                     />
                   )}
 
-                  <Text style={styles.label}>Hora de recogida</Text>
+                  <Text style={styles.label}>
+                    {i18n.t("configservice.pickUpTime")}
+                  </Text>
                   <TouchableOpacity
                     style={styles.timePickerButton}
                     onPress={() => setShowPickupPicker(true)}
@@ -1562,7 +1636,9 @@ export default function ServiceConfigScreen() {
                     style={styles.saveButton}
                     onPress={handleSaveCalendarConfig}
                   >
-                    <Text style={styles.saveButtonText}>Guardar cambios</Text>
+                    <Text style={styles.saveButtonText}>
+                      {i18n.t("configservice.saveChanges")}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               )}
@@ -1575,7 +1651,9 @@ export default function ServiceConfigScreen() {
                   setTimeSlotSchedules([]);
                 }}
               >
-                <Text style={styles.closeButtonText}>Cancelar</Text>
+                <Text style={styles.closeButtonText}>
+                  {i18n.t("configservice.cancel")}
+                </Text>
               </TouchableOpacity>
             </ScrollView>
           </View>
@@ -1844,24 +1922,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontFamily: fontFamily.medium,
   },
-  rangeInfoContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#E0F9F6",
-    padding: 12,
-    borderRadius: 10,
-    marginTop: 12,
-    gap: 8,
-    borderWidth: 1,
-    borderColor: "#36ebd8",
-  },
-  rangeInfoText: {
-    fontSize: 14,
-    color: "#1A1A1A",
-    fontWeight: "600",
-    fontFamily: fontFamily.semiBold,
-    flex: 1,
-  },
   nextButton: {
     backgroundColor: "#00BFA6",
     paddingVertical: 14,
@@ -1872,6 +1932,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 3,
     elevation: 3,
+    flex: 1,
   },
   nextButtonText: {
     color: "white",
@@ -1908,7 +1969,7 @@ const styles = StyleSheet.create({
   profileBanner: {
     backgroundColor: "#f6c3cc",
     padding: 16,
-    paddingRight: 50, // Espacio para que el texto no se superponga con el ícono
+    paddingRight: 50,
     borderRadius: 20,
     width: "100%",
   },
@@ -1924,7 +1985,7 @@ const styles = StyleSheet.create({
     right: 8,
     width: 70,
     height: 70,
-    opacity: 0.6, // Para darle ese efecto translúcido como en la imagen
+    opacity: 0.6,
   },
   sectionTitle: {
     fontSize: 15,

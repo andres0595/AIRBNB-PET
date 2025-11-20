@@ -1,5 +1,6 @@
 import { useModalToast } from "@/components/ModalToast";
 import { useGoogleAuth } from "@/hooks/useSocialAuth";
+import { i18n } from "@/i18n/translations";
 import { GenetateOtp, login } from "@/Service/Service-Login/authService";
 import { changeStyles } from "@/Styles/components/ChangePassword/changeStyles";
 import { Ionicons } from "@expo/vector-icons";
@@ -54,38 +55,47 @@ export default function ChangePassword() {
   const handleChange = async () => {
     if (!email) {
       showInfoModal(
-        "Por favor digita tu correo",
+        i18n.t("alerts.alertemailInvalid"),
         "information-circle",
-        "Faltan datos"
+        i18n.t("general.Data_missing")
       );
       return;
     }
     if (!validateEmail(email)) {
       showInfoModal(
-        "Por favor ingresa un correo válido",
+        i18n.t("alerts.alertemailInvalid"),
         "alert-circle",
-        "Correo inválido"
+        i18n.t("alerts.emailInvalid")
       );
       return;
     }
 
     setLoading(true);
     try {
-      /// setModalVisible(true);
-      showInfoModal(
-        `Te hemos enviado instrucciones para restablecer la contraseña, al correo ${maskEmail(
-          email
-        )} que se encuentra asociado a tu cuenta.`,
-        "",
-        "Restablecer contraseña",
-        true
-      );
-    await GenetateOtp(email);
-    router.replace("/(Login)/ValidateOtp");
+      const response = await GenetateOtp(email);
+      if (!response.flag) {
+        showInfoModal(
+          i18n.t("alerts.alertemailInvalid"),
+          "alert-circle",
+          i18n.t("alerts.userNotFound")
+        );
+        return;
+      } else {
+        /// setModalVisible(true);
+        showInfoModal(
+          i18n.t("alerts.passwordResetSent", { email: maskEmail(email) }),
+          "",
+          i18n.t("login.forgotPasswordChange"),
+          true
+        );
+        router.replace("/(Login)/ValidateOtp");
+      }
     } catch (error: any) {
-      showToast.error(
-        "Error al intentar cambiar contraseña",
-        "Por favor verifica tu conexión a internet"
+      showInfoModal(
+        i18n.t("alerts.errorChangePassword"),
+        "",
+        i18n.t("alerts.checkInternetConnection"),
+        false
       );
     } finally {
       setLoading(false);
@@ -153,21 +163,20 @@ export default function ChangePassword() {
             <View style={changeStyles.header}>
               <PuppySvg />
             </View>
-            <Text style={changeStyles.title}>¿Has olvidado tu contraseña?</Text>
+            <Text style={changeStyles.title}>
+              {i18n.t("login.forgotPasswordChange")}
+            </Text>
             <Text style={changeStyles.description}>
-              Para restablecer tu contraseña, escribe la dirección de correo
-              electrónico completa que usaste para registrarte en PuppyPo.com y
-              te enviaremos un correo que te ayudará a restablecer tu contraseña
-              paso por paso.
+              {i18n.t("login.textChangeDescription")}
             </Text>
 
-            <Text style={changeStyles.label}>Correo electrónico *</Text>
+            <Text style={changeStyles.label}>{i18n.t("login.email")} *</Text>
             <View style={changeStyles.inputContainer}>
               <Text style={changeStyles.inputIcon}>
                 <ArrobaIcon width={25} height={25} />
               </Text>
               <TextInput
-                placeholder="Email"
+                placeholder={i18n.t("login.email")}
                 value={email}
                 onChangeText={setEmail}
                 style={[
@@ -192,13 +201,18 @@ export default function ChangePassword() {
               onPress={handleChange}
             >
               <Text style={changeStyles.loginButtonText}>
-                {loading ? "Enviando..." : "Enviar"}
+                {loading
+                  ? i18n.t("general.sending") ?? "..."
+                  : i18n.t("general.send")}
               </Text>
             </TouchableOpacity>
           </View>
           <View style={changeStyles.dividerContainer}>
             <View style={changeStyles.divider} />
-            <Text style={changeStyles.dividerText}>O Continuar con</Text>
+            <Text style={changeStyles.dividerText}>
+              {" "}
+              {i18n.t("general.continue")}
+            </Text>
             <View style={changeStyles.divider} />
           </View>
 
@@ -236,7 +250,7 @@ export default function ChangePassword() {
         }
         iconColor={modalConfig.iconColor}
         primaryButton={{
-          text: "Entendido",
+          text: i18n.t("general.understood"),
           onPress: modalConfig.onPress || (() => setModalVisibleAlert(false)),
         }}
       >

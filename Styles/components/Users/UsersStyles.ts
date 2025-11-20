@@ -24,14 +24,14 @@ export const UsersStyles = StyleSheet.create({
   iconContainer: {
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 20,
+    marginBottom: 0,
     padding: 10,
   },
   title: {
     fontSize: 20,
-    fontWeight: "600",
+    fontWeight: "700",
     textAlign: "center",
-    marginBottom: 5,
+    marginBottom: 0,
     color: "#333",
     lineHeight: 24,
     fontFamily: fontFamily.bold,

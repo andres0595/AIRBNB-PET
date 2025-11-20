@@ -1,3 +1,4 @@
+import { i18n } from "@/i18n/translations";
 import { HomeRegisterStyles } from "@/Styles/components/Users/Home_RegisterStyles";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -41,8 +42,10 @@ const UserTypeSelectionScreen = () => {
       <SafeAreaView style={HomeRegisterStyles.container}>
         {/* Título principal */}
         <View style={HomeRegisterStyles.titleContainer}>
-          <Text style={HomeRegisterStyles.title}>Regístrate</Text>
-          <Text style={HomeRegisterStyles.title}>como</Text>
+          <Text style={HomeRegisterStyles.title}>
+            {" "}
+            {i18n.t("user.registeras")}
+          </Text>
         </View>
 
         {/* Contenedor de las opciones */}
@@ -64,7 +67,7 @@ const UserTypeSelectionScreen = () => {
                   HomeRegisterStyles.clientTitle,
                 ]}
               >
-                Cliente
+                {i18n.t("user.customer")}
               </Text>
 
               {/* Icono Cliente */}
@@ -86,13 +89,12 @@ const UserTypeSelectionScreen = () => {
                     HomeRegisterStyles.clientButtonText,
                   ]}
                 >
-                  Quiero ser cliente
+                  {i18n.t("user.descriptionCustomer")}
                 </Text>
               </TouchableOpacity>
 
               <Text style={HomeRegisterStyles.descriptionText}>
-                Encuentra cuidadores y alojamientos de confianza para tu
-                compañero peludo, justo donde estés.
+                {i18n.t("user.textdescription")}
               </Text>
             </View>
           </TouchableOpacity>
@@ -114,7 +116,7 @@ const UserTypeSelectionScreen = () => {
                   HomeRegisterStyles.caretakerTitle,
                 ]}
               >
-                Cuidador
+                {i18n.t("user.caregiver")}
               </Text>
 
               {/* Icono Cuidador */}
@@ -135,13 +137,12 @@ const UserTypeSelectionScreen = () => {
                     HomeRegisterStyles.caretakerButtonText,
                   ]}
                 >
-                  Quiero ser cuidador
+                  {i18n.t("user.descriptionCaregiver")}
                 </Text>
               </TouchableOpacity>
 
               <Text style={HomeRegisterStyles.descriptionText}>
-                Únete como cuidador y ofrece un hogar seguro y lleno de cariño
-                para las mascotas de tu ciudad.
+                {i18n.t("user.subtitle")}
               </Text>
             </View>
           </TouchableOpacity>

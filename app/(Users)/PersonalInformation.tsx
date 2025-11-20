@@ -1,4 +1,5 @@
 import AuthLayout from "@/components/AuthLayout";
+import { i18n } from "@/i18n/translations";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
@@ -163,11 +164,10 @@ export default function PersonalInformation() {
             </View>
           </View>
 
-          <Text style={styles.title}>Foto de perfil</Text>
+          <Text style={styles.title}> {i18n.t("user.titleprofilephoto")}</Text>
           <Text style={styles.description}>
-            Esta es la primera foto que verán los dueños de mascotas.
-            Recomendamos usar una foto bien iluminada y nítida de su cara (sin
-            gafas de sol).
+            {" "}
+            {i18n.t("user.subtitlephoto")}
           </Text>
 
           {/* Photo Upload Section */}
@@ -180,15 +180,20 @@ export default function PersonalInformation() {
               <Ionicons name="camera-outline" size={40} color="#36EBD8" />
             </View>
             <View style={styles.photoUploadTextContainer}>
-              <Text style={styles.photoUploadTitle}>Agregar foto</Text>
+              <Text style={styles.photoUploadTitle}>
+                {" "}
+                {i18n.t("user.addPhoto")}
+              </Text>
               <Text style={styles.photoUploadSubtitle}>
-                Tamaño del archivo{"\n"}PNG, JPG
+                {i18n.t("user.fileSize")}
+                {"\n"}
+                {i18n.t("user.fileTypes")}
               </Text>
             </View>
           </TouchableOpacity>
 
           {/* Form Fields */}
-          <Text style={styles.label}>Nombre completo legal *</Text>
+          <Text style={styles.label}>{i18n.t("user.legalFullName")} *</Text>
           <TextInput
             style={styles.input}
             value={fullName}
@@ -197,7 +202,7 @@ export default function PersonalInformation() {
             placeholderTextColor="#999"
           />
 
-          <Text style={styles.label}>Fecha de nacimiento *</Text>
+          <Text style={styles.label}>{i18n.t("user.birthDate")} *</Text>
           <TouchableOpacity
             style={styles.dateInput}
             onPress={() => setShowDatePicker(true)}
@@ -223,7 +228,7 @@ export default function PersonalInformation() {
             placeholderTextColor="#999"
           /> */}
 
-          <Text style={styles.label}>Número de identidad</Text>
+          <Text style={styles.label}>{i18n.t("user.identityNumber")} *</Text>
           <TextInput
             style={styles.input}
             value={idNumber}
@@ -232,7 +237,7 @@ export default function PersonalInformation() {
             placeholderTextColor="#999"
           />
 
-          <Text style={styles.label}>Correo electrónico *</Text>
+          <Text style={styles.label}>{i18n.t("login.email")} *</Text>
           <TextInput
             style={styles.input}
             value={email}
@@ -243,13 +248,10 @@ export default function PersonalInformation() {
             autoCapitalize="none"
           />
 
-          <Text style={styles.sectionTitle}>Añadir dirección</Text>
-          <Text style={styles.description}>
-            Su dirección solo se muestra a su cliente cuando su mascota o ayuda
-            está en casa.
-          </Text>
+          <Text style={styles.sectionTitle}>{i18n.t("user.addAddress")}</Text>
+          <Text style={styles.description}>{i18n.t("user.addressInfo")}</Text>
 
-          <Text style={styles.label}>Dirección actual *</Text>
+          <Text style={styles.label}>{i18n.t("user.currentAddress")} *</Text>
           <TextInput
             style={styles.input}
             value={address}
@@ -258,7 +260,7 @@ export default function PersonalInformation() {
             placeholderTextColor="#999"
           />
 
-          <Text style={styles.label}>Ciudad *</Text>
+          <Text style={styles.label}>{i18n.t("user.city")} *</Text>
           <View style={styles.pickerContainer}>
             <Picker
               selectedValue={city}
@@ -272,7 +274,7 @@ export default function PersonalInformation() {
             </Picker>
           </View>
 
-          <Text style={styles.label}>Provincia *</Text>
+          <Text style={styles.label}>{i18n.t("user.province")} *</Text>
           <View style={styles.pickerContainer}>
             <Picker
               selectedValue={province}
@@ -286,7 +288,7 @@ export default function PersonalInformation() {
             </Picker>
           </View>
 
-          <Text style={styles.label}>[postalCode] *</Text>
+          <Text style={styles.label}>{i18n.t("user.zipCode")} *</Text>
           <TextInput
             style={styles.input}
             value={postalCode}
@@ -296,7 +298,7 @@ export default function PersonalInformation() {
             keyboardType="numeric"
           />
 
-          <Text style={styles.label}>Tipo de vivienda *</Text>
+          <Text style={styles.label}>{i18n.t("user.housingType")} *</Text>
           <View style={styles.radioGroup}>
             <TouchableOpacity
               style={styles.radioButton}
@@ -308,7 +310,7 @@ export default function PersonalInformation() {
                   propertyType === "casa" && styles.radioCircleSelected,
                 ]}
               />
-              <Text style={styles.radioLabel}>Casa</Text>
+              <Text style={styles.radioLabel}>{i18n.t("user.house")}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -321,7 +323,9 @@ export default function PersonalInformation() {
                   propertyType === "apartamento" && styles.radioCircleSelected,
                 ]}
               />
-              <Text style={styles.radioLabel}>Apartamento *</Text>
+              <Text style={styles.radioLabel}>
+                {i18n.t("user.apartment")} *
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -330,7 +334,10 @@ export default function PersonalInformation() {
             style={[styles.button, styles.saveButton]}
             onPress={handleSave}
           >
-            <Text style={styles.saveButtonText}>Guardar</Text>
+            <Text style={styles.saveButtonText}>
+              {" "}
+              {i18n.t("general.save")}{" "}
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

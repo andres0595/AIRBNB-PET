@@ -1,0 +1,273 @@
+{
+  "general": {
+    "accept": "Aceptar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "close": "Cerrar",
+    "log_in": "Ingresar",
+    "logging_in": "Ingresando",
+    "continue": "O Continue with",
+    "register": "Registrate",
+    "sending": "Enviando",
+    "send": "Enviar",
+    "Data_missing": "Faltan datos",
+    "understood": "Entendido",
+    "reservation": "Reservar"
+  },
+  "home": {
+    "welcome": " ¡La tranquilidad de saber que tu mascota está en buenas manos!",
+    "subtitle": " Encuentra cuidadores y alojamientos de confianza para tu compañero"
+  },
+  "login": {
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "loginButton": "Iniciar sesión",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "title": "Iniciar sesión",
+    "account": "¿No tienes una cuenta?",
+    "forgotPasswordChange": "¿Haz olvidaste tu contraseña?",
+    "textChangeDescription": "Para restablecer tu contraseña, escribe la dirección de correo electrónico completa que usaste para registrarte en PuppyPo.com y paso por paso.",
+    "errorlogin": "Error al iniciar sesión"
+  },
+  "alerts": {
+    "locationDenied": "Debe activar la ubicación para continuar",
+    "error": "Ha ocurrido un error inesperado",
+    "nodata": "Ingresa correo y contraseña",
+    "emailInvalid": "Correo inválido",
+    "alertemailInvalid": "Por favor ingresa un correo válido",
+    "passwordResetSent": "Te hemos enviado las instrucciones para restablecer tu contraseña al correo {{email}} asociado a tu cuenta.",
+    "userNotFound": "Usuario no encontrado",
+    "errorChangePassword": "Error al intentar cambiar contraseña",
+    "checkInternetConnection": "Por favor verifica tu conexión a internet",
+    "docTypesLoad": "No se pudieron cargar los tipos de documento"
+  },
+  "slides": {
+    "petLodging": "Alojamiento de\nmascotas",
+    "daycare": "Guardería de día",
+    "homeCare": "Cuidado en casa",
+    "neighborhoodWalks": "Paseos en el barrio",
+    "homeBath": "Baño a domicilio"
+  },
+  "user": {
+    "textdescription": "Encuentra cuidadores y alojamientos de confianza para tu compañero peludo, justo donde estés.",
+    "caregiver": "Cuidador",
+    "descriptionCaregiver": "Quiero ser cuidador",
+    "subtitle": "Únete como cuidador y ofrece un hogar seguro y lleno de cariño para las mascotas de tu ciudad.",
+    "registergeneral": "Regístrate en PuppyPo",
+    "descriptionCustomer": "Quiero ser cliente",
+    "registeras": "Registrarme",
+    "IdentityDocument": "Documento de identidad",
+    "Documentnumber": "Número de documento",
+    "firstName": "Nombres",
+    "lastName": "Apellidos",
+    "zipCode": "Código postal",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "acceptPolicy": "Aceptar política privacidad de datos",
+    "requiredName": "El nombre es obligatorio",
+    "requiredLastName": "Los apellidos son obligatorios",
+    "requiredPostal": "El código postal es obligatorio",
+    "requiredPassword": "La contraseña es obligatoria",
+    "minPassword": "La contraseña debe tener al menos 6 caracteres",
+    "repeatPassword": "Debes repetir la contraseña",
+    "passwordNotMatch": "Las contraseñas no coinciden",
+    "acceptPolicyD": "Debes aceptar la política de privacidad",
+    "passwordMin": "Debe tener al menos 6 caracteres.",
+    "confirmPasswordRequired": "Debes repetir la contraseña.",
+    "passwordMatch": "Las contraseñas no coinciden.",
+    "register": "Registrarme",
+    "registerAsCustomer": "Registrarte como cliente",
+    "registerAsCaregiver": "Registrarte como cuidador",
+    "titleprofilephoto": "Foto de perfil",
+    "subtitlephoto": "Esta es la primera foto que verán los dueños de mascotas.Recomendamos usar una foto bien iluminada y nítida de su cara (sin gafas de sol).",
+    "addPhoto": "Agregar foto",
+    "fileSize": "Tamaño del archivo",
+    "fileTypes": "PNG, JPG",
+    "legalFullName": "Nombre completo legal",
+    "birthDate": "Fecha de nacimiento",
+    "identityNumber": "Número de identidad",
+    "addAddress": "Añadir dirección",
+    "addressInfo": "Su dirección solo se muestra a su cliente cuando su mascota o ayuda está en casa.",
+    "currentAddress": "Dirección actual",
+    "city": "Ciudad",
+    "province": "Provincia",
+    "housingType": "Tipo de vivienda",
+    "house": "Casa",
+    "apartment": "Apartamento"
+  },
+  "servicios": {
+    "header": {
+      "titulo": "Selección de servicios",
+      "subtitulo": "Seleccione alguno de los servicios que le interese"
+    },
+    "tooltip": {
+      "texto": "Siempre puede agregar más en otra ocasión. Para empezar a usar este servicio, solo verá uno de ellos durante el auto-registro. Después de enviar su perfil para revisión, puede editar los demás con los que quiera trabajar más."
+    },
+    "link": {
+      "que_servicio": "¿Qué servicio debo elegir?"
+    },
+    "botones": {
+      "guardar_continuar": "Guardar y continuar"
+    },
+
+    "alojamiento": {
+      "titulo": "Alojamiento de mascotas",
+      "descripcion": "en casa del cuidador",
+      "precio": "Promedio $3000 / noche"
+    },
+    "guarderia": {
+      "titulo": "Guardería de día",
+      "descripcion": "en casa del cuidador",
+      "precio": "Promedio $3000 / noche"
+    },
+    "cuidado": {
+      "titulo": "Cuidado en casa",
+      "descripcion": "Atiende a la mascota en la comodidad de su hogar",
+      "precio": "Promedio $3000 / noche"
+    },
+    "paseos": {
+      "titulo": "Paseos en el barrio",
+      "descripcion": "Paseos seguros y divertidos",
+      "precio": "Promedio $3000 / noche"
+    },
+    "banio": {
+      "titulo": "Baño a domicilio",
+      "descripcion": "Servicio de baño",
+      "precio": "Promedio $3000 / noche"
+    },
+
+    "modal1": {
+      "titulo": "¿Qué servicios debo elegir?",
+      "p1": {
+        "titulo": "¿Puedes alojar mascotas en tu casa?",
+        "descripcion": "Recomendamos elegir hospedaje y guardería canina para tener tu mejor oportunidad de obtener las mejores ganancias."
+      },
+      "p2": {
+        "titulo": "¿No puedes recibir mascotas en tu casa?",
+        "descripcion": "Le sugerimos ofrecer una combinación de cuidados de casa, visitas a domicilio y paseo de perros."
+      },
+      "p3": {
+        "titulo": "¿Sueles tener ocasionalmente días libres?",
+        "descripcion": "Sería ideal para pasear perros y hacer visitas a domicilio."
+      }
+    },
+
+    "modal2": {
+      "titulo": "¡Vamos a crear tu perfil!",
+      "descripcion": "Ten en cuenta que al crear tu perfil vamos a requerir cierta información que ayudará a evaluar tu identidad.",
+      "subtitulo": "Tenga a mano la siguiente información:",
+      "req1": "Fotos para tu perfil con mascotas y tu hogar.",
+      "req2": "Documento de identidad para verificación.",
+      "req3": "Datos bancarios para pagos automáticos."
+    },
+
+    "modal3": {
+      "titulo": "¿Cómo funciona la aprobación?",
+      "subtitulo": "Pasos para obtener la aprobación y ser parte de PuppyPo",
+      "texto1": "PuppyPo selecciona un solo servicio para que lo completes durante el registro.",
+      "texto2": "Tu perfil será revisado entre 24 a 48 horas.",
+      "texto3": "Carga fotos de buena calidad para acelerar la aprobación.",
+      "boton_continuar": "Continuar con los pasos",
+      "boton_cancelar": "Cancelar"
+    }
+  },
+  "configservice": {
+    "selectAtLeastOneDay": "Selecciona al menos un día",
+    "addAtLeastOneTimeRange": "Agrega al menos una franja horaria",
+    "configSavedFor": "Configuración de {{selectedService}} guardada",
+    "selectTimeRange": "Selecciona una franja horaria",
+    "enterBasePrice": "Ingresa el precio base",
+    "selectAtLeastOneService": "Selecciona al menos un servicio",
+    "configureServiceBeforeContinue": "Configura al menos un servicio antes de continuar",
+
+    "selectPetType": "Selecciona el tipo de mascotas que hospedas",
+    "selectExperienceLevel": "Selecciona tu nivel de experiencia",
+    "indicateAllergies": "Indica si tienes alergias a algún tipo de mascota",
+    "specifyAllergies": "Especifica tus alergias",
+    "selectHomeType": "Selecciona el tipo de vivienda",
+    "indicateOutdoorSpace": "Indica si tienes yarda o espacio exterior",
+    "indicatePeopleAtHome": "Indica las personas en casa",
+    "specifyChildrenAge": "Especifica la edad de los niños",
+
+    "fullConfigSaved": "¡Configuración completa guardada!",
+    "serviceConfiguration": "Configuración del servicio",
+    "selectServices": "Seleccionar servicios",
+    "calendarAndRates": "Calendario y tarifas",
+    "knowYourProfile": "Conocer tu perfil",
+    "selectServicesOffer": "Selecciona los servicios que deseas ofrecer en PuppyPo",
+    "next": "Siguiente",
+
+    "dateRange": "Rango de fechas",
+    "exactDates": "Fechas exactas",
+    "configureDays": "Configurar ({{days}} días)",
+    "selectServiceToConfigure": "Selecciona un servicio para configurar",
+    "servicesConfigured": "{{count}} servicio(s) configurado(s)",
+
+    "caregiverSkillsTitle": "Queremos conocer tus habilidades y experiencia como cuidador",
+    "caregiverSkillsDescription": "para construir un perfil que refleje tu verdadero potencial.",
+
+    "caregiverGeneralInfo": "Información general del cuidador",
+    "petTypesYouHost": "¿Tipo de mascotas que hospedas?",
+    "experienceLevel": "Nivel de experiencia:",
+    "experienceBeginner": "Aprendiz",
+    "experienceIntermediate": "Intermedio",
+    "experienceSenior": "Senior",
+
+    "certificationsOptional": "Certificaciones o cursos (opcional):",
+    "certificationVetStudent": "Estudiante de veterinaria",
+    "certificationGroomingFirstAid": "Curso en grooming o primeros auxilios",
+    "certificationNone": "No tengo",
+
+    "allergiesQuestion": "¿Tienes alergias a algún tipo de mascota?",
+    "yes": "Sí",
+    "no": "No",
+    "specifyAllergiesLabel": "Especificar:",
+    "allergiesPlaceholder": "Ej: Pelo de gato, perros grandes...",
+
+    "homeInfoTitle": "Información del hogar",
+    "selectHomeTypeLabel": "Selecciona el tipo de vivienda donde hospedas:",
+    "open": "Abierto",
+    "homeTypeFarm": "Finca",
+    "hasOutdoorSpace": "¿Tienes yarda o espacio exterior?",
+    "closed": "Cerrado",
+    "peopleAtHome": "Personas en casa:",
+    "liveAlone": "Vivo solo(a)",
+    "liveWithFamily": "Con familia",
+    "liveWithChildren": "Con niños",
+
+    "childrenAge": "Edad de los niños:",
+
+    "back": "Atrás",
+    "finish": "Finalizar",
+    "dogs": "Perros",
+    "cats": "Gatos",
+    "both": "Ambos",
+    "daysSelected": "{{count}} día(s) seleccionado(s)",
+    "defineTimeRange": "Por favor defina la franja horaria:",
+    "startTime": "Hora inicio:",
+    "endTime": "Hora Fin:",
+    "schedule": "Horario",
+    "rate": "Tarifa",
+    "delete": "Eliminar",
+    "saveChanges": "Guardar cambios",
+    "priceCAD": "Precio (CAD)",
+    "dropOffTime": "Hora de entrega",
+    "pickUpTime": "Hora de recogida",
+    "cancel": "Cancelar",
+    "addTimeSlotButtonText": "Guardar franja"
+  },
+  "profile": {
+    "title": "Perfil",
+    "personalInformation": "Información personal",
+    "serviceConfiguration": "Configuración de servicios",
+    "wallet": "Billetera",
+    "pets": "Tus mascotas",
+    "photos": "Fotos",
+    "configuration": "Configuración",
+    "completedProfile": "Perfil completado",
+    "modalAccept": "Aceptar",
+    "modalMessage1": "En este paso podrás definir el calendario de tarifas para cada uno de los servicios que seleccionaste anteriormente. Solo elige los días en los que estarás disponible para ofrecer tus servicios y asigna el valor que prefieras a cada fecha.",
+    "modalTitle": "¡Configura tu calendario de tarifas!",
+    "modalMessage2": "Una vez que configures todas las tarifas, el botón “Siguiente” se activará automáticamente para que puedas continuar."
+  }
+}

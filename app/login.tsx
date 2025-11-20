@@ -1,4 +1,5 @@
 import { useGoogleAuth } from "@/hooks/useSocialAuth";
+import { i18n } from "@/i18n/translations";
 import { login, loginGoogle } from "@/Service/Service-Login/authService";
 import { setCredentials } from "@/Store/authSlice";
 import { loginStyles } from "@/Styles/components/Login/loginStyles";
@@ -6,7 +7,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
-import Toast from "react-native-toast-message";
 import { useDispatch } from "react-redux";
 import ArrobaIcon from "../assets/Icons/arroba.svg";
 import FacebookIcon from "../assets/Icons/Facebook.svg";
@@ -54,36 +54,32 @@ export default function Login() {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      //showToast.info("Faltan datos", "Ingresa correo y contraseña");
       showInfoModal(
-        "Ingresa correo y contraseña",
+        i18n.t("alerts.nodata"),
         "information-circle",
-        "Faltan datos"
+        i18n.t("general.Data_missing")
       );
       return;
     }
     if (!validateEmail(email)) {
       showInfoModal(
-        "Por favor ingresa un correo válido",
+        i18n.t("alerts.alertemailInvalid"),
         "alert-circle",
-        "Correo inválido"
+        i18n.t("alerts.emailInvalid")
       );
       return;
     }
-
     setLoading(true);
     try {
       const data = await login(email, password);
       dispatch(setCredentials({ token: data.token, user: data.user }));
       router.replace("/(tabs)/perfil");
     } catch (error: any) {
-      Toast.show({
-        type: "error",
-        text1: "Error al iniciar sesión",
-        text2: error?.message ?? "Por favor verifica tus credenciales",
-        position: "top",
-        topOffset: 60,
-      });
+      showInfoModal(
+        i18n.t("alerts.error"),
+        "alert-circle",
+        i18n.t("login.errorlogin")
+      );
     } finally {
       setLoading(false);
     }
@@ -104,15 +100,15 @@ export default function Login() {
           {/* Header */}
           <View style={loginStyles.header}>
             <PuppySvg />
-            <Text style={loginStyles.title}>Iniciar sesión</Text>
+            <Text style={loginStyles.title}>{i18n.t("login.title")}</Text>
           </View>
-          <Text style={loginStyles.label}>Correo electrónico *</Text>
+          <Text style={loginStyles.label}>{i18n.t("login.email")} *</Text>
           <View style={loginStyles.inputContainer}>
             <Text style={loginStyles.inputIcon}>
               <ArrobaIcon width={25} height={25} />
             </Text>
             <TextInput
-              placeholder="Usuario"
+              placeholder={i18n.t("login.email")}
               value={email}
               onChangeText={setEmail}
               style={loginStyles.input}
@@ -127,13 +123,13 @@ export default function Login() {
             />
           </View>
 
-          <Text style={loginStyles.label}>Contraseña *</Text>
+          <Text style={loginStyles.label}>{i18n.t("login.password")} *</Text>
           <View style={loginStyles.inputContainer}>
             <Text style={loginStyles.inputIcon}>
               <LlaveIcon width={25} height={25} />
             </Text>
             <TextInput
-              placeholder="Contraseña"
+              placeholder={i18n.t("login.password")}
               value={password}
               onChangeText={setPassword}
               secureTextEntry
@@ -152,7 +148,7 @@ export default function Login() {
             onPress={() => router.push("/(Login)/ChangePassword")}
           >
             <Text style={loginStyles.forgotPasswordText}>
-              ¿Has olvidado tu contraseña?
+              {i18n.t("login.forgotPassword")}
             </Text>
           </TouchableOpacity>
 
@@ -162,14 +158,19 @@ export default function Login() {
             onPress={handleLogin}
           >
             <Text style={loginStyles.loginButtonText}>
-              {loading ? "Ingresando..." : "Ingresar"}
+              {loading
+                ? i18n.t("general.logging_in") ?? "..."
+                : i18n.t("general.log_in")}
             </Text>
           </TouchableOpacity>
         </View>
         {/* Social Buttons */}
         <View style={loginStyles.dividerContainer}>
           <View style={loginStyles.divider} />
-          <Text style={loginStyles.dividerText}>O Continuar con</Text>
+          <Text style={loginStyles.dividerText}>
+            {" "}
+            {i18n.t("general.continue")}
+          </Text>
           <View style={loginStyles.divider} />
         </View>
         <View style={loginStyles.socialButtonsContainer}>
@@ -196,11 +197,14 @@ export default function Login() {
         </View>
 
         <View style={loginStyles.registerContainer}>
-          <Text style={loginStyles.registerText}>¿No tienes una cuenta? </Text>
-          <TouchableOpacity
-            onPress={() => router.push("/(Users)/Home_Register")}
-          >
-            <Text style={loginStyles.registerLink}>Regístrate</Text>
+          <Text style={loginStyles.registerText}>
+            {" "}
+            {i18n.t("login.account")}
+          </Text>
+          <TouchableOpacity onPress={() => router.push("/(Users)/Users")}>
+            <Text style={loginStyles.registerLink}>
+              {i18n.t("general.register")}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -214,7 +218,7 @@ export default function Login() {
         }
         iconColor={modalConfig.iconColor}
         primaryButton={{
-          text: "Entendido",
+          text: i18n.t("general.understood"),
           onPress: () => setModalVisible(false),
         }}
       >

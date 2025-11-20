@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import IconoBanner from "../../assets/Icons/IconoBanner.svg";
 // Importa tus iconos SVG
+import { i18n } from "@/i18n/translations";
 import AlojamientoIcon from "../../assets/Icons/svg-banner/SubBanner1.svg";
 import GuarderiaIcon from "../../assets/Icons/svg-banner/SubBanner2.svg";
 import CuidadoIcon from "../../assets/Icons/svg-banner/SubBanner3.svg";
@@ -33,27 +34,27 @@ const PetCareHomeScreen = () => {
   const slides = [
     {
       image: require("../../assets/images/Banner_1.png"),
-      title: "Alojamiento de\nmascotas",
+      title: i18n.t("slides.petLodging"),
       icon: AlojamientoIcon,
     },
     {
       image: require("../../assets/images/Banner_2.png"),
-      title: "Guardería de día",
+      title: i18n.t("slides.daycare"),
       icon: GuarderiaIcon,
     },
     {
       image: require("../../assets/images/Banner_3.png"),
-      title: "Cuidado en casa",
+      title: i18n.t("slides.homeCare"),
       icon: CuidadoIcon,
     },
     {
       image: require("../../assets/images/Banner_4.png"),
-      title: "Paseos en el barrio",
+      title: i18n.t("slides.neighborhoodWalks"),
       icon: PaseosIcon,
     },
     {
       image: require("../../assets/images/Banner_5.png"),
-      title: "Baño a domicilio",
+      title: i18n.t("slides.homeBath"),
       icon: BañoIcon,
     },
   ];
@@ -188,29 +189,30 @@ const PetCareHomeScreen = () => {
 
           {/* Contenido de texto */}
           <View style={homeStyles.textContent}>
-            <Text style={homeStyles.mainTitle}>
-              ¡La tranquilidad de saber que tu mascota está en buenas manos!
-            </Text>
+            <Text style={homeStyles.mainTitle}>{i18n.t("home.welcome")}</Text>
 
-            <Text style={homeStyles.subtitle}>
-              Encuentra cuidadores y alojamientos de confianza para tu compañero
-            </Text>
+            <Text style={homeStyles.subtitle}>{i18n.t("home.subtitle")}</Text>
           </View>
 
           {/* Botones de acción */}
           <View style={homeStyles.buttonsContainer}>
             <TouchableOpacity
               style={homeStyles.registerButton}
-              onPress={() => router.push("/(Users)/Home_Register")}
+              onPress={() => router.push("/(Users)/Users")}
             >
-              <Text style={homeStyles.registerButtonText}>Regístrate</Text>
+              <Text style={homeStyles.registerButtonText}>
+                {i18n.t("general.register")}
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={homeStyles.loginButton}
               onPress={() => router.push("/(tabs)/perfil")}
             >
-              <Text style={homeStyles.loginButtonText}>Reservar</Text>
+              <Text style={homeStyles.loginButtonText}>
+                {" "}
+                {i18n.t("general.reservation")}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
