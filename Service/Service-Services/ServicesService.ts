@@ -1,9 +1,9 @@
-import { Response } from "@/app/Models/Model-Response/Response";
-import { ServiceData } from "@/app/Models/Model-Users/ServiceData";
+import { ResponseRequest } from "@/Models/Model-Response/Response";
+import { ServiceData } from "@/Models/Model-Users/ServiceData";
 import Constants from "expo-constants";
 const { apiUrl } = Constants.expoConfig?.extra || {};
 
-export async function GetServices(): Promise<Response<ServiceData[]>> {
+export async function GetServices(): Promise<ResponseRequest<ServiceData[]>> {
   try {
     const response = await fetch(`${apiUrl}Services/ListServices`, {
       method: "GET",

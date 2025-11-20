@@ -6,16 +6,17 @@
     "close": "Cerrar",
     "log_in": "Ingresar",
     "logging_in": "Ingresando",
-    "continue": "O Continue with",
+    "continue": "O Continuar con",
     "register": "Registrate",
     "sending": "Enviando",
     "send": "Enviar",
     "Data_missing": "Faltan datos",
     "understood": "Entendido",
-    "reservation": "Reservar"
+    "reservation": "Reservar",
+    "registrarionsuccess": "¡Registro exitoso!"
   },
   "home": {
-    "welcome": " ¡La tranquilidad de saber que tu mascota está en buenas manos!",
+    "welcome": "¡La tranquilidad de saber\nque tu mascota está\nen buenas manos!",
     "subtitle": " Encuentra cuidadores y alojamientos de confianza para tu compañero"
   },
   "login": {
@@ -24,10 +25,11 @@
     "loginButton": "Iniciar sesión",
     "forgotPassword": "¿Olvidaste tu contraseña?",
     "title": "Iniciar sesión",
-    "account": "¿No tienes una cuenta?",
+    "account": "¿Ya tienes una cuenta?",
     "forgotPasswordChange": "¿Haz olvidaste tu contraseña?",
     "textChangeDescription": "Para restablecer tu contraseña, escribe la dirección de correo electrónico completa que usaste para registrarte en PuppyPo.com y paso por paso.",
-    "errorlogin": "Error al iniciar sesión"
+    "errorlogin": "Error al iniciar sesión",
+    "logintocontinue": "Inicie sesión para continuar."
   },
   "alerts": {
     "locationDenied": "Debe activar la ubicación para continuar",
@@ -39,7 +41,8 @@
     "userNotFound": "Usuario no encontrado",
     "errorChangePassword": "Error al intentar cambiar contraseña",
     "checkInternetConnection": "Por favor verifica tu conexión a internet",
-    "docTypesLoad": "No se pudieron cargar los tipos de documento"
+    "docTypesLoad": "No se pudieron cargar los tipos de documento",
+    "insertFailed": "Se ha producido un error al guardar. Inténtalo de nuevo"
   },
   "slides": {
     "petLodging": "Alojamiento de\nmascotas",
@@ -65,6 +68,8 @@
     "password": "Contraseña",
     "acceptPolicy": "Aceptar política privacidad de datos",
     "requiredName": "El nombre es obligatorio",
+    "requiredDocumentType": "El tipo de documento es obligatorio",
+    "requiredNumberDocument": "El número de documento es obligatorio",
     "requiredLastName": "Los apellidos son obligatorios",
     "requiredPostal": "El código postal es obligatorio",
     "requiredPassword": "La contraseña es obligatoria",

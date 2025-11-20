@@ -118,6 +118,10 @@ export default function RootLayout() {
                 name="(Login)/ConfirmChange"
                 options={{ drawerItemStyle: { display: "none" } }}
               />
+              <Drawer.Screen
+                name="(Screen)/HomeScreen"
+                options={{ drawerItemStyle: { display: "none" } }}
+              />
             </Drawer>
           </ThemeProvider>
         </GestureHandlerRootView>

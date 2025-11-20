@@ -1,6 +1,6 @@
 import AuthLayout from "@/components/AuthLayout";
-import { useRouter } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { useNavigation, useRouter } from "expo-router";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
@@ -11,15 +11,16 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import IconoBanner from "../../assets/Icons/IconoBanner.svg";
+import IconoBanner from "../../assets/Icons/IconoBanner.png";
 // Importa tus iconos SVG
 import { i18n } from "@/i18n/translations";
-import AlojamientoIcon from "../../assets/Icons/svg-banner/SubBanner1.svg";
-import GuarderiaIcon from "../../assets/Icons/svg-banner/SubBanner2.svg";
-import CuidadoIcon from "../../assets/Icons/svg-banner/SubBanner3.svg";
-import PaseosIcon from "../../assets/Icons/svg-banner/SubBanner4.svg";
-import BañoIcon from "../../assets/Icons/svg-banner/SubBanner5.svg";
+import { moderateScale, verticalScale } from "react-native-size-matters";
 import { fontFamily } from "../../Config/typography";
+const AlojamientoIcon = require("../../assets/Icons/svg-banner/SubBanner1.png");
+const GuarderiaIcon = require("../../assets/Icons/svg-banner/SubBanner2.png");
+const CuidadoIcon = require("../../assets/Icons/svg-banner/SubBanner3.png");
+const PaseosIcon = require("../../assets/Icons/svg-banner/SubBanner4.png");
+const BañoIcon = require("../../assets/Icons/svg-banner/SubBanner5.png");
 
 const { width, height } = Dimensions.get("window");
 
@@ -29,7 +30,7 @@ const PetCareHomeScreen = () => {
   const router = useRouter();
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const scaleAnim = useRef(new Animated.Value(1)).current;
-
+  const navigation = useNavigation();
   // Array con tus slides (imagen, texto e icono)
   const slides = [
     {
@@ -115,12 +116,35 @@ const PetCareHomeScreen = () => {
     setCurrentImageIndex(index);
   };
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      tabBarStyle: { display: "none" }, // Oculta el tab bar
+    });
+
+    return () => {
+      navigation.setOptions({
+        tabBarStyle: {
+          backgroundColor: "#FFF",
+          borderTopWidth: 1,
+          borderTopColor: "#E5E5E5",
+          height: 70,
+          paddingBottom: 5,
+          paddingTop: 8,
+        }, // Restaura el estilo al salir
+      });
+    };
+  }, [navigation]);
+
   return (
     <AuthLayout contentStyle={homeStyles.container}>
       <View style={homeStyles.inner}>
         {/* Logo en la esquina superior */}
         <View style={homeStyles.logoContainer}>
-          <IconoBanner width={90} height={80} />
+          <Image
+            source={IconoBanner}
+            style={{ width: 80, height: 80 }}
+            resizeMode="contain"
+          />
         </View>
 
         {/* Contenedor principal con imagen y contenido */}
@@ -180,10 +204,11 @@ const PetCareHomeScreen = () => {
                 },
               ]}
             >
-              {(() => {
-                const CurrentIcon = slides[currentImageIndex].icon;
-                return <CurrentIcon width={60} height={60} />;
-              })()}
+              <Image
+                source={slides[currentImageIndex].icon}
+                style={{ width: 110, height: 80 }}
+                resizeMode="contain"
+              />
             </Animated.View>
           </View>
 
@@ -233,8 +258,8 @@ const homeStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     position: "absolute",
-    top: 60,
-    right: 20,
+    top: 45,
+    right: 35,
     zIndex: 10,
   },
   mainContent: {
@@ -302,8 +327,9 @@ const homeStyles = StyleSheet.create({
   iconContainer: {
     alignItems: "center",
     justifyContent: "center",
-    height: 100,
-    marginTop: -60,
+    height: 60,
+    marginBottom: 20,
+    marginTop: -15,
   },
   textContent: {
     alignItems: "center",
@@ -312,16 +338,21 @@ const homeStyles = StyleSheet.create({
     fontFamily: fontFamily.medium,
   },
   mainTitle: {
-    fontSize: 22,
-    fontWeight: "normal",
+    //fontSize: 17,
+    fontSize: moderateScale(17), // Escala automáticamente
+
+    // fontWeight: "bold",
     textAlign: "center",
     color: "#333",
-    marginBottom: 15,
-    lineHeight: 28,
+    marginBottom: verticalScale(15),
+    lineHeight: moderateScale(28),
+    //marginBottom: 15,
+    //lineHeight: 28,
     fontFamily: fontFamily.bold,
+    flexShrink: 1, // ← ¡Importante para textos largos!
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 14,
     textAlign: "center",
     color: "#666",
     lineHeight: 22,

@@ -140,7 +140,7 @@ const ProfileScreen = () => {
               activeOpacity={0.7}
             >
               <Text style={styles.menuItemText}>{item.title}</Text>
-              <Ionicons name="chevron-forward" size={24} color="#666" />
+              <Ionicons name="chevron-forward" size={28} color="#666" />
             </TouchableOpacity>
           ))}
         </View>
@@ -189,9 +189,9 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 80,
     paddingBottom: 10,
     backgroundColor: "#FFF",
   },
@@ -203,9 +203,10 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
-    fontWeight: "600",
+    fontWeight: "700",
     color: "#000",
     fontFamily: fontFamily.bold,
+    marginLeft: 30,
   },
   placeholder: {
     width: 40,
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: "700",
     color: "#000",
     marginBottom: 15,
     fontFamily: fontFamily.medium,
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
   },
   completeButtonText: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: "700",
     color: "#666",
     fontFamily: fontFamily.medium,
   },

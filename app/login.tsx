@@ -1,7 +1,6 @@
 import { useGoogleAuth } from "@/hooks/useSocialAuth";
 import { i18n } from "@/i18n/translations";
-import { login, loginGoogle } from "@/Service/Service-Login/authService";
-import { setCredentials } from "@/Store/authSlice";
+import { loginGoogle } from "@/Service/Service-Login/authService";
 import { loginStyles } from "@/Styles/components/Login/loginStyles";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -53,36 +52,36 @@ export default function Login() {
   };
 
   const handleLogin = async () => {
-    if (!email || !password) {
-      showInfoModal(
-        i18n.t("alerts.nodata"),
-        "information-circle",
-        i18n.t("general.Data_missing")
-      );
-      return;
-    }
-    if (!validateEmail(email)) {
-      showInfoModal(
-        i18n.t("alerts.alertemailInvalid"),
-        "alert-circle",
-        i18n.t("alerts.emailInvalid")
-      );
-      return;
-    }
+    // if (!email || !password) {
+    //   showInfoModal(
+    //     i18n.t("alerts.nodata"),
+    //     "information-circle",
+    //     i18n.t("general.Data_missing")
+    //   );
+    //   return;
+    // }
+    // if (!validateEmail(email)) {
+    //   showInfoModal(
+    //     i18n.t("alerts.alertemailInvalid"),
+    //     "alert-circle",
+    //     i18n.t("alerts.emailInvalid")
+    //   );
+    //   return;
+    // }
     setLoading(true);
-    try {
-      const data = await login(email, password);
-      dispatch(setCredentials({ token: data.token, user: data.user }));
-      router.replace("/(tabs)/perfil");
-    } catch (error: any) {
-      showInfoModal(
-        i18n.t("alerts.error"),
-        "alert-circle",
-        i18n.t("login.errorlogin")
-      );
-    } finally {
-      setLoading(false);
-    }
+    // try {
+    //const data = await login(email, password);
+    //dispatch(setCredentials({ token: data.token, user: data.user }));
+    router.replace("/(Screen)/HomeScreen");
+    // } catch (error: any) {
+    //   showInfoModal(
+    //     i18n.t("alerts.error"),
+    //     "alert-circle",
+    //     i18n.t("login.errorlogin")
+    //   );
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   const googleAuth = useGoogleAuth(async (token: string) => {
