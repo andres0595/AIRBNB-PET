@@ -17,6 +17,7 @@ import {
   Service,
   ServiceConfig,
 } from "@/Models/Model-ServiceConfig/serviceConfig";
+import { CalendarConfigStep } from "@/components/Steps/CalendarConfigStep";
 import { useCalendarState } from "@/hooks/useCalendarState";
 import { useProfileState } from "@/hooks/useProfileState";
 import { useTimeSlotState } from "@/hooks/useTimeSlotState";
@@ -219,35 +220,17 @@ export default function ServiceConfigScreen() {
           )}
 
           {currentStep === 2 && (
-            <View style={styles.stepContent}>
-              <Text style={styles.placeholderText}>
-                Componente de Calendario (CalendarConfigStep)
-              </Text>
-              <Text style={styles.infoText}>
-                Este componente manejará: - Selección de fechas - Configuración
-                de precios - Horarios de entrega/recogida - Franjas horarias
-              </Text>
-
-              <View style={styles.navigationButtons}>
-                <TouchableOpacity
-                  style={styles.backButton}
-                  onPress={() => setCurrentStep(1)}
-                >
-                  <Text style={styles.backButtonText}>
-                    {i18n.t("configservice.back")}
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.finishButton}
-                  onPress={handleFinish}
-                >
-                  <Text style={styles.finishButtonText}>
-                    {i18n.t("configservice.finish")}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+            <CalendarConfigStep
+              selectedServices={selectedServices}
+              services={SERVICES}
+              serviceConfigs={serviceConfigs}
+              dayPrices={calendarState.state.dayPrices}
+              onSaveConfig={(serviceId, config) => {
+                setServiceConfigs((prev) => ({ ...prev, [serviceId]: config }));
+              }}
+              onBack={() => setCurrentStep(1)}
+              onFinish={handleFinish}
+            />
           )}
         </View>
       </ScrollView>

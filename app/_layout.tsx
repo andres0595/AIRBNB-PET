@@ -122,6 +122,10 @@ export default function RootLayout() {
                 name="(Screen)/HomeScreen"
                 options={{ drawerItemStyle: { display: "none" } }}
               />
+              <Drawer.Screen
+                name="(Users)/Photos"
+                options={{ drawerItemStyle: { display: "none" } }}
+              />
             </Drawer>
           </ThemeProvider>
         </GestureHandlerRootView>

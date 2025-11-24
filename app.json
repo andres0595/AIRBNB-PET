@@ -4,7 +4,7 @@
     "slug": "puppy-po",
     "version": "1.0.0",
     "orientation": "default",
-    "icon": "./assets/images/Icono_Puppy.png",
+    "icon": "./assets/images/IconoAplicacion.png",
     "scheme": "petdaycare",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": false,
@@ -22,7 +22,7 @@
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "monochromeImage": "./assets/images/IconoAplicacion.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
@@ -57,7 +57,7 @@
       "router": {},
       "eas": {
         "projectId": "3bce2738-e5e4-40cf-bfde-3142c8cc9f5f"
-      },     
+      },
       "apiUrl": "http://3.85.241.108:4590/",
       "androidClientId": "195740328135-m86g67bd24toeu4b2dpb913tt9lb1qp0.apps.googleusercontent.com",
       "webClientId": "195740328135-mibbpe3cbvdmefrcmdd548mk0aedsli9.apps.googleusercontent.com",

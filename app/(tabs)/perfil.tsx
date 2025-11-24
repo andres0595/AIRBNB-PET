@@ -51,7 +51,7 @@ const ProfileScreen = () => {
     {
       id: 5,
       title: i18n.t("profile.photos"),
-      route: "/(profile)/photos",
+      route: "/(Users)/Photos",
     },
   ];
 
