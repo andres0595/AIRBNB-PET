@@ -19,30 +19,30 @@ export const UsersStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 25,
-    marginTop: 40,
   },
   iconContainer: {
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 20,
+    marginBottom: 0,
     padding: 10,
   },
   title: {
     fontSize: 20,
-    fontWeight: "600",
+    fontWeight: "700",
     textAlign: "center",
-    marginBottom: 5,
+    marginBottom: 0,
     color: "#333",
     lineHeight: 24,
     fontFamily: fontFamily.bold,
   },
   label: {
-    fontSize: 14,
+    fontSize: 15,
     color: "#333",
     marginBottom: 6,
-    marginLeft: 8,
-    fontWeight: "500",
     fontFamily: fontFamily.medium,
+    letterSpacing: 0,
+    textAlign: "left",
+    opacity: 1,
   },
 
   input: {
@@ -51,7 +51,7 @@ export const UsersStyles = StyleSheet.create({
     color: "#333",
     borderColor: "#ddd",
     borderWidth: 1,
-    borderRadius: 15,
+    borderRadius: 25,
     backgroundColor: "#f8f8f8",
     marginBottom: 15,
     fontFamily: fontFamily.medium,
@@ -189,5 +189,13 @@ export const UsersStyles = StyleSheet.create({
   },
   pickerPlaceholder: {
     color: "#999",
+  },
+
+  subtitle: {
+    fontSize: 14,
+    color: "#666",
+    textAlign: "center",
+    lineHeight: 20,
+    fontFamily: fontFamily.medium,
   },
 });

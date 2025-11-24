@@ -1,4 +1,5 @@
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { i18n } from "@/i18n/translations";
 import { persistor, store } from "@/Store/store";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -7,9 +8,11 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
+import * as Localization from "expo-localization";
 import { Drawer } from "expo-router/drawer";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { AppState } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
@@ -35,6 +38,19 @@ export default function RootLayout() {
     };
     setTimeout(hideSplash, 2000);
   }, [fontsLoaded, fontError]);
+
+  // 🌐 Detectar cambio de idioma al regresar al foreground
+  useEffect(() => {
+    const sub = AppState.addEventListener("change", (state) => {
+      if (state === "active") {
+        const locale = Localization.getLocales()[0].languageCode;
+        const language = locale?.startsWith("es") ? "es" : "en";
+        i18n.locale = language;
+      }
+    });
+
+    return () => sub.remove();
+  }, []);
 
   const colorScheme = useColorScheme();
 
@@ -89,10 +105,7 @@ export default function RootLayout() {
                 name="(Login)/ValidateOtp"
                 options={{ drawerItemStyle: { display: "none" } }}
               />
-              <Drawer.Screen
-                name="(Users)/Home_Register"
-                options={{ drawerItemStyle: { display: "none" } }}
-              />
+
               <Drawer.Screen
                 name="(Service)/Services"
                 options={{ drawerItemStyle: { display: "none" } }}
@@ -103,6 +116,10 @@ export default function RootLayout() {
               />
               <Drawer.Screen
                 name="(Login)/ConfirmChange"
+                options={{ drawerItemStyle: { display: "none" } }}
+              />
+              <Drawer.Screen
+                name="(Screen)/HomeScreen"
                 options={{ drawerItemStyle: { display: "none" } }}
               />
             </Drawer>

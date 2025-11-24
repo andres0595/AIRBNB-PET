@@ -1,5 +1,6 @@
 import { RootState } from "@/Store/store";
 import {
+  setauthorization,
   setBackgroundCheck,
   setDocuments,
   setValidationsPercentage,
@@ -19,6 +20,7 @@ interface ValidationsProps {
 interface ValidationsData {
   backgroundCheckAccepted: boolean | null;
   documents: string[];
+  authorization: boolean | null;
 }
 
 const ValidationsForm: React.FC<ValidationsProps> = ({
@@ -26,12 +28,16 @@ const ValidationsForm: React.FC<ValidationsProps> = ({
   onProgressChange,
 }) => {
   const dispatch = useDispatch();
-  const { backgroundCheckAccepted, documents } = useSelector(
+  const { backgroundCheckAccepted, documents, authorization } = useSelector(
     (state: RootState) => state.validations
   );
 
   const toggleBackgroundCheck = (value: boolean) => {
     dispatch(setBackgroundCheck(value));
+  };
+
+  const toggleauthorization = (value: string) => {
+    dispatch(setauthorization(value));
   };
 
   // Función para seleccionar documentos
@@ -76,7 +82,7 @@ const ValidationsForm: React.FC<ValidationsProps> = ({
       onProgressChange(percentage);
     }
     dispatch(setValidationsPercentage(percentage));
-  }, [backgroundCheckAccepted, documents, dispatch]);
+  }, [backgroundCheckAccepted, documents, authorization, dispatch]);
 
   // Función para limpiar todos los documentos
   const clearAllDocuments = () => {
@@ -95,7 +101,6 @@ const ValidationsForm: React.FC<ValidationsProps> = ({
       <Text style={styles.label}>
         12. ¿Aceptas la verificación de antecedentes (background check)? *
       </Text>
-
       <View style={styles.radioGroup}>
         <TouchableOpacity
           style={styles.radioOption}
@@ -135,7 +140,6 @@ const ValidationsForm: React.FC<ValidationsProps> = ({
           </Text>
         </TouchableOpacity>
       </View>
-
       {backgroundCheckAccepted === false && (
         <View style={styles.warningBox}>
           <Ionicons name="warning" size={20} color="#FF3B30" />
@@ -147,7 +151,118 @@ const ValidationsForm: React.FC<ValidationsProps> = ({
 
       <View>
         <Text style={styles.label}>
-          13. ¿Tienes certificados relacionados con cuidado de mascotas o
+          13. ¿Estás legalmente autorizado para trabajar en Canadá? *
+        </Text>
+        <View style={styles.radioGroup}>
+          <TouchableOpacity
+            style={styles.radioOption}
+            onPress={() => toggleauthorization("citizen")}
+            activeOpacity={0.7}
+          >
+            <View
+              style={[
+                styles.radioCircle,
+                authorization === "citizen" && styles.radioCircleSelected,
+              ]}
+            >
+              {authorization === "citizen" && (
+                <View style={styles.radioSelected} />
+              )}
+            </View>
+            <Text style={styles.radioLabel}>Ciudadano canadiense</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.radioOption}
+            onPress={() => toggleauthorization("permanent")}
+            activeOpacity={0.7}
+          >
+            <View
+              style={[
+                styles.radioCircle,
+                authorization === "permanent" && styles.radioCircleSelected,
+              ]}
+            >
+              {authorization === "permanent" && (
+                <View style={styles.radioSelected} />
+              )}
+            </View>
+            <Text style={styles.radioLabel}>Residente permanente</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.radioOption}
+            onPress={() => toggleauthorization("work_permit")}
+            activeOpacity={0.7}
+          >
+            <View
+              style={[
+                styles.radioCircle,
+                authorization === "work_permit" && styles.radioCircleSelected,
+              ]}
+            >
+              {authorization === "work_permit" && (
+                <View style={styles.radioSelected} />
+              )}
+            </View>
+            <Text style={styles.radioLabel}>
+              Titular con permiso de trabajo valido
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.radioOption}
+            onPress={() => toggleauthorization("student")}
+            activeOpacity={0.7}
+          >
+            <View
+              style={[
+                styles.radioCircle,
+                authorization === "student" && styles.radioCircleSelected,
+              ]}
+            >
+              {authorization === "student" && (
+                <View style={styles.radioSelected} />
+              )}
+            </View>
+            <Text style={styles.radioLabel}>
+              Estudiante autorizado para trabajar
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.radioOption}
+            onPress={() => toggleauthorization("visitor")}
+            activeOpacity={0.7}
+          >
+            <View
+              style={[
+                styles.radioCircle,
+                authorization === "visitor" && styles.radioCircleSelected,
+              ]}
+            >
+              {authorization === "visitor" && (
+                <View style={styles.radioSelected} />
+              )}
+            </View>
+            <Text style={styles.radioLabel}>
+              Otro/ visitante (no autorizado)
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {authorization === "visitor" && (
+          <View style={styles.warningBox}>
+            <Ionicons name="warning" size={20} color="#FF3B30" />
+            <Text style={styles.warningText}>
+              No podrás ser activado como sitter sin autorización de trabajo
+            </Text>
+          </View>
+        )}
+      </View>
+      <View>
+        <Text style={styles.label}>
+          14. ¿Tienes certificados relacionados con cuidado de mascotas o
           primeros auxilios? (Opcional)
         </Text>
         <View style={styles.uploadHeader}>

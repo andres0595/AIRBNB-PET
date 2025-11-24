@@ -1,4 +1,4 @@
-export interface Response<T = any> {
+export interface ResponseRequest<T = any> {
   message: string;
   data: T;
   statusCode: number;

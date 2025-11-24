@@ -1,5 +1,7 @@
 import Constants from "expo-constants";
 import { LoginResponse } from "../../Models/Model-Login/LoginResponse";
+import { ResponseRequest } from "../../Models/Model-Response/Response";
+
 const { apiUrl } = Constants.expoConfig?.extra || {};
 
 export async function login(
@@ -25,7 +27,7 @@ export async function login(
   }
 }
 
-export async function GenetateOtp(email: string): Promise<any> {
+export async function GenetateOtp(email: string): Promise<ResponseRequest> {
   const response = await fetch(`${apiUrl}auth/SendOtp?email=${email}`, {
     method: "POST",
     headers: {
@@ -78,14 +80,17 @@ export async function loginGoogle(token: string): Promise<LoginResponse> {
     throw error;
   }
 }
-export async function validateOtp(email:string,otp:number):Promise<Response>{
+export async function validateOtp(
+  email: string,
+  otp: number
+): Promise<ResponseRequest> {
   try {
     const response = await fetch(`${apiUrl}auth/ConfirmOtp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email,otp }),
+      body: JSON.stringify({ email, otp }),
     });
 
     if (!response.ok) {

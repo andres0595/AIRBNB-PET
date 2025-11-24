@@ -1,4 +1,5 @@
 import AuthLayout from "@/components/AuthLayout";
+import { i18n } from "@/i18n/translations";
 import { ServicesStyles } from "@/Styles/components/Services/ServiceStyles";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -32,49 +33,46 @@ const services: Service[] = [
   {
     id: "1",
     icon: alojamientoMascotas,
-    title: "Alojamiento de mascotas",
-    description: "en casa del cuidador",
-    price: "Promedio $3000 / noche",
+    title: i18n.t("servicios.alojamiento.titulo"),
+    description: i18n.t("servicios.alojamiento.descripcion"),
+    price: i18n.t("servicios.alojamiento.precio"),
     isPng: true,
   },
   {
     id: "2",
     icon: Guarderia,
-    title: "Guardería de día",
-    description: "en casa del cuidador",
-    price: "Promedio $3000 / noche",
+    title: i18n.t("servicios.guarderia.titulo"),
+    description: i18n.t("servicios.guarderia.descripcion"),
+    price: i18n.t("servicios.guarderia.precio"),
     isPng: true,
   },
   {
     id: "3",
     icon: Cuidado,
-    title: "Cuidado en casa",
-    description: "Atiende a la mascota en la comodidad de su hogar",
-    price: "Promedio $3000 / noche",
+    title: i18n.t("servicios.cuidado.titulo"),
+    description: i18n.t("servicios.cuidado.descripcion"),
+    price: i18n.t("servicios.cuidado.precio"),
     isPng: true,
   },
   {
     id: "4",
     icon: Paseos,
-    title: "Paseos en el barrio",
-    description: "Paseos seguros y divertidos",
-    price: "Promedio $3000 / noche",
+    title: i18n.t("servicios.paseos.titulo"),
+    description: i18n.t("servicios.paseos.descripcion"),
+    price: i18n.t("servicios.paseos.precio"),
     isPng: true,
   },
   {
     id: "5",
     icon: Banio,
-    title: "Baño a domicilio",
-    description: "Servicio de baño",
-    price: "Promedio $3000 / noche",
+    title: i18n.t("servicios.banio.titulo"),
+    description: i18n.t("servicios.banio.descripcion"),
+    price: i18n.t("servicios.banio.precio"),
     isPng: true,
   },
 ];
 
 const ServiceSelectionScreen = () => {
-  // useEffect(() => {
-  //   fetchServices();
-  // }, []);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [tooltipVisible, setTooltipVisible] = useState(false);
@@ -82,8 +80,6 @@ const ServiceSelectionScreen = () => {
   const [approvalModalVisible, setApprovalModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-
-  // const [services, setServices] = useState<Service[]>([]);
 
   const toggleService = (serviceId: string) => {
     setSelectedServices((prev) =>
@@ -93,72 +89,9 @@ const ServiceSelectionScreen = () => {
     );
   };
 
-  const iconMap: { [key: string]: React.FC<SvgProps> } = {
-    "alojamientoMascotas.svg": alojamientoMascotas,
-    "guarderiaDia.svg": Banio,
-    "cuidadoCasa.svg": Banio,
-    "paseo.svg": Banio,
-    "baño.svg": Banio,
-  };
-
-  // Función auxiliar para extraer el nombre del archivo del icono
-  const getIconName = (iconPath: string): string => {
-    const parts = iconPath.split("/");
-    return parts[parts.length - 1];
-  };
-
-  // const fetchServices = async () => {
-  //   try {
-  //     setLoading(true);
-
-  //     const response = await GetServices();
-
-  //     if (response.flag && response.data) {
-  //       // Ahora TypeScript sabe que response.data es ServiceData[]
-  //       const mappedServices: Service[] = response.data
-  //         .filter((service: any) => service.Status) // Solo servicios activos
-  //         .map((service: any) => ({
-  //           id: service.IdService.toString(),
-  //           icon: iconMap[getIconName(service.Icon)] || alojamientoMascotas,
-  //           title: service.Title,
-  //           description: service.Description,
-  //           price: service.AveragePrice,
-  //         }));
-
-  //       setServices(mappedServices);
-  //     } else {
-  //       Alert.alert(
-  //         "Error",
-  //         response.message || "No se pudieron cargar los servicios"
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error("Error al obtener servicios:", error);
-  //     Alert.alert(
-  //       "Error de conexión",
-  //       "No se pudo conectar con el servidor. Por favor intenta nuevamente.",
-  //       [
-  //         { text: "Reintentar", onPress: fetchServices },
-  //         { text: "Cancelar", style: "cancel" },
-  //       ]
-  //     );
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const handleContinue = () => {
-    // if (selectedServices.length === 0) {
-    //   Alert.alert(
-    //     "Atención",
-    //     "Por favor selecciona al menos un servicio para continuar"
-    //   );
-    //   return;
-    // }
-
     console.log("Servicios seleccionados:", selectedServices);
     setModalVisiblePerfil(true);
-    // router.push("/(Users)/NextScreen");
   };
 
   const toggleTooltip = () => {
@@ -170,26 +103,18 @@ const ServiceSelectionScreen = () => {
   };
 
   const handleGoBack = () => {
-    router.push("/(Users)/Home_Register");
+    router.push("/");
   };
 
   const handleProfileContinue = () => {
     setModalVisiblePerfil(false);
     setApprovalModalVisible(true);
     console.log("Servicios seleccionados:", selectedServices);
-    // router.push("/(Users)/NextScreen");
   };
 
   const handleApprovalContinue = () => {
     setApprovalModalVisible(false);
-    console.log("Servicios seleccionados:", selectedServices);
-    // Aquí rediriges a la siguiente pantalla del registro
     router.push("/(Steps)/ApprovalStepsScreen");
-  };
-
-  const handleApprovalCancel = () => {
-    setApprovalModalVisible(false);
-    // Opcionalmente puedes regresar o cerrar todo
   };
 
   return (
@@ -199,7 +124,6 @@ const ServiceSelectionScreen = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={ServicesStyles.scrollContent}
       >
-        {/* Botón de regresar */}
         <TouchableOpacity
           style={ServicesStyles.backButton}
           onPress={handleGoBack}
@@ -207,13 +131,16 @@ const ServiceSelectionScreen = () => {
           <Ionicons name="chevron-back" size={28} color="#666" />
         </TouchableOpacity>
 
-        {/* Header */}
         <View style={ServicesStyles.header}>
-          <Text style={ServicesStyles.title}>Selección de servicios</Text>
+          <Text style={ServicesStyles.title}>
+            {i18n.t("servicios.header.titulo")}
+          </Text>
+
           <View style={ServicesStyles.subtitleContainer}>
             <Text style={ServicesStyles.subtitle}>
-              Seleccione alguno de los servicio que le interese
+              {i18n.t("servicios.header.subtitulo")}
             </Text>
+
             <View style={ServicesStyles.tooltipWrapper}>
               <TouchableOpacity
                 style={ServicesStyles.infoButton}
@@ -227,7 +154,6 @@ const ServiceSelectionScreen = () => {
                 />
               </TouchableOpacity>
 
-              {/* Tooltip */}
               {tooltipVisible && (
                 <>
                   <TouchableOpacity
@@ -238,10 +164,7 @@ const ServiceSelectionScreen = () => {
                   <View style={ServicesStyles.tooltipContainer}>
                     <View style={ServicesStyles.tooltipArrow} />
                     <Text style={ServicesStyles.tooltipText}>
-                      Siempre puede agregar más en otra ocasión. Para empezar a
-                      usar este servicio, solo verá uno de ellos durante el
-                      auto-registro. Después de enviar su perfil para revisión,
-                      puede editar los demás con los que quiera trabajar más.
+                      {i18n.t("servicios.tooltip.texto")}
                     </Text>
                   </View>
                 </>
@@ -250,7 +173,6 @@ const ServiceSelectionScreen = () => {
           </View>
         </View>
 
-        {/* Grid de servicios */}
         <View style={ServicesStyles.servicesGrid}>
           {services.map((service, index) => {
             const isLastAndOdd =
@@ -266,7 +188,6 @@ const ServiceSelectionScreen = () => {
                 onPress={() => toggleService(service.id)}
                 activeOpacity={0.7}
               >
-                {/* Icono */}
                 <View
                   style={[
                     ServicesStyles.iconContainer,
@@ -284,7 +205,6 @@ const ServiceSelectionScreen = () => {
                   )}
                 </View>
 
-                {/* Textos - Envueltos en un View cuando es full */}
                 <View
                   style={isLastAndOdd && ServicesStyles.serviceCardFullContent}
                 >
@@ -296,6 +216,7 @@ const ServiceSelectionScreen = () => {
                   >
                     {service.title}
                   </Text>
+
                   <Text
                     style={[
                       ServicesStyles.serviceDescription,
@@ -310,16 +231,15 @@ const ServiceSelectionScreen = () => {
           })}
         </View>
 
-        {/* Link de ayuda */}
         <TouchableOpacity
           style={ServicesStyles.linkButton}
           onPress={handleInfoPress}
         >
           <Text style={ServicesStyles.linkText}>
-            ¿Qué servicio debo elegir?
+            {i18n.t("servicios.link.que_servicio")}
           </Text>
         </TouchableOpacity>
-        {/* Botón fijo inferior */}
+
         <View style={ServicesStyles.buttonContainer}>
           <TouchableOpacity
             style={[ServicesStyles.continueButton]}
@@ -327,21 +247,16 @@ const ServiceSelectionScreen = () => {
             activeOpacity={0.8}
           >
             <Text style={[ServicesStyles.continueButtonText]}>
-              Guardar y continuar
+              {i18n.t("servicios.botones.guardar_continuar")}
             </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-      {/* Modal de información */}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
+
+      {/* ---------------- MODAL 1 ---------------- */}
+      <Modal animationType="fade" transparent={true} visible={modalVisible}>
         <View style={ServicesStyles.modalOverlay}>
           <View style={ServicesStyles.modalContent}>
-            {/* Botón cerrar */}
             <TouchableOpacity
               style={ServicesStyles.closeButton}
               onPress={() => setModalVisible(false)}
@@ -349,7 +264,6 @@ const ServiceSelectionScreen = () => {
               <Ionicons name="close" size={24} color="#333" />
             </TouchableOpacity>
 
-            {/* Icono de información */}
             <View style={ServicesStyles.modalIconContainer}>
               <Ionicons
                 name="information-circle-outline"
@@ -358,48 +272,38 @@ const ServiceSelectionScreen = () => {
               />
             </View>
 
-            {/* Título */}
             <Text style={ServicesStyles.modalTitle}>
-              ¿Qué servicios debo elegir?
+              {i18n.t("servicios.modal1.titulo")}
             </Text>
 
-            {/* Contenido scrollable */}
             <ScrollView
               style={ServicesStyles.modalScroll}
               showsVerticalScrollIndicator={false}
             >
-              {/* Pregunta 1 */}
               <View style={ServicesStyles.questionBlock}>
                 <Text style={ServicesStyles.questionTitle}>
-                  ¿Puedes alojar mascotas en tu casa?
+                  {i18n.t("servicios.modal1.p1.titulo")}
                 </Text>
                 <Text style={ServicesStyles.questionAnswer}>
-                  Recomendamos elegir hospedaje y guardería canina para tener tu
-                  mejor oportunidad de obtener las mejores ganancias.
+                  {i18n.t("servicios.modal1.p1.descripcion")}
                 </Text>
               </View>
 
-              {/* Pregunta 2 */}
               <View style={ServicesStyles.questionBlock}>
                 <Text style={ServicesStyles.questionTitle}>
-                  ¿No puedes recibir mascotas en tu casa?
+                  {i18n.t("servicios.modal1.p2.titulo")}
                 </Text>
                 <Text style={ServicesStyles.questionAnswer}>
-                  Le sugerimos ofrecer una combinación de cuidados de casa,
-                  visitas a domicilio y paseo de perros. Los clientes buscan
-                  personas que puedan ayudarles a cuidar su querida mascota.
+                  {i18n.t("servicios.modal1.p2.descripcion")}
                 </Text>
               </View>
 
-              {/* Pregunta 3 */}
               <View style={ServicesStyles.questionBlock}>
                 <Text style={ServicesStyles.questionTitle}>
-                  ¿Sueles tener ocasionalmente días libres?
+                  {i18n.t("servicios.modal1.p3.titulo")}
                 </Text>
                 <Text style={ServicesStyles.questionAnswer}>
-                  Sería ideal para pasear perros y hacer visitas a domicilio.
-                  Los dueños de mascotas suelen necesitar ayuda temporal para
-                  sus fieles amigos. Trabaja tanto o tan poco como quieras.
+                  {i18n.t("servicios.modal1.p3.descripcion")}
                 </Text>
               </View>
             </ScrollView>
@@ -407,16 +311,14 @@ const ServiceSelectionScreen = () => {
         </View>
       </Modal>
 
-      {/* Modal de creación de perfil */}
+      {/* ---------------- MODAL 2 ---------------- */}
       <Modal
         animationType="fade"
         transparent={true}
         visible={modalVisiblePerfil}
-        onRequestClose={() => setModalVisiblePerfil(false)}
       >
         <View style={ServicesStyles.modalOverlay}>
           <View style={ServicesStyles.profileModalContent}>
-            {/* Botón cerrar */}
             <TouchableOpacity
               style={ServicesStyles.closeButton}
               onPress={() => setModalVisiblePerfil(false)}
@@ -424,114 +326,87 @@ const ServiceSelectionScreen = () => {
               <Ionicons name="close" size={28} color="#333" />
             </TouchableOpacity>
 
-            {/* Título */}
             <Text style={ServicesStyles.profileModalTitle}>
-              ¡Vamos a crear tu perfil!
+              {i18n.t("servicios.modal2.titulo")}
             </Text>
 
-            {/* Descripción principal */}
             <Text style={ServicesStyles.profileModalDescription}>
-              Ten en cuenta que al crear tu perfil vamos a requerir cierta
-              información que nos ayudará a evaluar tu identidad para que
-              nuestro sistema sea seguro y efectivo.
+              {i18n.t("servicios.modal2.descripcion")}
             </Text>
 
-            {/* Subtítulo */}
             <Text style={ServicesStyles.profileModalSubtitle}>
-              Tenga a mano la siguiente información para crear un excelente
-              perfil
+              {i18n.t("servicios.modal2.subtitulo")}
             </Text>
 
-            {/* Lista de requisitos */}
             <View style={ServicesStyles.requirementsList}>
               <View style={ServicesStyles.requirementItem}>
                 <View style={ServicesStyles.bulletPoint} />
                 <Text style={ServicesStyles.requirementText}>
-                  Fotos para tu perfil con mascotas, áreas circundantes y tu
-                  hogar.
+                  {i18n.t("servicios.modal2.req1")}
                 </Text>
               </View>
 
               <View style={ServicesStyles.requirementItem}>
                 <View style={ServicesStyles.bulletPoint} />
                 <Text style={ServicesStyles.requirementText}>
-                  Su pasaporte o identificación con fotografía emitida por el
-                  gobierno para verificar su identidad.
+                  {i18n.t("servicios.modal2.req2")}
                 </Text>
               </View>
 
               <View style={ServicesStyles.requirementItem}>
                 <View style={ServicesStyles.bulletPoint} />
                 <Text style={ServicesStyles.requirementText}>
-                  Datos de la cuenta bancaria que se pagarán automáticamente
-                  después de cada servicio
+                  {i18n.t("servicios.modal2.req3")}
                 </Text>
               </View>
             </View>
 
-            {/* Botón de continuar */}
             <TouchableOpacity
               style={ServicesStyles.profileModalButton}
               onPress={handleProfileContinue}
               activeOpacity={0.8}
             >
               <Text style={ServicesStyles.profileModalButtonText}>
-                Guardar y continuar
+                {i18n.t("servicios.botones.guardar_continuar")}
               </Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
 
-      {/* Modal de aprobación */}
+      {/* ---------------- MODAL 3 ---------------- */}
       <Modal
         animationType="fade"
         transparent={true}
         visible={approvalModalVisible}
-        onRequestClose={() => setApprovalModalVisible(false)}
       >
         <View style={ServicesStyles.modalOverlay}>
           <View style={ServicesStyles.approvalModalContent}>
-            {/* Título */}
             <Text style={ServicesStyles.approvalModalTitle}>
-              ¿Cómo funciona la aprobación?
+              {i18n.t("servicios.modal3.titulo")}
             </Text>
 
-            {/* Subtítulo */}
             <Text style={ServicesStyles.approvalModalSubtitle}>
-              Pasos para obtener la aprobación y ser parte de nuestro equipo
-              PuppyPo
+              {i18n.t("servicios.modal3.subtitulo")}
             </Text>
 
-            {/* Contenido scrollable */}
             <ScrollView
               style={ServicesStyles.approvalScroll}
               showsVerticalScrollIndicator={false}
             >
               <Text style={ServicesStyles.approvalText}>
-                PuppyPo selecciona un solo servicio para que lo completes
-                durante el registro. Una vez aprobado, puedes desactivar
-                cualquier servicio que ya no quieras ofrecer o añadir servicios
-                nuevos en cualquier momento.
+                {i18n.t("servicios.modal3.texto1")}
               </Text>
 
               <Text style={ServicesStyles.approvalText}>
-                Una vez que haya completado los pasos de registro necesarios, su
-                perfil se enviará automáticamente y se revisará para garantizar
-                su precisión y calidad. Recibirá un correo electrónico nuestro
-                en un plazo de 24 a 48 horas informándole de su aprobación o de
-                que debe completar pasos adicionales y volver a enviarlo para
-                obtenerla.
+                {i18n.t("servicios.modal3.texto2")}
               </Text>
 
               <Text style={ServicesStyles.approvalText}>
-                Para una aprobación más rápida, asegúrese de cargar fotos de
-                alta calidad, escribir una descripción descriptiva de usted y
-                sus servicios, ¡y asegúrese de revisar todo!
+                {i18n.t("servicios.modal3.texto3")}
               </Text>
             </ScrollView>
 
-            {/* Botones */}
             <View style={ServicesStyles.approvalButtonsContainer}>
               <TouchableOpacity
                 style={ServicesStyles.approvalContinueButton}
@@ -539,7 +414,7 @@ const ServiceSelectionScreen = () => {
                 activeOpacity={0.8}
               >
                 <Text style={ServicesStyles.approvalContinueButtonText}>
-                  Continuar con los pasos
+                  {i18n.t("servicios.modal3.boton_continuar")}
                 </Text>
                 <Ionicons
                   name="arrow-forward"
@@ -551,11 +426,11 @@ const ServiceSelectionScreen = () => {
 
               <TouchableOpacity
                 style={ServicesStyles.approvalCancelButton}
-                onPress={handleApprovalCancel}
+                onPress={() => setApprovalModalVisible(false)}
                 activeOpacity={0.8}
               >
                 <Text style={ServicesStyles.approvalCancelButtonText}>
-                  Cancelar
+                  {i18n.t("servicios.modal3.boton_cancelar")}
                 </Text>
               </TouchableOpacity>
             </View>

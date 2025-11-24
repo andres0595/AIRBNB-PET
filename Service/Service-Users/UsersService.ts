@@ -1,12 +1,14 @@
-import { Response } from "@/app/Models/Model-Response/Response";
-import { RegisterData } from "@/app/Models/Model-Users/RegisterData";
+import { ResponseRequest } from "@/Models/Model-Response/Response";
+import { RegisterData } from "@/Models/Model-Users/RegisterData";
 import Constants from "expo-constants";
 const { apiUrl } = Constants.expoConfig?.extra || {};
 
-
-export async function CreateOrUpdateUsers(_DataRegister:RegisterData):Promise<Response>{
+export async function CreateOrUpdateUsers(
+  _DataRegister: RegisterData
+): Promise<ResponseRequest> {
   try {
-    const response = await fetch(`${apiUrl}Users/CrearOrUpdateUsers`, { // Cambié a /register
+    const response = await fetch(`${apiUrl}Users/CrearOrUpdateUsers`, {
+      // Cambié a /register
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -25,7 +27,7 @@ export async function CreateOrUpdateUsers(_DataRegister:RegisterData):Promise<Re
   }
 }
 
-export async function GetDocumentTypes(): Promise<Response> {
+export async function GetDocumentTypes(): Promise<ResponseRequest> {
   try {
     const response = await fetch(`${apiUrl}users/ListDocumentTypes`, {
       method: "GET",

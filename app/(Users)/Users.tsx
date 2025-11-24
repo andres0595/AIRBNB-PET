@@ -1,6 +1,11 @@
 import AuthLayout from "@/components/AuthLayout";
-import { GetDocumentTypes } from "@/Service/Service-Users/UsersService";
+import { i18n } from "@/i18n/translations";
+import {
+  CreateOrUpdateUsers,
+  GetDocumentTypes,
+} from "@/Service/Service-Users/UsersService";
 import { UsersStyles } from "@/Styles/components/Users/UsersStyles";
+import { pickerSelectStyles } from "@/Styles/pickerSelectStyles";
 import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
 import { router, useLocalSearchParams } from "expo-router";
@@ -12,14 +17,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import ClientIcon from "../../assets/Icons/Cliente.svg";
-import CaregiverIcon from "../../assets/Icons/Cuidador.svg";
+import RNPickerSelect from "react-native-picker-select";
+import CustomModal from "../(CustomModal)/CustomModal";
+import PuppySvg from "../../assets/Icons/PuppySvg.svg";
 
 export default function UsersRegister() {
   const { userType } = useLocalSearchParams();
-  // Determinar si es cliente o cuidador
-  const isClient = userType === "client";
-  const isCaretaker = userType === "caretaker";
+  const isClient = "client";
+  const isCaretaker = "caretaker";
   const [loadingDocTypes, setLoadingDocTypes] = useState(true);
   const [form, setForm] = useState({
     tipoDocumento: 0,
@@ -32,22 +37,27 @@ export default function UsersRegister() {
     confirmPassword: "",
     aceptaPolitica: false,
   });
-
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [documentTypes, setDocumentTypes] = useState<any>([]);
+  const [modalVisibleAlert, setModalVisibleAlert] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    title: "",
+    message: "",
+    iconName: null as keyof typeof Ionicons.glyphMap | null,
+    iconColor: "#00D9C5",
+    onPress: undefined as (() => void) | undefined,
+  });
 
-  // Limpiar errores cuando el componente se monta
   useEffect(() => {
     setErrors({});
-    // loadDocumentTypes();
-  }, [userType]); // Se ejecuta cada vez que cambia userType (cuando regresa y vuelve a entrar)
+    loadDocumentTypes();
+  }, [userType]);
 
   const handleChange = (field: string, value: string | boolean) => {
     setForm({ ...form, [field]: value });
   };
 
-  // Función para limpiar el formulario
   const resetForm = () => {
     setForm({
       nombre: "",
@@ -60,37 +70,43 @@ export default function UsersRegister() {
       confirmPassword: "",
       aceptaPolitica: false,
     });
-    setErrors({}); // Limpiar errores también
+    setErrors({});
   };
 
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
 
-    if (!form.nombre) newErrors.nombre = "El nombre es obligatorio.";
-    if (!form.apellido) newErrors.apellido = "El apellido es obligatorio.";
+    if (!form.nombre) newErrors.nombre = i18n.t("user.requiredName");
+    if (!form.apellido) newErrors.apellido = i18n.t("user.requiredLastName");
     if (!form.codigoPostal)
-      newErrors.codigoPostal = "El código postal es obligatorio.";
+      newErrors.codigoPostal = i18n.t("user.requiredPostal");
 
     if (!form.correo) {
-      newErrors.correo = "El correo es obligatorio.";
+      newErrors.correo = i18n.t("login.email");
     } else if (!/\S+@\S+\.\S+/.test(form.correo)) {
-      newErrors.correo = "El correo no es válido.";
+      newErrors.correo = i18n.t("alerts.emailInvalid");
     }
 
     if (!form.password) {
-      newErrors.password = "La contraseña es obligatoria.";
+      newErrors.password = i18n.t("user.requiredPassword");
     } else if (form.password.length < 6) {
-      newErrors.password = "Debe tener al menos 6 caracteres.";
+      newErrors.password = i18n.t("user.minPassword");
     }
 
     if (!form.confirmPassword) {
-      newErrors.confirmPassword = "Debes repetir la contraseña.";
+      newErrors.confirmPassword = i18n.t("user.repeatPassword");
     } else if (form.password !== form.confirmPassword) {
-      newErrors.confirmPassword = "Las contraseñas no coinciden.";
+      newErrors.confirmPassword = i18n.t("user.passwordNotMatch");
     }
 
     if (!form.aceptaPolitica) {
-      newErrors.aceptaPolitica = "Debes aceptar la política de privacidad.";
+      newErrors.aceptaPolitica = i18n.t("user.acceptPolicy");
+    }
+    if (!form.tipoDocumento) {
+      newErrors.tipoDocumento = i18n.t("user.requiredDocumentType");
+    }
+    if (!form.documento) {
+      newErrors.documento = i18n.t("user.requiredNumberDocument");
     }
 
     setErrors(newErrors);
@@ -98,56 +114,60 @@ export default function UsersRegister() {
   };
 
   const handleSubmit = async () => {
-    // if (validate()) {
-    //   setIsLoading(true);
+    if (validate()) {
+      setIsLoading(true);
 
-    //   try {
-    //     // Preparar datos para enviar
-    //     const registerData = {
-    //       id: 0,
-    //       idRol: userType == "client" ? UserRole.CLIENT : UserRole.CARETAKER,
-    //       FullName: `${form.nombre.trim()} ${form.apellido.trim()}`, // trim para quitar espacios
-    //       zipCode: form.codigoPostal,
-    //       Email: form.correo.toLowerCase().trim(), // normalizar email
-    //       Password: form.password,
-    //     };
-    //     // Llamar al servicio
-    //     const response = await CreateOrUpdateUsers(registerData);
-    //     resetForm();
-    //     // Navegación según tipo de usuario
-    //     if (isCaretaker) {
-    //       router.push("/(Service)/Services");
-    //     } else {
-    //       // router.push("/dashboard"); // o donde vayas con clientes
-    //     }
-    //   } catch (error) {
-    //     alert(
-    //       `Error: ${
-    //         error instanceof Error ? error.message : "Error desconocido"
-    //       }`
-    //     );
-    //   } finally {
-    //     setIsLoading(false);
-    //   }
-    // }
-
-    if (isCaretaker) {
-      router.push("/(Service)/Services");
-    } else {
-      // router.push("/dashboard"); // o donde vayas con clientes
+      try {
+        const registerData = {
+          id: 0,
+          idRol: 1,
+          idDocumentType: form.tipoDocumento,
+          DocumentNumber: form.documento,
+          FullName: `${form.nombre.trim()} ${form.apellido.trim()}`,
+          zipCode: form.codigoPostal,
+          Email: form.correo.toLowerCase().trim(),
+          Password: form.password,
+        };
+        const response = await CreateOrUpdateUsers(registerData);
+        if (!response.flag) {
+          showInfoModal(
+            response.message,
+            "alert-circle",
+            i18n.t("alerts.error"),
+            //i18n.t("alerts.insertFailed"),
+            false
+          );
+          return;
+        }
+        resetForm();
+        showInfoModal(
+          i18n.t("login.logintocontinue"),
+          "checkmark-circle",
+          i18n.t("general.registrarionsuccess"),
+          true
+        );
+      } catch (error) {
+        showInfoModal(
+          i18n.t("alerts.insertFailed"),
+          "",
+          i18n.t("alerts.error"),
+          false
+        );
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
-  // Funciones para obtener contenido dinámico
   const getTitle = () => {
-    if (isClient) return "Regístrate en PuppyPo como cliente";
-    if (isCaretaker) return "Regístrate en PuppyPo como cuidador";
-    return "Regístrate en PuppyPo";
+    if (isClient) return `${i18n.t("user.registergeneral")}`;
+    if (isCaretaker) return `${i18n.t("user.registergeneral")}`;
+    return i18n.t("general.register");
   };
 
   const getIcon = () => {
-    if (isClient) return <ClientIcon width={60} height={60} />;
-    if (isCaretaker) return <CaregiverIcon width={60} height={60} />;
+    if (isClient) return <PuppySvg width={150} height={120} />;
+    if (isCaretaker) return <PuppySvg width={60} height={60} />;
     return null;
   };
 
@@ -158,9 +178,12 @@ export default function UsersRegister() {
   };
 
   const handleGoBack = () => {
-    router.push("/(Users)/Home_Register"); // Navega específicamente a Home_Register
+    router.push("/");
   };
 
+  const handleGoSuccess = () => {
+    router.push("/login");
+  };
   const loadDocumentTypes = async () => {
     try {
       setLoadingDocTypes(true);
@@ -169,14 +192,32 @@ export default function UsersRegister() {
       if (response.flag && response.data) {
         setDocumentTypes(response.data);
       } else {
-        console.log("Error", "No se pudieron cargar los tipos de documento");
+        console.log("Error", i18n.t("alerts.error"));
       }
     } catch (error) {
       console.error("Error cargando tipos de documento:", error);
-      console.log("Error", "Error al cargar tipos de documento");
     } finally {
       setLoadingDocTypes(false);
     }
+  };
+
+  const showInfoModal = (
+    message: string,
+    icon: any,
+    titulo: string,
+    shouldCall: boolean = false
+  ) => {
+    setModalConfig({
+      title: titulo,
+      message: message,
+      iconName: icon,
+      iconColor: "#00D9C5",
+      onPress: () => {
+        setModalVisibleAlert(false);
+        if (shouldCall) handleGoSuccess();
+      },
+    });
+    setModalVisibleAlert(true);
   };
 
   return (
@@ -187,7 +228,7 @@ export default function UsersRegister() {
         contentContainerStyle={UsersStyles.scrollContent}
       >
         <View style={UsersStyles.inner}>
-          {/* Botón de regresar */}
+          {/* Botón Regresar */}
           <TouchableOpacity
             style={UsersStyles.backButton}
             onPress={handleGoBack}
@@ -196,18 +237,55 @@ export default function UsersRegister() {
           </TouchableOpacity>
 
           <View style={UsersStyles.header}>
-            {/* Icono dinámico basado en userType */}
             <View style={UsersStyles.iconContainer}>{getIcon()}</View>
-
-            {/* Título dinámico */}
             <Text style={UsersStyles.title}>{getTitle()}</Text>
           </View>
 
-          {/* Campos del formulario */}
-          <Text style={UsersStyles.label}>Nombres *</Text>
+          {/* tipo de documento */}
+          <Text style={UsersStyles.label}>
+            {i18n.t("user.IdentityDocument")} *
+          </Text>
+
+          <RNPickerSelect
+            onValueChange={(value) => handleChange("tipoDocumento", value)}
+            items={documentTypes.map(
+              (doc: { Description: any; IdDocumentType: any }) => ({
+                label: doc.Description,
+                value: doc.IdDocumentType,
+              })
+            )}
+            placeholder={{ label: "Seleccione un tipo...", value: null }}
+            style={pickerSelectStyles}
+            value={form.tipoDocumento}
+            useNativeAndroidPickerStyle={false} // ← Importante para Android
+            Icon={() => {
+              return <Ionicons name="chevron-down" size={20} color="#666" />;
+            }}
+          />
+          {errors.tipoDocumento && (
+            <Text style={UsersStyles.error}>{errors.tipoDocumento}</Text>
+          )}
+
+          {/* numero de documento */}
+          <Text style={UsersStyles.label}>
+            {i18n.t("user.Documentnumber")} *
+          </Text>
           <TextInput
             style={UsersStyles.input}
-            placeholder="Nombres"
+            placeholder={i18n.t("user.Documentnumber")}
+            value={form.documento}
+            placeholderTextColor="#999"
+            onChangeText={(text) => handleChange("documento", text)}
+          />
+          {errors.documento && (
+            <Text style={UsersStyles.error}>{errors.documento}</Text>
+          )}
+
+          {/* Nombre */}
+          <Text style={UsersStyles.label}>{i18n.t("user.firstName")} *</Text>
+          <TextInput
+            style={UsersStyles.input}
+            placeholder={i18n.t("user.firstName")}
             value={form.nombre}
             placeholderTextColor="#999"
             onChangeText={(text) => handleChange("nombre", text)}
@@ -216,10 +294,11 @@ export default function UsersRegister() {
             <Text style={UsersStyles.error}>{errors.nombre}</Text>
           )}
 
-          <Text style={UsersStyles.label}>Apellidos *</Text>
+          {/* Apellidos */}
+          <Text style={UsersStyles.label}>{i18n.t("user.lastName")} *</Text>
           <TextInput
             style={UsersStyles.input}
-            placeholder="Apellidos"
+            placeholder={i18n.t("user.lastName")}
             value={form.apellido}
             placeholderTextColor="#999"
             onChangeText={(text) => handleChange("apellido", text)}
@@ -228,10 +307,11 @@ export default function UsersRegister() {
             <Text style={UsersStyles.error}>{errors.apellido}</Text>
           )}
 
-          <Text style={UsersStyles.label}>Código postal *</Text>
+          {/* Código Postal */}
+          <Text style={UsersStyles.label}>{i18n.t("user.zipCode")} *</Text>
           <TextInput
             style={UsersStyles.input}
-            placeholder="Código postal"
+            placeholder={i18n.t("user.zipCode")}
             keyboardType="numeric"
             placeholderTextColor="#999"
             value={form.codigoPostal}
@@ -241,10 +321,11 @@ export default function UsersRegister() {
             <Text style={UsersStyles.error}>{errors.codigoPostal}</Text>
           )}
 
-          <Text style={UsersStyles.label}>Correo electrónico *</Text>
+          {/* Correo */}
+          <Text style={UsersStyles.label}>{i18n.t("login.email")} *</Text>
           <TextInput
             style={UsersStyles.input}
-            placeholder="Correo electrónico"
+            placeholder={i18n.t("login.email")}
             keyboardType="email-address"
             placeholderTextColor="#999"
             value={form.correo}
@@ -254,10 +335,11 @@ export default function UsersRegister() {
             <Text style={UsersStyles.error}>{errors.correo}</Text>
           )}
 
-          <Text style={UsersStyles.label}>Contraseña</Text>
+          {/* Contraseña */}
+          <Text style={UsersStyles.label}>{i18n.t("login.password")}</Text>
           <TextInput
             style={UsersStyles.input}
-            placeholder="Contraseña"
+            placeholder={i18n.t("login.password")}
             secureTextEntry
             value={form.password}
             placeholderTextColor="#999"
@@ -267,10 +349,13 @@ export default function UsersRegister() {
             <Text style={UsersStyles.error}>{errors.password}</Text>
           )}
 
-          <Text style={UsersStyles.label}>Repite contraseña *</Text>
+          {/* Confirmar Contraseña */}
+          <Text style={UsersStyles.label}>
+            {i18n.t("user.repeatPassword")} *
+          </Text>
           <TextInput
             style={UsersStyles.input}
-            placeholder="Repite contraseña"
+            placeholder={i18n.t("user.repeatPassword")}
             secureTextEntry
             value={form.confirmPassword}
             placeholderTextColor="#999"
@@ -280,6 +365,7 @@ export default function UsersRegister() {
             <Text style={UsersStyles.error}>{errors.confirmPassword}</Text>
           )}
 
+          {/* Política de privacidad */}
           <View style={UsersStyles.checkboxContainer}>
             <Checkbox
               value={form.aceptaPolitica}
@@ -289,32 +375,47 @@ export default function UsersRegister() {
               color={isClient ? "#F6C3CC" : isCaretaker ? "#36EBD8" : "#007AFF"}
             />
             <Text style={UsersStyles.checkboxLabel}>
-              Aceptar política privacidad de datos
+              {i18n.t("user.acceptPolicy")}
             </Text>
           </View>
           {errors.aceptaPolitica && (
             <Text style={UsersStyles.error}>{errors.aceptaPolitica}</Text>
           )}
 
-          {/* Botón con color dinámico */}
-
+          {/* Botón */}
           <TouchableOpacity style={getButtonStyle()} onPress={handleSubmit}>
             <Text style={[UsersStyles.continueButtonText]}>
-              {isClient
-                ? "Registrate como cliente"
-                : isCaretaker
-                ? "Registrate como cuidador"
-                : "Registrarme"}
+              {i18n.t("user.registeras")}
             </Text>
           </TouchableOpacity>
-          {/* Enlace "¿Ya tienes una cuenta?" */}
+
+          {/* ¿Ya tienes una cuenta? */}
           <View style={UsersStyles.loginLinkContainer}>
-            <Text style={UsersStyles.loginText}>¿Ya tienes una cuenta? </Text>
+            <Text style={UsersStyles.loginText}>
+              {i18n.t("login.account")}{" "}
+            </Text>
             <TouchableOpacity onPress={() => router.push("/login")}>
-              <Text style={UsersStyles.loginLink}>Inicia sesión</Text>
+              <Text style={UsersStyles.loginLink}>
+                {i18n.t("login.loginButton")}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
+        <CustomModal
+          visible={modalVisibleAlert}
+          onClose={() => setModalVisibleAlert(false)}
+          title={modalConfig.title}
+          iconName={
+            modalConfig.iconName as keyof typeof Ionicons.glyphMap | undefined
+          }
+          iconColor={modalConfig.iconColor}
+          primaryButton={{
+            text: i18n.t("general.understood"),
+            onPress: modalConfig.onPress || (() => setModalVisibleAlert(false)),
+          }}
+        >
+          <Text style={UsersStyles.subtitle}>{modalConfig.message}</Text>
+        </CustomModal>
       </ScrollView>
     </AuthLayout>
   );
