@@ -4,7 +4,7 @@ import { fontFamily } from "../../../Config/typography";
 export const loginStyles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#E4E4E4",
     justifyContent: "center",
     paddingHorizontal: 24,
     paddingVertical: 20,
@@ -189,7 +189,7 @@ export const loginStyles = StyleSheet.create({
 
   registerText: {
     fontSize: 10,
-    color: "#666",
+    color: "#000",
     fontFamily: fontFamily.medium,
   },
 

@@ -2,6 +2,7 @@ import { useGoogleAuth } from "@/hooks/useSocialAuth";
 import { i18n } from "@/i18n/translations";
 import { loginGoogle } from "@/Service/Service-Login/authService";
 import { loginStyles } from "@/Styles/components/Login/loginStyles";
+import { UsersStyles } from "@/Styles/components/Users/UsersStyles";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -12,7 +13,7 @@ import FacebookIcon from "../assets/Icons/Facebook.svg";
 import GoogleIcon from "../assets/Icons/google.svg";
 import IOSIconfrom from "../assets/Icons/IOS.svg";
 import LlaveIcon from "../assets/Icons/Llave.svg";
-import PuppySvg from "../assets/Icons/PuppySvg.svg";
+import PuppySvg from "../assets/images/LogoPuppyPo.svg";
 import AuthLayout from "../components/AuthLayout";
 import { useModalToast } from "../components/ModalToast";
 import CustomModal from "./(CustomModal)/CustomModal";
@@ -194,18 +195,16 @@ export default function Login() {
             </View>
           </TouchableOpacity>
         </View>
-
-        <View style={loginStyles.registerContainer}>
-          <Text style={loginStyles.registerText}>
-            {" "}
-            {i18n.t("login.account")}
-          </Text>
-          <TouchableOpacity onPress={() => router.push("/(Users)/Users")}>
-            <Text style={loginStyles.registerLink}>
-              {i18n.t("general.register")}
+        <View style={UsersStyles.loginLinkContainer}>
+            <Text style={UsersStyles.loginText}>
+              {i18n.t("login.account")}{" "}
             </Text>
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity onPress={() => router.push("/login")}>
+              <Text style={UsersStyles.loginLink}>
+                {i18n.t("login.loginButton")}
+              </Text>
+            </TouchableOpacity>
+          </View>
       </View>
 
       <CustomModal

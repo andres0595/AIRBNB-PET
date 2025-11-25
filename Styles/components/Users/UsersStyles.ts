@@ -127,7 +127,7 @@ export const UsersStyles = StyleSheet.create({
     gap: 5,
   },
   loginText: {
-    color: "#555",
+    color: "#000",
     fontSize: 14,
     fontFamily: fontFamily.medium,
   },

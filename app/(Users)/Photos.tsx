@@ -1,4 +1,5 @@
 // PhotoUploadForm.js
+import { i18n } from "@/i18n/translations";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
@@ -80,53 +81,49 @@ export default function PhotoUploadForm() {
             <TouchableOpacity onPress={handleBack} style={styles.backButton}>
               <Ionicons name="chevron-back" size={28} color="#000" />
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>Fotos</Text>
+            <Text style={styles.headerTitle}>{i18n.t("photoUpload.headerTitle")}</Text>
           </View>
 
           <View style={styles.content}>
             <Text style={styles.mainTitle}>
-              Muestra quién eres y cuánto amas cuidar mascotas
+              {i18n.t("photoUpload.introTitle")} 
             </Text>
 
             <Text style={styles.subtitle}>
-              Sube entre 3 y 10 fotos que reflejen tu experiencia y cariño con
-              los animales. Te recomendamos incluir fotos donde:
+             {i18n.t("photoUpload.introSubtitle")} 
             </Text>
 
             <View style={styles.bulletList}>
               <View style={styles.bulletItem}>
                 <View style={styles.bulletDot} />
                 <Text style={styles.bulletText}>
-                  Estés interactuando con mascotas (paseos, juegos, caricias).
+                 {i18n.t("photoUpload.bullet1")} 
                 </Text>
               </View>
 
               <View style={styles.bulletItem}>
                 <View style={styles.bulletDot} />
                 <Text style={styles.bulletText}>
-                  Se vea un entorno limpio y seguro.
+                   {i18n.t("photoUpload.bullet2")} 
                 </Text>
               </View>
 
               <View style={styles.bulletItem}>
                 <View style={styles.bulletDot} />
                 <Text style={styles.bulletText}>
-                  Aparezcan tus propias mascotas o las que hayas cuidado (con
-                  permiso).
+                {i18n.t("photoUpload.bullet3")} 
                 </Text>
               </View>
             </View>
 
             <Text style={styles.helpText}>
-              Estas imágenes ayudarán a los dueños a confiar más en ti y a
-              elegirte como su cuidador.
+               {i18n.t("photoUpload.helpText")} 
             </Text>
 
             <View style={styles.warningBox}>
               <Ionicons name="megaphone-outline" size={40} color="#00D4D4" />
               <Text style={styles.warningText}>
-                Evita fotos borrosas, con filtros fuertes{"\n"}o en lugares
-                oscuros.
+                {i18n.t("photoUpload.warning")} 
               </Text>
             </View>
 
@@ -134,7 +131,7 @@ export default function PhotoUploadForm() {
               style={styles.uploadButton}
               onPress={() => setShowUploadView(true)}
             >
-              <Text style={styles.uploadButtonText}>Subir fotos</Text>
+              <Text style={styles.uploadButtonText}>  {i18n.t("photoUpload.uploadButton")} </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -153,11 +150,11 @@ export default function PhotoUploadForm() {
           >
             <Ionicons name="chevron-back" size={24} color="#000" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Fotos</Text>
+          <Text style={styles.headerTitle}>{i18n.t("photoUpload.headerTitle")} </Text>
         </View>
 
         <ScrollView style={styles.content}>
-          <Text style={styles.uploadTitle}>Agregar contenido</Text>
+          <Text style={styles.uploadTitle}>{i18n.t("photoUpload.uploadViewTitle")}</Text>
 
           <TouchableOpacity style={styles.imagePickerBox} onPress={pickImage}>
             <View style={styles.imagePickerContent}>
@@ -165,7 +162,7 @@ export default function PhotoUploadForm() {
                 <Ionicons name="images-outline" size={50} color="#000" />
               </View>
               <Text style={styles.imagePickerText}>
-                Elegir de la{"\n"}galería
+                {i18n.t("photoUpload.chooseFromGallery")}
               </Text>
             </View>
           </TouchableOpacity>
@@ -173,7 +170,9 @@ export default function PhotoUploadForm() {
           {selectedImages.length > 0 && (
             <View style={styles.selectedImagesContainer}>
               <Text style={styles.selectedImagesTitle}>
-                Fotos seleccionadas ({selectedImages.length}/10)
+                    {i18n.t("photoUpload.selectedPhotos", {
+                                    count: Object.keys(selectedImages).length,
+                                  })}
               </Text>
               <View style={styles.imageGrid}>
                 {selectedImages.map((image) => (
@@ -197,7 +196,8 @@ export default function PhotoUploadForm() {
 
         <View style={styles.footer}>
           <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-            <Text style={styles.saveButtonText}>Guardar</Text>
+            <Text style={styles.saveButtonText}>
+                {i18n.t("general.save")}</Text>
           </TouchableOpacity>
         </View>
       </View>

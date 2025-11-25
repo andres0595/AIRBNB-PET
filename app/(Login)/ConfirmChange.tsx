@@ -14,7 +14,7 @@ import {
 import CustomModal from "../(CustomModal)/CustomModal";
 import ArrobaIcon from "../../assets/Icons/arroba.svg";
 import LlaveIcon from "../../assets/Icons/Llave.svg";
-import PuppySvg from "../../assets/Icons/PuppySvg.svg";
+import PuppySvg from "../../assets/images/LogoPuppyPo.svg";
 import AuthLayout from "../../components/AuthLayout";
 
 export default function ConfirmChange() {

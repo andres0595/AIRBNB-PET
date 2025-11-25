@@ -20,16 +20,17 @@
     "subtitle": "Find trusted caregivers and accommodations for your companion"
   },
   "login": {
-    "email": "Email",
+    "email": "Email address",
     "password": "Password",
     "loginButton": "Log In",
     "forgotPassword": "Forgot your password?",
     "title": "Sign In",
     "account": "Don't have an account?",
     "forgotPasswordChange": "Forgot your password?",
-    "textChangeDescription": "To reset your password, enter the full email address you used to register with PuppyPo.com, and we will send you an email with step-by-step instructions to reset it.",
+    "textChangeDescription": "To reset your password, enter the full email address you used to register with PuppyPo and we will send you an email with step-by-step instructions to reset it.",
     "errorlogin": "Error logging in",
-    "logintocontinue": "Please log in to continue"
+    "logintocontinue": "Please log in to continue",
+    "user":"User"
   },
   "alerts": {
     "locationDenied": "You must enable location to continue",
@@ -42,7 +43,12 @@
     "errorChangePassword": "Error attempting to change password",
     "checkInternetConnection": "Please check your internet connection",
     "docTypesLoad": "Document types could not be loaded",
-    "insertFailed": "An error occurred while saving. Please try again."
+    "insertFailed": "An error occurred while saving. Please try again.",
+      "permissionDenied": "Permission denied",
+    "permissionMessage": "We need access to your gallery",
+    "minPhotos": "You must upload at least 3 photos",
+    "maxPhotos": "You can upload up to 10 photos",
+    "success": "Photos saved successfully"
   },
   "slides": {
     "petLodging": "Pet Boarding",
@@ -260,5 +266,21 @@
     "modalMessage1": "In this step, you can define the rate calendar for each of the services you previously selected. Simply choose the days you’ll be available to offer your services and assign the rate you prefer to each date.",
     "modalTitle": "Set Your Rate Calendar!",
     "modalMessage2": "Once you configure all the rates, the “Next” button will be automatically enabled so you can continue."
+  },
+  "photoUpload": {
+      "headerTitle": "Photos",
+  "introTitle": "Show who you are and how much you love caring for pets",
+  "introSubtitle": "Upload between 3 and 10 photos that reflect your experience and affection for animals. We recommend including photos where:",
+  "bullet1": "You are interacting with pets (walks, playtime, cuddles).",
+  "bullet2": "A clean and safe environment is visible.",
+  "bullet3": "Your own pets or ones you've cared for appear (with permission).",
+  "helpText": "These images will help owners trust you more and choose you as their caregiver.",
+  "warning": "Avoid blurry photos, strong filters, or dark places.",
+  "uploadButton": "Upload Photos",
+
+  "uploadViewTitle": "Add Content",
+  "chooseFromGallery": "Choose from\nthe gallery",
+  "selectedPhotos": "Selected photos ({{count}}/10)"
   }
+
 }

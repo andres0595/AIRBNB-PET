@@ -3,6 +3,7 @@ import { useGoogleAuth } from "@/hooks/useSocialAuth";
 import { i18n } from "@/i18n/translations";
 import { GenetateOtp, login } from "@/Service/Service-Login/authService";
 import { changeStyles } from "@/Styles/components/ChangePassword/changeStyles";
+import { UsersStyles } from "@/Styles/components/Users/UsersStyles";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -18,7 +19,7 @@ import ArrobaIcon from "../../assets/Icons/arroba.svg";
 import FacebookIcon from "../../assets/Icons/Facebook.svg";
 import GoogleIcon from "../../assets/Icons/google.svg";
 import IOSIconfrom from "../../assets/Icons/IOS.svg";
-import PuppySvg from "../../assets/Icons/PuppySvg.svg";
+import PuppySvg from "../../assets/images/LogoPuppyPo.svg";
 import AuthLayout from "../../components/AuthLayout";
 export default function ChangePassword() {
   const router = useRouter();
@@ -156,7 +157,7 @@ export default function ChangePassword() {
               style={changeStyles.backButton}
               onPress={handleGoBack}
             >
-              <Ionicons name="chevron-back" size={24} color="#333" />
+              <Ionicons name="chevron-back" size={24} color="#707070" />
             </TouchableOpacity>
             <ToastComponent />
             {/* Header */}
@@ -173,10 +174,10 @@ export default function ChangePassword() {
             <Text style={changeStyles.label}>{i18n.t("login.email")} *</Text>
             <View style={changeStyles.inputContainer}>
               <Text style={changeStyles.inputIcon}>
-                <ArrobaIcon width={25} height={25} />
+                <ArrobaIcon width={40} height={40} />
               </Text>
               <TextInput
-                placeholder={i18n.t("login.email")}
+                placeholder={i18n.t("login.user")}
                 value={email}
                 onChangeText={setEmail}
                 style={[
@@ -220,7 +221,7 @@ export default function ChangePassword() {
           <View style={changeStyles.socialButtonsContainer}>
             <TouchableOpacity style={changeStyles.socialButton}>
               <View style={changeStyles.socialIconContainer}>
-                <FacebookIcon width={40} height={40} />
+                <FacebookIcon width={70} height={70} />
               </View>
             </TouchableOpacity>
 
@@ -229,16 +230,27 @@ export default function ChangePassword() {
               onPress={() => googleAuth.promptAsync()}
             >
               <View style={changeStyles.socialIconContainer}>
-                <GoogleIcon width={40} height={40} />
+                <GoogleIcon width={70} height={70} />
               </View>
             </TouchableOpacity>
 
             <TouchableOpacity style={changeStyles.socialButton}>
               <View style={changeStyles.socialIconContainer}>
-                <IOSIconfrom width={40} height={40} />
+                <IOSIconfrom width={70} height={70}/>
               </View>
             </TouchableOpacity>
+
           </View>
+                 <View style={UsersStyles.loginLinkContainer}>
+                     <Text style={UsersStyles.loginText}>
+                       {i18n.t("login.account")}{" "}
+                     </Text>
+                     <TouchableOpacity onPress={() => router.push("/login")}>
+                       <Text style={UsersStyles.loginLink}>
+                         {i18n.t("general.register")}
+                       </Text>
+                     </TouchableOpacity>
+                   </View>
         </View>
       </ScrollView>
       <CustomModal

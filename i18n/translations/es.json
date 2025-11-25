@@ -7,7 +7,7 @@
     "log_in": "Ingresar",
     "logging_in": "Ingresando",
     "continue": "O Continuar con",
-    "register": "Registrate",
+    "register": "Regístrate",
     "sending": "Enviando",
     "send": "Enviar",
     "Data_missing": "Faltan datos",
@@ -42,7 +42,12 @@
     "errorChangePassword": "Error al intentar cambiar contraseña",
     "checkInternetConnection": "Por favor verifica tu conexión a internet",
     "docTypesLoad": "No se pudieron cargar los tipos de documento",
-    "insertFailed": "Se ha producido un error al guardar. Inténtalo de nuevo"
+    "insertFailed": "Se ha producido un error al guardar. Inténtalo de nuevo",
+        "permissionDenied": "Permiso denegado",
+    "permissionMessage": "Necesitamos acceso a tu galería",
+    "minPhotos": "Debes subir al menos 3 fotos",
+    "maxPhotos": "Puedes subir hasta 10 fotos",
+    "success": "Fotos guardadas exitosamente"
   },
   "slides": {
     "petLodging": "Alojamiento de\nmascotas",
@@ -274,5 +279,20 @@
     "modalMessage1": "En este paso podrás definir el calendario de tarifas para cada uno de los servicios que seleccionaste anteriormente. Solo elige los días en los que estarás disponible para ofrecer tus servicios y asigna el valor que prefieras a cada fecha.",
     "modalTitle": "¡Configura tu calendario de tarifas!",
     "modalMessage2": "Una vez que configures todas las tarifas, el botón “Siguiente” se activará automáticamente para que puedas continuar."
+  },
+  "photoUpload": {
+  "headerTitle": "Fotos",
+  "introTitle": "Muestra quién eres y cuánto amas cuidar mascotas",
+  "introSubtitle": "Sube entre 3 y 10 fotos que reflejen tu experiencia y cariño por los animales. Te recomendamos incluir fotos donde:",
+  "bullet1": "Estés interactuando con mascotas (paseos, juegos, abrazos).",
+  "bullet2": "Se vea un ambiente limpio y seguro.",
+  "bullet3": "Aparezcan tus propias mascotas o aquellas que hayas cuidado (con permiso).",
+  "helpText": "Estas imágenes ayudarán a que los dueños confíen más en ti y te elijan como su cuidador.",
+  "warning": "Evita fotos borrosas, con filtros fuertes o en lugares oscuros.",
+  "uploadButton": "Subir Fotos",
+
+  "uploadViewTitle": "Agregar Contenido",
+  "chooseFromGallery": "Elegir desde\ngaería",
+  "selectedPhotos": "Fotos seleccionadas ({{count}}/10)"
   }
 }

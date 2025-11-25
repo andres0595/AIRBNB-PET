@@ -18,7 +18,7 @@ export const changeStyles = StyleSheet.create({
 
   container: {
     flexGrow: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#E4E4E4",
     justifyContent: "center",
     paddingHorizontal: 24,
     paddingVertical: 20,
@@ -47,7 +47,7 @@ export const changeStyles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
     textAlign: "center",
-    color: "#333",
+    color: "#000000",
     marginBottom: 30,
     fontFamily: fontFamily.bold,
   },
@@ -55,15 +55,15 @@ export const changeStyles = StyleSheet.create({
   description: {
     fontSize: 14,
     textAlign: "justify",
-    color: "#666",
+    color: "#000000",
     marginBottom: 25,
     lineHeight: 17,
-    fontFamily: fontFamily.medium,
+    fontFamily: fontFamily.light,
   },
 
   label: {
     fontSize: 14,
-    color: "#444",
+    color: "#0000",
     marginBottom: 8,
     fontFamily: fontFamily.medium,
   },
@@ -96,7 +96,7 @@ export const changeStyles = StyleSheet.create({
   loginButton: {
     backgroundColor: "#ff0000",
     borderRadius: 25,
-    paddingVertical: 16,
+    paddingVertical: 12,
     alignItems: "center",
     marginVertical: 16,
     shadowColor: "#ff0000",
@@ -119,9 +119,9 @@ export const changeStyles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f8f8f8",
+    backgroundColor: "#E4E4E4",
     borderRadius: 25,
-    paddingHorizontal: 16,
+    paddingHorizontal: 6,
     marginBottom: 4,
     minHeight: 50,
   },
@@ -146,15 +146,16 @@ export const changeStyles = StyleSheet.create({
   },
 
   divider: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#e0e0e0",
+    flex:1,
+    
+    height: 0.5,    
+    backgroundColor: "#707070",
   },
 
   dividerText: {
     marginHorizontal: 16,
     fontSize: 12,
-    color: "#666",
+    color: "#0000",
     fontFamily: fontFamily.medium,
   },
 
@@ -166,9 +167,9 @@ export const changeStyles = StyleSheet.create({
   },
 
   socialButton: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 45,
+    height: 45,
+    borderRadius:30,
     backgroundColor: "#ff0000",
     justifyContent: "center",
     alignItems: "center",
@@ -196,8 +197,8 @@ export const changeStyles = StyleSheet.create({
     left: 20,
     zIndex: 10,
     padding: 10,
-    borderRadius: 20,
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    borderRadius: 24,
+    backgroundColor: "#F7F7F7",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
@@ -250,7 +251,7 @@ export const changeStyles = StyleSheet.create({
   },
   questionAnswer: {
     fontSize: 14,
-    color: "#666",
+    color: "#0000",
     textAlign: "center",
     lineHeight: 20,
     fontFamily: fontFamily.medium,

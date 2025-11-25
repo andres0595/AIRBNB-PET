@@ -15,7 +15,7 @@ import { useRouter } from "expo-router";
 import { useMemo, useRef, useState } from "react";
 import Toast from "react-native-toast-message";
 import CustomModal from "../(CustomModal)/CustomModal";
-import PuppySvg from "../../assets/Icons/PuppySvg.svg";
+import PuppySvg from "../../assets/images/LogoPuppyPo.svg";
 import { fontFamily } from "../../Config/typography";
 
 export default function ValidateOtp() {
@@ -96,8 +96,7 @@ export default function ValidateOtp() {
     setLoading(true);
     try {
       console.log("Código OTP:", otpCode);
-      // Aquí va tu lógica de verificación
-       await validateOtp(otpCode);
+      await validateOtp(otpCode);
       setOtp(["", "", "", "", "", ""]);
       router.push("/(Login)/ConfirmChange");
     } catch (error) {
@@ -122,6 +121,7 @@ export default function ValidateOtp() {
       "Código reenviado"
     );
   };
+
   const handleGoBack = () => {
     router.push("/(Login)/ChangePassword");
   };
@@ -135,9 +135,13 @@ export default function ValidateOtp() {
       >
         <View style={styles.inner}>
           <View style={styles.formContainer}>
-            <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
-              <Ionicons name="chevron-back" size={24} color="#333" />
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={handleGoBack}
+            >
+              <Ionicons name="chevron-back" size={24} color="#707070" />
             </TouchableOpacity>
+
             {/* Header */}
             <View style={styles.header}>
               <PuppySvg />
@@ -146,8 +150,7 @@ export default function ValidateOtp() {
             {/* Título y descripción */}
             <Text style={styles.title}>Verificación</Text>
             <Text style={styles.description}>
-              Ingresa el código de verificación que enviamos a tu correo
-              electrónico para continuar con la recuperación de tu cuenta.
+              Ingresa el código de verificación que enviamos a tu correo electrónico para continuar con la recuperación de tu cuenta.
             </Text>
 
             {/* Inputs OTP - 6 dígitos */}
@@ -198,35 +201,6 @@ export default function ValidateOtp() {
               </Text>
             </TouchableOpacity>
           </View>
-          {/* <View style={styles.dividerContainer}>
-            <View style={styles.divider} />
-            <Text style={styles.dividerText}>O Continuar con</Text>
-            <View style={styles.divider} />
-          </View> */}
-
-          {/* Social Buttons */}
-          {/* <View style={styles.socialButtonsContainer}>
-            <TouchableOpacity style={styles.socialButton}>
-              <View style={styles.socialIconContainer}>
-                <FacebookIcon width={40} height={40} />
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.socialButton}
-              onPress={() => googleAuth.promptAsync()}
-            >
-              <View style={styles.socialIconContainer}>
-                <GoogleIcon width={40} height={40} />
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.socialButton}>
-              <View style={styles.socialIconContainer}>
-                <IOSIconfrom width={40} height={40} />
-              </View>
-            </TouchableOpacity>
-          </View> */}
         </View>
       </ScrollView>
 
@@ -251,157 +225,147 @@ export default function ValidateOtp() {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    backgroundColor: "#f5f5f5",
-    justifyContent: "center",
-    paddingHorizontal: 11,
-    paddingVertical: 20,
-  },
-
-  keyboardView: {
     flex: 1,
-    paddingHorizontal: 20,
+    backgroundColor: "#E4E4E4",
+    justifyContent: "center",
+    paddingHorizontal: 16,
   },
 
-  backButton: {
-    width: 40,
-    height: 40,
-    justifyContent: "center",
-  },
-  logoContainer: {
-    alignItems: "center",
-    marginBottom: 30,
-  },
-  logoPlaceholder: {
-    width: 120,
-    height: 120,
-    backgroundColor: "#fff",
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
+ backButton: {
+    position: "absolute",
+    top: 20,
+    left: 20,
+    zIndex: 10,
+    padding: 10,
+    borderRadius: 24,
+    backgroundColor: "#F7F7F7",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    shadowRadius: 2,
+    elevation: 2,
   },
-  logoText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#FF0000",
-  },
+
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "600",
     textAlign: "center",
-    color: "#333",
-    marginBottom: 15,
+    color: "#000",
+    marginBottom: 16,
     fontFamily: fontFamily.bold,
   },
+
   description: {
-    fontSize: 14,
+    fontSize: 13,
     textAlign: "center",
-    color: "#666",
-    lineHeight: 20,
-    marginBottom: 30,
-    paddingHorizontal: 10,
-    fontFamily: fontFamily.medium,
+    color: "#000",
+    lineHeight: 18,
+    marginBottom: 40,
+ marginTop:23,
+    fontFamily: fontFamily.regular,
   },
+
   otpContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
-    paddingHorizontal: 5,
+    justifyContent: "center",
+    gap: 8,
+    marginBottom: 32,
+    paddingHorizontal: 10,
   },
-  otpInput: {
-    width: 50,
-    height: 60,
-    borderWidth: 2,
-    borderColor: "#DDD",
-    borderRadius: 12,
-    textAlign: "center",
-    fontSize: 24,
-    fontWeight: "600",
-    backgroundColor: "#fff",
-    color: "#333",
-    fontFamily: fontFamily.medium,
+
+otpInput: {
+  width: 46,
+  height: 63,
+  borderWidth: 0.5,
+  borderColor: "#00000029",
+  borderRadius: 8,
+  textAlign: "center",
+  fontSize: 24,
+  fontWeight: "600",
+  backgroundColor: "#F8F8F8",
+  color: "#000",
+  fontFamily: fontFamily.semiBold,
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 4, // Aumentado de 2 a 4
   },
+  shadowOpacity: 0.25, // Aumentado de 0.1 a 0.25
+  shadowRadius: 6, // Aumentado de 4 a 6
+  elevation: 5, // Aumentado de 3 a 5 (para Android)
+},
   otpInputFilled: {
     borderColor: "#FF0000",
+    backgroundColor: "#FFF",
+    shadowColor: "#FF0000",
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 4,
   },
+
   resendContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    marginBottom: 25,
-  },
-  resendText: {
-    fontSize: 12,
-    color: "#666",
-    fontFamily: fontFamily.medium,
-  },
-  resendLink: {
-    fontSize: 12,
-    color: "#FF0000",
-    fontWeight: "600",
-    textDecorationLine: "underline",
-    fontFamily: fontFamily.medium,
-  },
-  verifyButton: {
-    backgroundColor: "#FF0000",
-    borderRadius: 25,
-    paddingVertical: 15,
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  verifyButtonDisabled: {
-    backgroundColor: "#CCCCCC",
-    opacity: 0.7,
-  },
-  verifyButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
-    fontFamily: fontFamily.medium,
-  },
-  verifyButtonTextDisabled: {
-    color: "#999",
-    fontFamily: fontFamily.medium,
-  },
-  separator: {
-    textAlign: "center",
-    color: "#999",
-    fontSize: 14,
-    marginBottom: 20,
-  },
-  socialContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 15,
-    marginBottom: 20,
+    marginBottom: 40,
+    marginTop:35
   },
 
-  registerContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 10,
-  },
-  registerText: {
-    fontSize: 14,
+  resendText: {
+    fontSize: 13,
     color: "#666",
+    fontFamily: fontFamily.regular,
   },
-  registerLink: {
-    fontSize: 14,
-    color: "#FF0000",
+
+  resendLink: {
+    fontSize: 13,
+    color: "#000",
     fontWeight: "600",
     textDecorationLine: "underline",
+    fontFamily: fontFamily.semiBold,
+  },
+
+  verifyButton: {
+    backgroundColor: "#FF0000",
+    borderRadius: 30,
+    paddingVertical: 16,
+    alignItems: "center",
+    marginBottom: 16,    
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+    marginTop:15
+  },
+
+  verifyButtonDisabled: {
+    backgroundColor: "#CCCCCC",
+    
+    shadowOpacity: 0,
+  },
+
+  verifyButtonText: {
+    color: "#FFF",
+    fontSize: 16,   
+    fontFamily: fontFamily.bold,
+  },
+
+  verifyButtonTextDisabled: {
+    color: "#000",
+    fontFamily: fontFamily.bold,
+     fontSize: 16,  
   },
 
   scrollView: {
     flex: 1,
   },
+
   scrollContent: {
-    paddingTop: 50,
-    paddingBottom: 100,
+    flexGrow: 1,
+    justifyContent: "center",
+    paddingVertical: 40,
   },
 
   inner: {
@@ -412,72 +376,29 @@ const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 25,
-    marginTop: 40,
-    padding: 10,
+    marginBottom: 32,
   },
 
   formContainer: {
-    backgroundColor: "#fff",
-    borderRadius: 20,
+    backgroundColor: "#FFF",
+    borderRadius: 24,
     padding: 24,
+    paddingVertical: 40,
+    marginHorizontal: 8,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-
-  dividerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 24,
-  },
-
-  divider: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#e0e0e0",
-  },
-
-  dividerText: {
-    marginHorizontal: 16,
-    fontSize: 12,
-    color: "#666",
-  },
-
-  socialButtonsContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 20,
-    marginBottom: 24,
-  },
-
-  socialButton: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: "#ff0000",
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#ff0000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
     elevation: 4,
   },
 
-  socialIconContainer: {
-    width: 24,
-    height: 24,
-    justifyContent: "center",
-    alignItems: "center",
-    color: "#fffff",
+  dividerText: {
+    fontSize: 14,
+    color: "#666",
+    textAlign: "center",
+    fontFamily: fontFamily.regular,
   },
 });

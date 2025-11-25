@@ -216,7 +216,7 @@ const PetCareHomeScreen = () => {
           <View style={homeStyles.textContent}>
             <Text style={homeStyles.mainTitle}>{i18n.t("home.welcome")}</Text>
 
-            <Text style={homeStyles.subtitle}>{i18n.t("home.subtitle")}</Text>
+            <Text style={homeStyles.subtitle}>{i18n.t("home.subtitle")} </Text>
           </View>
 
           {/* Botones de acción */}
@@ -297,15 +297,14 @@ const homeStyles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   slideTitle: {
-    fontSize: 28,
-    fontWeight: "bold",
+    fontSize: 28, 
     color: "white",
     textAlign: "center",
     textShadowColor: "rgba(0, 0, 0, 0.75)",
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
     lineHeight: 36,
-    fontFamily: fontFamily.medium,
+    fontFamily: fontFamily.bold,
   },
   carouselIndicators: {
     flexDirection: "row",
@@ -368,7 +367,7 @@ const homeStyles = StyleSheet.create({
   },
   registerButton: {
     flex: 1,
-    backgroundColor: "#00D4AA",
+    backgroundColor: "#36EBD8",
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 25,
@@ -382,7 +381,7 @@ const homeStyles = StyleSheet.create({
   },
   loginButton: {
     flex: 1,
-    backgroundColor: "#FF4444",
+    backgroundColor: "#FF0000",
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 25,
