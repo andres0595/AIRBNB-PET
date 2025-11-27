@@ -73,9 +73,9 @@ export const loginStyles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f8f8f8",
+    backgroundColor: "#E4E4E4",
     borderRadius: 25,
-    paddingHorizontal: 16,
+    paddingHorizontal: 6,
     marginBottom: 4,
     minHeight: 50,
   },
@@ -138,17 +138,17 @@ export const loginStyles = StyleSheet.create({
 
   divider: {
     flex: 1,
-    height: 1,
-    backgroundColor: "#e0e0e0",
+
+    height: 0.5,
+    backgroundColor: "#707070",
   },
 
   dividerText: {
     marginHorizontal: 16,
     fontSize: 12,
-    color: "#666",
+    color: "#0000",
     fontFamily: fontFamily.medium,
   },
-
   socialButtonsContainer: {
     flexDirection: "row",
     justifyContent: "center",
@@ -157,9 +157,9 @@ export const loginStyles = StyleSheet.create({
   },
 
   socialButton: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 45,
+    height: 45,
+    borderRadius: 30,
     backgroundColor: "#ff0000",
     justifyContent: "center",
     alignItems: "center",

@@ -105,7 +105,7 @@ export default function Login() {
           <Text style={loginStyles.label}>{i18n.t("login.email")} *</Text>
           <View style={loginStyles.inputContainer}>
             <Text style={loginStyles.inputIcon}>
-              <ArrobaIcon width={25} height={25} />
+              <ArrobaIcon width={40} height={40} />
             </Text>
             <TextInput
               placeholder={i18n.t("login.email")}
@@ -126,7 +126,7 @@ export default function Login() {
           <Text style={loginStyles.label}>{i18n.t("login.password")} *</Text>
           <View style={loginStyles.inputContainer}>
             <Text style={loginStyles.inputIcon}>
-              <LlaveIcon width={25} height={25} />
+              <LlaveIcon width={40} height={40} />
             </Text>
             <TextInput
               placeholder={i18n.t("login.password")}
@@ -176,7 +176,7 @@ export default function Login() {
         <View style={loginStyles.socialButtonsContainer}>
           <TouchableOpacity style={loginStyles.socialButton}>
             <View style={loginStyles.socialIconContainer}>
-              <FacebookIcon width={40} height={40} />
+              <FacebookIcon width={70} height={70} />
             </View>
           </TouchableOpacity>
 
@@ -185,26 +185,24 @@ export default function Login() {
             onPress={() => googleAuth.promptAsync()}
           >
             <View style={loginStyles.socialIconContainer}>
-              <GoogleIcon width={40} height={40} />
+              <GoogleIcon width={70} height={70} />
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity style={loginStyles.socialButton}>
             <View style={loginStyles.socialIconContainer}>
-              <IOSIconfrom width={40} height={40} />
+              <IOSIconfrom width={70} height={70} />
             </View>
           </TouchableOpacity>
         </View>
         <View style={UsersStyles.loginLinkContainer}>
-            <Text style={UsersStyles.loginText}>
-              {i18n.t("login.account")}{" "}
+          <Text style={UsersStyles.loginText}>{i18n.t("login.account")} </Text>
+          <TouchableOpacity onPress={() => router.push("/login")}>
+            <Text style={UsersStyles.loginLink}>
+              {i18n.t("login.loginButton")}
             </Text>
-            <TouchableOpacity onPress={() => router.push("/login")}>
-              <Text style={UsersStyles.loginLink}>
-                {i18n.t("login.loginButton")}
-              </Text>
-            </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <CustomModal

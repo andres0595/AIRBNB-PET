@@ -236,21 +236,20 @@ export default function ChangePassword() {
 
             <TouchableOpacity style={changeStyles.socialButton}>
               <View style={changeStyles.socialIconContainer}>
-                <IOSIconfrom width={70} height={70}/>
+                <IOSIconfrom width={70} height={70} />
               </View>
             </TouchableOpacity>
-
           </View>
-                 <View style={UsersStyles.loginLinkContainer}>
-                     <Text style={UsersStyles.loginText}>
-                       {i18n.t("login.account")}{" "}
-                     </Text>
-                     <TouchableOpacity onPress={() => router.push("/login")}>
-                       <Text style={UsersStyles.loginLink}>
-                         {i18n.t("general.register")}
-                       </Text>
-                     </TouchableOpacity>
-                   </View>
+          <View style={UsersStyles.loginLinkContainer}>
+            <Text style={UsersStyles.loginText}>
+              {i18n.t("login.account")}{" "}
+            </Text>
+            <TouchableOpacity onPress={() => router.push("/login")}>
+              <Text style={UsersStyles.loginLink}>
+                {i18n.t("general.register")}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
       <CustomModal

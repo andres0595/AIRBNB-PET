@@ -19,7 +19,7 @@ import {
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import CustomModal from "../(CustomModal)/CustomModal";
-import PuppySvg from "../../assets/Icons/PuppySvg.svg";
+import PuppySvg from "../../assets/images/LogoPuppyPo.svg";
 
 export default function UsersRegister() {
   const { userType } = useLocalSearchParams();
@@ -233,7 +233,7 @@ export default function UsersRegister() {
             style={UsersStyles.backButton}
             onPress={handleGoBack}
           >
-            <Ionicons name="chevron-back" size={24} color="#333" />
+            <Ionicons name="chevron-back" size={24} color="#707070" />
           </TouchableOpacity>
 
           <View style={UsersStyles.header}>
@@ -249,8 +249,14 @@ export default function UsersRegister() {
           <RNPickerSelect
             onValueChange={(value) => handleChange("tipoDocumento", value)}
             items={documentTypes.map(
-              (doc: { Description: any; IdDocumentType: any }) => ({
-                label: doc.Description,
+              (doc: {
+                Description: string;
+                IdDocumentType: number;
+                Abbreviation: string;
+              }) => ({
+                label: `${doc.Abbreviation || ""}${
+                  doc.Abbreviation && doc.Description ? " - " : ""
+                }${doc.Description || ""}`,
                 value: doc.IdDocumentType,
               })
             )}

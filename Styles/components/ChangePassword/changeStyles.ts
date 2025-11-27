@@ -96,7 +96,7 @@ export const changeStyles = StyleSheet.create({
   loginButton: {
     backgroundColor: "#ff0000",
     borderRadius: 25,
-    paddingVertical: 12,
+    paddingVertical: 16,
     alignItems: "center",
     marginVertical: 16,
     shadowColor: "#ff0000",
@@ -146,9 +146,9 @@ export const changeStyles = StyleSheet.create({
   },
 
   divider: {
-    flex:1,
-    
-    height: 0.5,    
+    flex: 1,
+
+    height: 0.5,
     backgroundColor: "#707070",
   },
 
@@ -169,7 +169,7 @@ export const changeStyles = StyleSheet.create({
   socialButton: {
     width: 45,
     height: 45,
-    borderRadius:30,
+    borderRadius: 30,
     backgroundColor: "#ff0000",
     justifyContent: "center",
     alignItems: "center",

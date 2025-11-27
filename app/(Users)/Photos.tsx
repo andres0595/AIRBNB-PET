@@ -33,19 +33,31 @@ export default function PhotoUploadForm() {
       return;
     }
 
-    // Abrir galería
+    // Abrir galería con selección múltiple
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ["images"], // Actualizado: usa array en lugar de MediaTypeOptions
       allowsEditing: false,
+      allowsMultipleSelection: true, // Permite selección múltiple
       quality: 0.8,
+      selectionLimit: 10, // Límite de 10 fotos
     });
 
-    if (!result.canceled) {
-      const newImage = {
+    if (!result.canceled && result.assets) {
+      // Agregar todas las imágenes seleccionadas
+      const newImages = result.assets.map((asset) => ({
         id: Date.now().toString() + Math.random(),
-        uri: result.assets[0].uri,
-      };
-      setSelectedImages([...selectedImages, newImage]);
+        uri: asset.uri,
+      }));
+
+      const updatedImages = [...selectedImages, ...newImages];
+
+      // Verificar que no exceda el límite de 10
+      if (updatedImages.length > 10) {
+        Alert.alert("Atención", "Puedes subir máximo 10 fotos en total");
+        setSelectedImages(updatedImages.slice(0, 10));
+      } else {
+        setSelectedImages(updatedImages);
+      }
     }
   };
 
@@ -81,49 +93,51 @@ export default function PhotoUploadForm() {
             <TouchableOpacity onPress={handleBack} style={styles.backButton}>
               <Ionicons name="chevron-back" size={28} color="#000" />
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>{i18n.t("photoUpload.headerTitle")}</Text>
+            <Text style={styles.headerTitle}>
+              {i18n.t("photoUpload.headerTitle")}
+            </Text>
           </View>
 
           <View style={styles.content}>
             <Text style={styles.mainTitle}>
-              {i18n.t("photoUpload.introTitle")} 
+              {i18n.t("photoUpload.introTitle")}
             </Text>
 
             <Text style={styles.subtitle}>
-             {i18n.t("photoUpload.introSubtitle")} 
+              {i18n.t("photoUpload.introSubtitle")}
             </Text>
 
             <View style={styles.bulletList}>
               <View style={styles.bulletItem}>
                 <View style={styles.bulletDot} />
                 <Text style={styles.bulletText}>
-                 {i18n.t("photoUpload.bullet1")} 
+                  {i18n.t("photoUpload.bullet1")}
                 </Text>
               </View>
 
               <View style={styles.bulletItem}>
                 <View style={styles.bulletDot} />
                 <Text style={styles.bulletText}>
-                   {i18n.t("photoUpload.bullet2")} 
+                  {i18n.t("photoUpload.bullet2")}
                 </Text>
               </View>
 
               <View style={styles.bulletItem}>
                 <View style={styles.bulletDot} />
                 <Text style={styles.bulletText}>
-                {i18n.t("photoUpload.bullet3")} 
+                  {i18n.t("photoUpload.bullet3")}
                 </Text>
               </View>
             </View>
 
             <Text style={styles.helpText}>
-               {i18n.t("photoUpload.helpText")} 
+              {i18n.t("photoUpload.helpText")}
             </Text>
 
             <View style={styles.warningBox}>
               <Ionicons name="megaphone-outline" size={40} color="#00D4D4" />
               <Text style={styles.warningText}>
-                {i18n.t("photoUpload.warning")} 
+                {i18n.t("photoUpload.warning")}
               </Text>
             </View>
 
@@ -131,7 +145,10 @@ export default function PhotoUploadForm() {
               style={styles.uploadButton}
               onPress={() => setShowUploadView(true)}
             >
-              <Text style={styles.uploadButtonText}>  {i18n.t("photoUpload.uploadButton")} </Text>
+              <Text style={styles.uploadButtonText}>
+                {" "}
+                {i18n.t("photoUpload.uploadButton")}{" "}
+              </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -150,11 +167,15 @@ export default function PhotoUploadForm() {
           >
             <Ionicons name="chevron-back" size={24} color="#000" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{i18n.t("photoUpload.headerTitle")} </Text>
+          <Text style={styles.headerTitle}>
+            {i18n.t("photoUpload.headerTitle")}{" "}
+          </Text>
         </View>
 
         <ScrollView style={styles.content}>
-          <Text style={styles.uploadTitle}>{i18n.t("photoUpload.uploadViewTitle")}</Text>
+          <Text style={styles.uploadTitle}>
+            {i18n.t("photoUpload.uploadViewTitle")}
+          </Text>
 
           <TouchableOpacity style={styles.imagePickerBox} onPress={pickImage}>
             <View style={styles.imagePickerContent}>
@@ -170,9 +191,9 @@ export default function PhotoUploadForm() {
           {selectedImages.length > 0 && (
             <View style={styles.selectedImagesContainer}>
               <Text style={styles.selectedImagesTitle}>
-                    {i18n.t("photoUpload.selectedPhotos", {
-                                    count: Object.keys(selectedImages).length,
-                                  })}
+                {i18n.t("photoUpload.selectedPhotos", {
+                  count: selectedImages.length,
+                })}
               </Text>
               <View style={styles.imageGrid}>
                 {selectedImages.map((image) => (
@@ -196,8 +217,7 @@ export default function PhotoUploadForm() {
 
         <View style={styles.footer}>
           <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-            <Text style={styles.saveButtonText}>
-                {i18n.t("general.save")}</Text>
+            <Text style={styles.saveButtonText}>{i18n.t("general.save")}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -207,7 +227,7 @@ export default function PhotoUploadForm() {
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 5,
+    flex: 1,
     backgroundColor: "#FFF",
   },
   container: {
@@ -320,10 +340,10 @@ const styles = StyleSheet.create({
     borderStyle: "dashed",
     borderRadius: 12,
     padding: 40,
-    paddingVertical: 200, // ← Agregar esto para más altura
+    paddingVertical: 200,
     alignItems: "center",
     backgroundColor: "#F8FEFF",
-    minHeight: 400, // ← O agregar esto para altura mínima
+    minHeight: 400,
   },
   imagePickerContent: {
     alignItems: "center",

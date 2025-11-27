@@ -27,19 +27,19 @@ export const UsersStyles = StyleSheet.create({
     padding: 10,
   },
   title: {
-    fontSize: 20,
-    fontWeight: "700",
-    textAlign: "center",
-    marginBottom: 0,
+    fontSize: 18,
+    fontWeight: "600",
     color: "#333",
-    lineHeight: 24,
+    textAlign: "center",
+    marginTop: 20,
     fontFamily: fontFamily.bold,
   },
+
   label: {
     fontSize: 15,
-    color: "#333",
+    color: "#0000",
     marginBottom: 6,
-    fontFamily: fontFamily.medium,
+    fontFamily: fontFamily.light,
     letterSpacing: 0,
     textAlign: "left",
     opacity: 1,
@@ -51,10 +51,12 @@ export const UsersStyles = StyleSheet.create({
     color: "#333",
     borderColor: "#ddd",
     borderWidth: 1,
-    borderRadius: 25,
-    backgroundColor: "#f8f8f8",
+    borderRadius: 20,
+    backgroundColor: "#E4E4E4",
     marginBottom: 15,
     fontFamily: fontFamily.medium,
+    paddingHorizontal: 15, // Agrega espacio interno a los lados
+    paddingVertical: 30, // Opcional: también da espacio arriba y abajo
   },
   error: {
     color: "#e74c3c",
@@ -107,12 +109,12 @@ export const UsersStyles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    top: 15,
-    left: 10,
+    top: 20,
+    left: 20,
     zIndex: 10,
-    padding: 8,
-    borderRadius: 20,
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    padding: 10,
+    borderRadius: 24,
+    backgroundColor: "#F7F7F7",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
@@ -151,10 +153,9 @@ export const UsersStyles = StyleSheet.create({
   },
 
   continueButtonText: {
-    color: "#000000",
+    color: "#0000",
     fontSize: 16,
-    fontWeight: "700",
-    fontFamily: fontFamily.medium,
+    fontFamily: fontFamily.bold,
   },
 
   // Para Picker nativo
