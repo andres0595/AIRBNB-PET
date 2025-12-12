@@ -96,7 +96,7 @@ export default function ValidateOtp() {
     setLoading(true);
     try {
       console.log("Código OTP:", otpCode);
-      await validateOtp(otpCode);
+      await validateOtp("juv_149@hotmail.com", +otpCode);
       setOtp(["", "", "", "", "", ""]);
       router.push("/(Login)/ConfirmChange");
     } catch (error) {
@@ -135,10 +135,7 @@ export default function ValidateOtp() {
       >
         <View style={styles.inner}>
           <View style={styles.formContainer}>
-            <TouchableOpacity
-              style={styles.backButton}
-              onPress={handleGoBack}
-            >
+            <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
               <Ionicons name="chevron-back" size={24} color="#707070" />
             </TouchableOpacity>
 
@@ -150,7 +147,8 @@ export default function ValidateOtp() {
             {/* Título y descripción */}
             <Text style={styles.title}>Verificación</Text>
             <Text style={styles.description}>
-              Ingresa el código de verificación que enviamos a tu correo electrónico para continuar con la recuperación de tu cuenta.
+              Ingresa el código de verificación que enviamos a tu correo
+              electrónico para continuar con la recuperación de tu cuenta.
             </Text>
 
             {/* Inputs OTP - 6 dígitos */}
@@ -231,7 +229,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
 
- backButton: {
+  backButton: {
     position: "absolute",
     top: 20,
     left: 20,
@@ -261,7 +259,7 @@ const styles = StyleSheet.create({
     color: "#000",
     lineHeight: 18,
     marginBottom: 40,
- marginTop:23,
+    marginTop: 23,
     fontFamily: fontFamily.regular,
   },
 
@@ -273,27 +271,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
 
-otpInput: {
-  width: 46,
-  height: 63,
-  borderWidth: 0.5,
-  borderColor: "#00000029",
-  borderRadius: 8,
-  textAlign: "center",
-  fontSize: 24,
-  fontWeight: "600",
-  backgroundColor: "#F8F8F8",
-  color: "#000",
-  fontFamily: fontFamily.semiBold,
-  shadowColor: "#000",
-  shadowOffset: {
-    width: 0,
-    height: 4, // Aumentado de 2 a 4
+  otpInput: {
+    width: 46,
+    height: 63,
+    borderWidth: 0.5,
+    borderColor: "#00000029",
+    borderRadius: 8,
+    textAlign: "center",
+    fontSize: 24,
+    fontWeight: "600",
+    backgroundColor: "#F8F8F8",
+    color: "#000",
+    fontFamily: fontFamily.semiBold,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4, // Aumentado de 2 a 4
+    },
+    shadowOpacity: 0.25, // Aumentado de 0.1 a 0.25
+    shadowRadius: 6, // Aumentado de 4 a 6
+    elevation: 5, // Aumentado de 3 a 5 (para Android)
   },
-  shadowOpacity: 0.25, // Aumentado de 0.1 a 0.25
-  shadowRadius: 6, // Aumentado de 4 a 6
-  elevation: 5, // Aumentado de 3 a 5 (para Android)
-},
   otpInputFilled: {
     borderColor: "#FF0000",
     backgroundColor: "#FFF",
@@ -307,7 +305,7 @@ otpInput: {
     flexDirection: "row",
     justifyContent: "center",
     marginBottom: 40,
-    marginTop:35
+    marginTop: 35,
   },
 
   resendText: {
@@ -329,7 +327,7 @@ otpInput: {
     borderRadius: 30,
     paddingVertical: 16,
     alignItems: "center",
-    marginBottom: 16,    
+    marginBottom: 16,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -337,25 +335,25 @@ otpInput: {
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 6,
-    marginTop:15
+    marginTop: 15,
   },
 
   verifyButtonDisabled: {
     backgroundColor: "#CCCCCC",
-    
+
     shadowOpacity: 0,
   },
 
   verifyButtonText: {
     color: "#FFF",
-    fontSize: 16,   
+    fontSize: 16,
     fontFamily: fontFamily.bold,
   },
 
   verifyButtonTextDisabled: {
     color: "#000",
     fontFamily: fontFamily.bold,
-     fontSize: 16,  
+    fontSize: 16,
   },
 
   scrollView: {

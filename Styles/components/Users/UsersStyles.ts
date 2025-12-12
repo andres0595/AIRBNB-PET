@@ -55,8 +55,8 @@ export const UsersStyles = StyleSheet.create({
     backgroundColor: "#E4E4E4",
     marginBottom: 15,
     fontFamily: fontFamily.medium,
-    paddingHorizontal: 15, // Agrega espacio interno a los lados
-    paddingVertical: 30, // Opcional: también da espacio arriba y abajo
+    paddingHorizontal: 18, // Agrega espacio interno a los lados
+    paddingVertical: 12, // Opcional: también da espacio arriba y abajo
   },
   error: {
     color: "#e74c3c",

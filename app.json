@@ -2,7 +2,7 @@
   "expo": {
     "name": "Puppy Po",
     "slug": "puppy-po",
-    "version": "1.0.0",
+    "version": "3.0.0",
     "orientation": "default",
     "icon": "./assets/images/IconoAplicacion.png",
     "scheme": "petdaycare",
@@ -13,11 +13,21 @@
       "bundleIdentifier": "com.puppypo.ios",
       "newArchEnabled": true,
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true,
+          "NSExceptionDomains": {
+            "puppypo-backend-alb-653500462.us-east-1.elb.amazonaws.com": {
+              "NSExceptionAllowsInsecureHTTPLoads": true,
+              "NSIncludesSubdomains": true
+            }
+          }
+        }
       }
     },
     "android": {
       "package": "com.puppypo.android",
+      "versionCode": 3,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -27,11 +37,12 @@
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "softwareKeyboardLayoutMode": "resize",
-      "newArchEnabled": true
+      "newArchEnabled": true,
+      "usesCleartextTraffic": true
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/IconoAplicacion.png"
     },
     "plugins": [
       "expo-router",

@@ -7,7 +7,7 @@ const { apiUrl } = Constants.expoConfig?.extra || {};
 export async function login(
   correo: string,
   contrasena: string
-): Promise<LoginResponse> {
+): Promise<ResponseRequest> {
   try {
     const response = await fetch(`${apiUrl}auth/login`, {
       method: "POST",

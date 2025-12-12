@@ -43,7 +43,7 @@
     "checkInternetConnection": "Por favor verifica tu conexión a internet",
     "docTypesLoad": "No se pudieron cargar los tipos de documento",
     "insertFailed": "Se ha producido un error al guardar. Inténtalo de nuevo",
-        "permissionDenied": "Permiso denegado",
+    "permissionDenied": "Permiso denegado",
     "permissionMessage": "Necesitamos acceso a tu galería",
     "minPhotos": "Debes subir al menos 3 fotos",
     "maxPhotos": "Puedes subir hasta 10 fotos",
@@ -281,18 +281,23 @@
     "modalMessage2": "Una vez que configures todas las tarifas, el botón “Siguiente” se activará automáticamente para que puedas continuar."
   },
   "photoUpload": {
-  "headerTitle": "Fotos",
-  "introTitle": "Muestra quién eres y cuánto amas cuidar mascotas",
-  "introSubtitle": "Sube entre 3 y 10 fotos que reflejen tu experiencia y cariño por los animales. Te recomendamos incluir fotos donde:",
-  "bullet1": "Estés interactuando con mascotas (paseos, juegos, abrazos).",
-  "bullet2": "Se vea un ambiente limpio y seguro.",
-  "bullet3": "Aparezcan tus propias mascotas o aquellas que hayas cuidado (con permiso).",
-  "helpText": "Estas imágenes ayudarán a que los dueños confíen más en ti y te elijan como su cuidador.",
-  "warning": "Evita fotos borrosas, con filtros fuertes o en lugares oscuros.",
-  "uploadButton": "Subir Fotos",
+    "headerTitle": "Fotos",
+    "introTitle": "Muestra quién eres y cuánto amas cuidar mascotas",
+    "introSubtitle": "Sube entre 3 y 10 fotos que reflejen tu experiencia y cariño por los animales. Te recomendamos incluir fotos donde:",
+    "bullet1": "Estés interactuando con mascotas (paseos, juegos, abrazos).",
+    "bullet2": "Se vea un ambiente limpio y seguro.",
+    "bullet3": "Aparezcan tus propias mascotas o aquellas que hayas cuidado (con permiso).",
+    "helpText": "Estas imágenes ayudarán a que los dueños confíen más en ti y te elijan como su cuidador.",
+    "warning": "Evita fotos borrosas, con filtros fuertes o en lugares oscuros.",
+    "uploadButton": "Subir Fotos",
 
-  "uploadViewTitle": "Agregar Contenido",
-  "chooseFromGallery": "Elegir desde\ngaería",
-  "selectedPhotos": "Fotos seleccionadas ({{count}}/10)"
+    "uploadViewTitle": "Agregar Contenido",
+    "chooseFromGallery": "Elegir desde\ngaería",
+    "selectedPhotos": "Fotos seleccionadas ({{count}}/10)"
+  },
+  "responseRequest": {
+    "CODE_OTP_INVALID": "Código otp invalido",
+    "OTP_CODE_EXPIRED": "Código otp expirado",
+    "CODE_OTP_VALID": "Código otp valido"
   }
 }

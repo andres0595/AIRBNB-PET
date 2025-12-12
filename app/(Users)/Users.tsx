@@ -11,7 +11,9 @@ import Checkbox from "expo-checkbox";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   ScrollView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -134,7 +136,6 @@ export default function UsersRegister() {
             response.message,
             "alert-circle",
             i18n.t("alerts.error"),
-            //i18n.t("alerts.insertFailed"),
             false
           );
           return;
@@ -177,6 +178,12 @@ export default function UsersRegister() {
     return UsersStyles.button;
   };
 
+  const getLoadingColor = () => {
+    if (isClient) return "#F6C3CC";
+    if (isCaretaker) return "#36EBD8";
+    return "#00D9C5";
+  };
+
   const handleGoBack = () => {
     router.push("/");
   };
@@ -184,6 +191,7 @@ export default function UsersRegister() {
   const handleGoSuccess = () => {
     router.push("/login");
   };
+
   const loadDocumentTypes = async () => {
     try {
       setLoadingDocTypes(true);
@@ -192,10 +200,21 @@ export default function UsersRegister() {
       if (response.flag && response.data) {
         setDocumentTypes(response.data);
       } else {
-        console.log("Error", i18n.t("alerts.error"));
+        showInfoModal(
+          i18n.t("alerts.error"),
+          "alert-circle",
+          i18n.t("alerts.error"),
+          false
+        );
       }
     } catch (error) {
       console.error("Error cargando tipos de documento:", error);
+      showInfoModal(
+        "No se pudieron cargar los tipos de documento",
+        "alert-circle",
+        i18n.t("alerts.error"),
+        false
+      );
     } finally {
       setLoadingDocTypes(false);
     }
@@ -219,6 +238,28 @@ export default function UsersRegister() {
     });
     setModalVisibleAlert(true);
   };
+
+  // Loading de pantalla completa
+  if (loadingDocTypes) {
+    return (
+      <AuthLayout contentStyle={UsersStyles.container}>
+        <View style={styles.fullScreenLoading}>
+          <View style={styles.loadingCard}>
+            {getIcon()}
+            <ActivityIndicator
+              size="large"
+              color={getLoadingColor()}
+              style={styles.spinner}
+            />
+            <Text style={styles.loadingText}>Cargando información...</Text>
+            <Text style={styles.loadingSubtext}>
+              Estamos preparando el formulario
+            </Text>
+          </View>
+        </View>
+      </AuthLayout>
+    );
+  }
 
   return (
     <AuthLayout contentStyle={UsersStyles.container}>
@@ -263,7 +304,7 @@ export default function UsersRegister() {
             placeholder={{ label: "Seleccione un tipo...", value: null }}
             style={pickerSelectStyles}
             value={form.tipoDocumento}
-            useNativeAndroidPickerStyle={false} // ← Importante para Android
+            useNativeAndroidPickerStyle={false}
             Icon={() => {
               return <Ionicons name="chevron-down" size={20} color="#666" />;
             }}
@@ -389,10 +430,18 @@ export default function UsersRegister() {
           )}
 
           {/* Botón */}
-          <TouchableOpacity style={getButtonStyle()} onPress={handleSubmit}>
-            <Text style={[UsersStyles.continueButtonText]}>
-              {i18n.t("user.registeras")}
-            </Text>
+          <TouchableOpacity
+            style={getButtonStyle()}
+            onPress={handleSubmit}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={[UsersStyles.continueButtonText]}>
+                {i18n.t("user.registeras")}
+              </Text>
+            )}
           </TouchableOpacity>
 
           {/* ¿Ya tienes una cuenta? */}
@@ -426,3 +475,46 @@ export default function UsersRegister() {
     </AuthLayout>
   );
 }
+
+const styles = StyleSheet.create({
+  fullScreenLoading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    padding: 20,
+  },
+  loadingCard: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 40,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+    width: "90%",
+    maxWidth: 400,
+  },
+  spinner: {
+    marginTop: 20,
+    marginBottom: 15,
+  },
+  loadingText: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#333",
+    marginTop: 10,
+    textAlign: "center",
+  },
+  loadingSubtext: {
+    fontSize: 14,
+    color: "#666",
+    marginTop: 5,
+    textAlign: "center",
+  },
+});

@@ -11,7 +11,7 @@ export const pickerSelectStyles = StyleSheet.create({
     backgroundColor: "#E4E4E4",
     marginBottom: 15,
     fontFamily: fontFamily.medium,
-    paddingVertical: 12,
+    paddingVertical: 14,
     paddingHorizontal: 15,
     paddingRight: 30, // Para el icono
   },

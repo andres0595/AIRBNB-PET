@@ -1,12 +1,19 @@
 import { useGoogleAuth } from "@/hooks/useSocialAuth";
 import { i18n } from "@/i18n/translations";
-import { loginGoogle } from "@/Service/Service-Login/authService";
+import { login, loginGoogle } from "@/Service/Service-Login/authService";
+import { setCredentials } from "@/Store/authSlice";
 import { loginStyles } from "@/Styles/components/Login/loginStyles";
 import { UsersStyles } from "@/Styles/components/Users/UsersStyles";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useDispatch } from "react-redux";
 import ArrobaIcon from "../assets/Icons/arroba.svg";
 import FacebookIcon from "../assets/Icons/Facebook.svg";
@@ -15,17 +22,14 @@ import IOSIconfrom from "../assets/Icons/IOS.svg";
 import LlaveIcon from "../assets/Icons/Llave.svg";
 import PuppySvg from "../assets/images/LogoPuppyPo.svg";
 import AuthLayout from "../components/AuthLayout";
-import { useModalToast } from "../components/ModalToast";
 import CustomModal from "./(CustomModal)/CustomModal";
 
 export default function Login() {
   const router = useRouter();
   const dispatch = useDispatch();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { showToast, ToastComponent } = useModalToast();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalConfig, setModalConfig] = useState({
     title: "",
@@ -53,36 +57,51 @@ export default function Login() {
   };
 
   const handleLogin = async () => {
-    // if (!email || !password) {
-    //   showInfoModal(
-    //     i18n.t("alerts.nodata"),
-    //     "information-circle",
-    //     i18n.t("general.Data_missing")
-    //   );
-    //   return;
-    // }
-    // if (!validateEmail(email)) {
-    //   showInfoModal(
-    //     i18n.t("alerts.alertemailInvalid"),
-    //     "alert-circle",
-    //     i18n.t("alerts.emailInvalid")
-    //   );
-    //   return;
-    // }
+    if (!email || !password) {
+      showInfoModal(
+        i18n.t("alerts.nodata"),
+        "information-circle",
+        i18n.t("general.Data_missing")
+      );
+      return;
+    }
+    if (!validateEmail(email)) {
+      showInfoModal(
+        i18n.t("alerts.alertemailInvalid"),
+        "alert-circle",
+        i18n.t("alerts.emailInvalid")
+      );
+      return;
+    }
     setLoading(true);
-    // try {
-    //const data = await login(email, password);
-    //dispatch(setCredentials({ token: data.token, user: data.user }));
-    router.replace("/(Screen)/HomeScreen");
-    // } catch (error: any) {
-    //   showInfoModal(
-    //     i18n.t("alerts.error"),
-    //     "alert-circle",
-    //     i18n.t("login.errorlogin")
-    //   );
-    // } finally {
-    //   setLoading(false);
-    // }
+    try {
+      const response = await login(email, password);
+      if (!response.flag) {
+        showInfoModal(
+          "Usuario no encontrado",
+          //i18n.t("alerts.error"),
+          "alert-circle",
+          i18n.t("login.errorlogin")
+        );
+        return;
+      } else {
+        dispatch(
+          setCredentials({
+            token: response.data.access_token,
+            user: response.data.user,
+          })
+        );
+        router.replace("/(tabs)/HomeScreen");
+      }
+    } catch (error: any) {
+      showInfoModal(
+        i18n.t("alerts.error"),
+        "alert-circle",
+        i18n.t("login.errorlogin")
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const googleAuth = useGoogleAuth(async (token: string) => {
@@ -91,10 +110,35 @@ export default function Login() {
     router.replace("/(tabs)/perfil");
   });
 
+  const getIcon = () => {
+    return <PuppySvg width={150} height={120} />;
+  };
+
+  // Loading de pantalla completa
+  if (loading) {
+    return (
+      <AuthLayout contentStyle={UsersStyles.container}>
+        <View style={loginStyles.fullScreenLoading}>
+          <View style={loginStyles.loadingCard}>
+            {getIcon()}
+            <ActivityIndicator
+              size="large"
+              color="#F6C3CC"
+              style={loginStyles.spinner}
+            />
+            <Text style={loginStyles.loadingText}>Cargando información...</Text>
+            <Text style={loginStyles.loadingSubtext}>
+              Estamos preparando el formulario
+            </Text>
+          </View>
+        </View>
+      </AuthLayout>
+    );
+  }
+
   return (
     <AuthLayout contentStyle={loginStyles.container}>
       <View style={loginStyles.inner}>
-        <ToastComponent />
         {/* Form */}
         <View style={loginStyles.formContainer}>
           {/* Header */}
@@ -197,9 +241,9 @@ export default function Login() {
         </View>
         <View style={UsersStyles.loginLinkContainer}>
           <Text style={UsersStyles.loginText}>{i18n.t("login.account")} </Text>
-          <TouchableOpacity onPress={() => router.push("/login")}>
+          <TouchableOpacity onPress={() => router.push("/(Users)/Users")}>
             <Text style={UsersStyles.loginLink}>
-              {i18n.t("login.loginButton")}
+              {i18n.t("general.register")}
             </Text>
           </TouchableOpacity>
         </View>

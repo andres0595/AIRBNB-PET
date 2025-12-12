@@ -200,4 +200,45 @@ export const loginStyles = StyleSheet.create({
     textDecorationLine: "underline",
     fontFamily: fontFamily.medium,
   },
+
+  fullScreenLoading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    padding: 20,
+  },
+  loadingCard: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 40,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+    width: "90%",
+    maxWidth: 400,
+  },
+  spinner: {
+    marginTop: 20,
+    marginBottom: 15,
+  },
+  loadingText: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#333",
+    marginTop: 10,
+    textAlign: "center",
+  },
+  loadingSubtext: {
+    fontSize: 14,
+    color: "#666",
+    marginTop: 5,
+    textAlign: "center",
+  },
 });

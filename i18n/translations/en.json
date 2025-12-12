@@ -281,6 +281,11 @@
   "uploadViewTitle": "Add Content",
   "chooseFromGallery": "Choose from\nthe gallery",
   "selectedPhotos": "Selected photos ({{count}}/10)"
+  },
+  "responseRequest":{
+"CODE_OTP_INVALID":"Otp invalid",
+"OTP_CODE_EXPIRED":"Otp expired",
+"CODE_OTP_VALID":"Otp valid"
   }
 
 }

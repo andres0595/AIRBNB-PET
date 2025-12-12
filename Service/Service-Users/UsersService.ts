@@ -29,19 +29,47 @@ export async function CreateOrUpdateUsers(
 
 export async function GetDocumentTypes(): Promise<ResponseRequest> {
   try {
-    const response = await fetch(`${apiUrl}users/ListDocumentTypes`, {
+    const url = `${apiUrl}users/ListDocumentTypes`;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 segundos
+
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
       },
+      signal: controller.signal,
     });
 
-    if (!response.ok) {
-      throw new Error("Error al obtener tipos de documento");
-    }
+    clearTimeout(timeoutId);
 
-    return await response.json();
-  } catch (error) {
+    if (!response.ok) {
+      console.error("❌ Respuesta no OK:", {
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries()),
+      });
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error: any) {
     throw error;
   }
+}
+
+export async function GetDocumentTypesWithRetry(
+  retries = 3
+): Promise<ResponseRequest> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await GetDocumentTypes();
+    } catch (error) {
+      if (i === retries - 1) throw error;
+      console.log(`Reintento ${i + 1}/${retries}...`);
+      await new Promise((resolve) => setTimeout(resolve, 1000 * (i + 1))); // Backoff exponencial
+    }
+  }
+  throw new Error("Todos los reintentos fallaron");
 }

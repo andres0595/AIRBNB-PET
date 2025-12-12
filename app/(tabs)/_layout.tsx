@@ -118,6 +118,14 @@ export default function TabLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="HomeScreen"
+        options={{
+          href: null, // 🔥 Esto oculta el tab pero mantiene la pantalla
+          title: isAuthenticated ? "Hoy" : "Home",
+        }}
+      />
     </Tabs>
   );
 }

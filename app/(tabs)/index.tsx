@@ -229,11 +229,8 @@ const PetCareHomeScreen = () => {
                 {i18n.t("general.register")}
               </Text>
             </TouchableOpacity>
-
-            <TouchableOpacity
-              style={homeStyles.loginButton}
-              onPress={() => router.push("/(tabs)/perfil")}
-            >
+            {/* onPress={() => router.push("/(tabs)/perfil")} */}
+            <TouchableOpacity style={homeStyles.loginButton}>
               <Text style={homeStyles.loginButtonText}>
                 {" "}
                 {i18n.t("general.reservation")}
@@ -297,7 +294,7 @@ const homeStyles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   slideTitle: {
-    fontSize: 28, 
+    fontSize: 28,
     color: "white",
     textAlign: "center",
     textShadowColor: "rgba(0, 0, 0, 0.75)",
