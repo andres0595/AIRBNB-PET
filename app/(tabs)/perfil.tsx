@@ -1,5 +1,6 @@
 import AuthLayout from "@/components/AuthLayout";
 import { i18n } from "@/i18n/translations";
+import { RootState } from "@/Store/store";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -11,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSelector } from "react-redux";
 import CustomModal from "../(CustomModal)/CustomModal";
 import configService from "../../assets/images/Image_config_service.png";
 import { fontFamily } from "../../Config/typography";
@@ -24,7 +26,8 @@ const ProfileScreen = () => {
     iconColor: "#00D9C5",
     onPress: undefined as (() => void) | undefined,
   });
-
+  const user = useSelector((state: RootState) => state.auth.user);
+  console.log("🚀 ~ HomeScreen ~ user:", user);
   const router = useRouter();
 
   const menuItems = [
@@ -119,7 +122,9 @@ const ProfileScreen = () => {
                 style={styles.avatar}
               />
             </View>
-            <Text style={styles.userName}>Maria Alejandra</Text>
+            <Text style={styles.userName} numberOfLines={2}>
+              {user?.nombre}
+            </Text>
           </View>
         </View>
 
@@ -232,9 +237,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#E0E0E0",
   },
   userName: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
     color: "#000",
+    maxWidth: "90%",
+    fontFamily: fontFamily.medium,
   },
   configSection: {
     marginTop: 20,

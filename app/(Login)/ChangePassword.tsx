@@ -2,6 +2,7 @@ import { useModalToast } from "@/components/ModalToast";
 import { useGoogleAuth } from "@/hooks/useSocialAuth";
 import { i18n } from "@/i18n/translations";
 import { GenetateOtp, login } from "@/Service/Service-Login/authService";
+import { setEmailForOtp } from "@/Store/authSlice";
 import { changeStyles } from "@/Styles/components/ChangePassword/changeStyles";
 import { UsersStyles } from "@/Styles/components/Users/UsersStyles";
 import { Ionicons } from "@expo/vector-icons";
@@ -73,6 +74,7 @@ export default function ChangePassword() {
 
     setLoading(true);
     try {
+      dispatch(setEmailForOtp(email));
       const response = await GenetateOtp(email);
       if (!response.flag) {
         showInfoModal(
@@ -269,4 +271,7 @@ export default function ChangePassword() {
       </CustomModal>
     </AuthLayout>
   );
+}
+function dispatch(arg0: { payload: string; type: "auth/setEmailForOtp" }) {
+  throw new Error("Function not implemented.");
 }

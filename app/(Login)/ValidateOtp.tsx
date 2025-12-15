@@ -10,10 +10,12 @@ import {
 import AuthLayout from "@/components/AuthLayout";
 import { useGoogleAuth } from "@/hooks/useSocialAuth";
 import { login, validateOtp } from "@/Service/Service-Login/authService";
+import { RootState } from "@/Store/store";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useMemo, useRef, useState } from "react";
 import Toast from "react-native-toast-message";
+import { useSelector } from "react-redux";
 import CustomModal from "../(CustomModal)/CustomModal";
 import PuppySvg from "../../assets/images/LogoPuppyPo.svg";
 import { fontFamily } from "../../Config/typography";
@@ -31,6 +33,7 @@ export default function ValidateOtp() {
     iconColor: "#00D9C5",
     onPress: undefined as (() => void) | undefined,
   });
+  const email_redux = useSelector((state: RootState) => state.auth.emailForOtp);
 
   const googleAuth = useGoogleAuth(async (token: string) => {
     const data = await login("google", token);
@@ -95,8 +98,8 @@ export default function ValidateOtp() {
 
     setLoading(true);
     try {
-      console.log("Código OTP:", otpCode);
-      await validateOtp("juv_149@hotmail.com", +otpCode);
+      console.log("Email:", email_redux);
+      await validateOtp(email_redux, +otpCode);
       setOtp(["", "", "", "", "", ""]);
       router.push("/(Login)/ConfirmChange");
     } catch (error) {

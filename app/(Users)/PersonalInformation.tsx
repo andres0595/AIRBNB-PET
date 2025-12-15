@@ -1,13 +1,14 @@
 import AuthLayout from "@/components/AuthLayout";
+import { useImagePicker } from "@/hooks/Images/useImagePicker";
 import { i18n } from "@/i18n/translations";
+import { RegisterData } from "@/Models/Model-Users/RegisterData";
+import { RootState } from "@/Store/store";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
-import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  Alert,
   Image,
   Platform,
   ScrollView,
@@ -17,6 +18,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSelector } from "react-redux";
 import CustomModal from "../(CustomModal)/CustomModal";
 import { fontFamily } from "../../Config/typography";
 
@@ -31,18 +33,115 @@ export default function PersonalInformation() {
   const [postalCode, setPostalCode] = useState("");
   const [propertyType, setPropertyType] = useState("");
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImageBase64, setProfileImageBase64] = useState<string | null>(
+    null
+  );
   const [showPhotoModal, setShowPhotoModal] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showEndModal, setShowEndModal] = useState(false);
-
+  const user = useSelector((state: RootState) => state.auth.user);
+  const { image, openCamera, openGallery } = useImagePicker();
+  const [modalConfig, setModalConfig] = useState({
+    title: "",
+    message: "",
+    iconName: null as keyof typeof Ionicons.glyphMap | null,
+    iconColor: "#00D9C5",
+    onPress: undefined as (() => void) | undefined,
+  });
   const handleGoBack = () => {
     router.push("/(tabs)/perfil");
   };
 
-  const handleSave = () => {
-    console.log("Guardando información...");
-    setShowEndModal(true);
+  useEffect(() => {
+    if (user?.nombre) {
+      setFullName(user.nombre);
+      setIdNumber(user.numeroDocumento);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (image) {
+      setProfileImage(image.uri);
+      setProfileImageBase64(image.base64 || null);
+    }
+  }, [image]);
+
+  const handleCloseModal = () => {
+    setShowPhotoModal(false); // Cerrar el modal
+  };
+
+  // Utiliza el hook para abrir la cámara o la galería
+  const handleCameraSelect = async () => {
+    const selectedImage = await openCamera();
+    if (selectedImage) {
+      setShowPhotoModal(false); // Cerrar el modal después de seleccionar la imagen
+    }
+  };
+
+  const handleGallerySelect = async () => {
+    const selectedImage = await openGallery();
+    if (selectedImage) {
+      setShowPhotoModal(false); // Cerrar el modal después de seleccionar la imagen
+    }
+  };
+
+  const handleGoSuccess = () => {
     router.push("/(tabs)/perfil");
+  };
+
+  const handleSave = async () => {
+    const IdUser = user?.id;
+    try {
+      const registerPayload: RegisterData = {
+        id: Number(IdUser) || 0,
+        documentNumber: idNumber,
+        FullName: fullName,
+        zipCode: postalCode,
+        Email: email,
+        address: address,
+        city: +city,
+        province: +province,
+        postalCode: postalCode,
+        propertyType: +propertyType,
+        profileImage: profileImageBase64 ?? "",
+      };
+
+      console.log("Enviando datos al backend...", registerPayload);
+
+      //await CreateOrUpdateUsers(registerPayload);
+
+      showInfoModal(
+        "¡Información personal guardada exitosamente!",
+        "checkmark-circle",
+        "Registro exitoso",
+        true
+      );
+
+      // Navegar
+      //router.push("/(tabs)/perfil");
+    } catch (error) {
+      console.error("Error guardando la información", error);
+      alert("Hubo un error guardando la información");
+    }
+  };
+
+  const showInfoModal = (
+    message: string,
+    icon: any,
+    titulo: string,
+    shouldCall: boolean = false
+  ) => {
+    setModalConfig({
+      title: titulo,
+      message: message,
+      iconName: icon,
+      iconColor: "#00D9C5",
+      onPress: () => {
+        setShowEndModal(false);
+        if (shouldCall) handleGoSuccess();
+      },
+    });
+    setShowEndModal(true);
   };
 
   // Función para formatear la fecha
@@ -63,71 +162,9 @@ export default function PersonalInformation() {
   // Handler para cuando cambia la fecha
   const onDateChange = (event: any, selectedDate?: Date) => {
     setShowDatePicker(Platform.OS === "ios"); // En iOS mantener abierto, en Android cerrar
-
     if (selectedDate) {
       const formattedDate = formatDate(selectedDate);
-    }
-  };
-  // Solicitar permisos y abrir la cámara
-  const openCamera = async () => {
-    setShowPhotoModal(false); // Cerrar el modal primero
-
-    try {
-      const { status } = await ImagePicker.requestCameraPermissionsAsync();
-
-      if (status !== "granted") {
-        Alert.alert(
-          "Permisos requeridos",
-          "Necesitamos acceso a tu cámara para tomar fotos."
-        );
-        return;
-      }
-
-      const result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0.8,
-      });
-
-      if (!result.canceled && result.assets[0]) {
-        setProfileImage(result.assets[0].uri);
-      }
-    } catch (error) {
-      console.error("Error al abrir la cámara:", error);
-      Alert.alert("Error", "No se pudo abrir la cámara");
-    }
-  };
-
-  // Abrir galería de fotos
-  const openGallery = async () => {
-    setShowPhotoModal(false); // Cerrar el modal primero
-
-    try {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-      if (status !== "granted") {
-        Alert.alert(
-          "Permisos requeridos",
-          "Necesitamos acceso a tu galería para seleccionar fotos."
-        );
-        return;
-      }
-
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0.8,
-      });
-
-      if (!result.canceled && result.assets[0]) {
-        setProfileImage(result.assets[0].uri);
-      }
-    } catch (error) {
-      console.error("Error al abrir la galería:", error);
-      Alert.alert("Error", "No se pudo abrir la galería");
+      setBirthDate(formattedDate);
     }
   };
 
@@ -160,7 +197,9 @@ export default function PersonalInformation() {
                   style={styles.avatar}
                 />
               </View>
-              <Text style={styles.userName}>Maria Alejandra</Text>
+              <Text style={styles.userName} numberOfLines={2}>
+                {user?.nombre}
+              </Text>
             </View>
           </View>
 
@@ -220,13 +259,6 @@ export default function PersonalInformation() {
               minimumDate={new Date(1900, 0, 1)} // Fecha mínima razonable
             />
           )}
-          {/* <TextInput
-            style={styles.input}
-            value={birthDate}
-            onChangeText={setBirthDate}
-            placeholder="12 / 12 / 1970"
-            placeholderTextColor="#999"
-          /> */}
 
           <Text style={styles.label}>{i18n.t("user.identityNumber")} *</Text>
           <TextInput
@@ -268,9 +300,9 @@ export default function PersonalInformation() {
               style={styles.picker}
             >
               <Picker.Item label="Seleccionar ciudad" value="" />
-              <Picker.Item label="Bogotá" value="bogota" />
-              <Picker.Item label="Medellín" value="medellin" />
-              <Picker.Item label="Cali" value="cali" />
+              <Picker.Item label="Bogotá" value="1" />
+              <Picker.Item label="Medellín" value="2" />
+              <Picker.Item label="Cali" value="3" />
             </Picker>
           </View>
 
@@ -282,9 +314,9 @@ export default function PersonalInformation() {
               style={styles.picker}
             >
               <Picker.Item label="Seleccionar provincia" value="" />
-              <Picker.Item label="Cundinamarca" value="cundinamarca" />
-              <Picker.Item label="Antioquia" value="antioquia" />
-              <Picker.Item label="Valle del Cauca" value="valle" />
+              <Picker.Item label="Cundinamarca" value="1" />
+              <Picker.Item label="Antioquia" value="2" />
+              <Picker.Item label="Valle del Cauca" value="3" />
             </Picker>
           </View>
 
@@ -302,12 +334,12 @@ export default function PersonalInformation() {
           <View style={styles.radioGroup}>
             <TouchableOpacity
               style={styles.radioButton}
-              onPress={() => setPropertyType("casa")}
+              onPress={() => setPropertyType("1")}
             >
               <View
                 style={[
                   styles.radioCircle,
-                  propertyType === "casa" && styles.radioCircleSelected,
+                  propertyType === "1" && styles.radioCircleSelected,
                 ]}
               />
               <Text style={styles.radioLabel}>{i18n.t("user.house")}</Text>
@@ -315,12 +347,12 @@ export default function PersonalInformation() {
 
             <TouchableOpacity
               style={styles.radioButton}
-              onPress={() => setPropertyType("apartamento")}
+              onPress={() => setPropertyType("2")}
             >
               <View
                 style={[
                   styles.radioCircle,
-                  propertyType === "apartamento" && styles.radioCircleSelected,
+                  propertyType === "2" && styles.radioCircleSelected,
                 ]}
               />
               <Text style={styles.radioLabel}>
@@ -345,18 +377,18 @@ export default function PersonalInformation() {
       {/* Modal para seleccionar foto */}
       <CustomModal
         visible={showPhotoModal}
-        onClose={() => setShowPhotoModal(false)}
+        onClose={handleCloseModal}
         title="Seleccionar foto"
         animationType="slide"
         primaryButton={{
           text: "Tomar foto",
-          onPress: openCamera,
+          onPress: handleCameraSelect,
           style: { backgroundColor: "#36EBD8" },
           textStyle: { color: "#000" },
         }}
         secondaryButton={{
           text: "Elegir de galería",
-          onPress: openGallery,
+          onPress: handleGallerySelect,
           style: { backgroundColor: "#F6C3CC" },
           textStyle: { color: "#000" },
         }}
@@ -366,16 +398,23 @@ export default function PersonalInformation() {
         </Text>
       </CustomModal>
 
-      {/* Modal para seleccionar foto */}
+      {/* Modal final proceso */}
+
       <CustomModal
         visible={showEndModal}
         onClose={() => setShowEndModal(false)}
-        title="¡Información personal guardada exitosamente!"
+        title={modalConfig.title}
+        iconName={
+          modalConfig.iconName as keyof typeof Ionicons.glyphMap | undefined
+        }
+        iconColor={modalConfig.iconColor}
         primaryButton={{
-          text: "Ok",
-          onPress: () => setShowEndModal(false),
+          text: i18n.t("general.understood"),
+          onPress: modalConfig.onPress || (() => setShowEndModal(false)),
         }}
-      ></CustomModal>
+      >
+        <Text style={styles.subtitle}>{modalConfig.message}</Text>
+      </CustomModal>
     </AuthLayout>
   );
 }
@@ -429,9 +468,10 @@ export const styles = StyleSheet.create({
     backgroundColor: "#E0E0E0",
   },
   userName: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: "600",
     color: "#000",
+    maxWidth: "90%",
     fontFamily: fontFamily.medium,
   },
   title: {
@@ -520,6 +560,7 @@ export const styles = StyleSheet.create({
   picker: {
     height: Platform.OS === "ios" ? 150 : 50,
     width: "100%",
+    color: "#0000",
   },
   radioGroup: {
     flexDirection: "row",
@@ -590,6 +631,13 @@ export const styles = StyleSheet.create({
   dateText: {
     fontSize: 14,
     color: "#333",
+    fontFamily: fontFamily.medium,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: "#666",
+    textAlign: "center",
+    lineHeight: 20,
     fontFamily: fontFamily.medium,
   },
 });

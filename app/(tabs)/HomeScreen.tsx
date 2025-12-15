@@ -8,6 +8,9 @@ import {
   View,
 } from "react-native";
 
+import { RootState } from "@/Store/store";
+import { useRouter } from "expo-router";
+import { useSelector } from "react-redux";
 import Logocard from "../../assets/Icons/png-card-principal/LogoCardInternoG.png";
 import alojamientoMascotas from "../../assets/Icons/svg-servicios/Alojamiento.png";
 import Banio from "../../assets/Icons/svg-servicios/Banio.png";
@@ -15,8 +18,9 @@ import Cuidado from "../../assets/Icons/svg-servicios/Cuidado.png";
 import Guarderia from "../../assets/Icons/svg-servicios/Guarderia.png";
 import Paseos from "../../assets/Icons/svg-servicios/Paseos.png";
 import { fontFamily } from "../../Config/typography";
-
 export default function HomeScreen() {
+  const user = useSelector((state: RootState) => state.auth.user);
+  const router = useRouter();
   return (
     <AuthLayout contentStyle={styles.container}>
       <ScrollView
@@ -26,9 +30,11 @@ export default function HomeScreen() {
         {/* HEADER */}
         <View style={styles.headerContainer}>
           <View style={styles.header}>
-            <Text style={styles.hello}>¡Hola! Maria</Text>
+            <Text style={styles.hello} numberOfLines={2}>
+              ¡Hola! {user?.nombre}
+            </Text>
             <Text style={styles.welcome}>
-              Bienvenida a <Text style={styles.brand}>PuppyPó</Text>
+              Bienvenido(a) a <Text style={styles.brand}>PuppyPó</Text>
             </Text>
           </View>
         </View>
@@ -66,9 +72,13 @@ export default function HomeScreen() {
               />
             </View>
             <Text style={styles.bannerTitle}>Conviértete en un cuidador</Text>
-            <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              activeOpacity={0.7}
+              onPress={() => router.push("/(Service)/Services")}
+            >
               <Text style={styles.bannerButton}>¡Regístrate!</Text>
-            </View>
+            </TouchableOpacity>
           </View>
           <Image
             // source={require("../../assets/Icons/cuidadores.png")}
@@ -140,6 +150,9 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     fontWeight: "700",
     fontFamily: fontFamily.medium,
+    textAlign: "center",
+    flexWrap: "wrap",
+    maxWidth: "90%", // evita desbordes
   },
   welcome: {
     fontSize: 16,

@@ -12,7 +12,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { SvgProps } from "react-native-svg";
 import { useDispatch } from "react-redux";
 import alojamientoMascotas from "../../assets/Icons/svg-servicios/Alojamiento.png";
 import Banio from "../../assets/Icons/svg-servicios/Banio.png";
@@ -22,7 +21,7 @@ import Paseos from "../../assets/Icons/svg-servicios/Paseos.png";
 
 interface Service {
   id: string;
-  icon: React.FC<SvgProps>;
+  icon: any;
   title: string;
   description: string;
   price: string;
@@ -103,7 +102,7 @@ const ServiceSelectionScreen = () => {
   };
 
   const handleGoBack = () => {
-    router.push("/");
+    router.push("/(tabs)/HomeScreen");
   };
 
   const handleProfileContinue = () => {

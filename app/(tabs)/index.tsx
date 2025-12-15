@@ -230,7 +230,10 @@ const PetCareHomeScreen = () => {
               </Text>
             </TouchableOpacity>
             {/* onPress={() => router.push("/(tabs)/perfil")} */}
-            <TouchableOpacity style={homeStyles.loginButton}>
+            <TouchableOpacity
+              style={homeStyles.loginButton}
+              onPress={() => router.push("/(tabs)/perfil")}
+            >
               <Text style={homeStyles.loginButtonText}>
                 {" "}
                 {i18n.t("general.reservation")}

@@ -1,10 +1,8 @@
+import { useLogin } from "@/hooks/Login/useLogin";
 import { useGoogleAuth } from "@/hooks/useSocialAuth";
 import { i18n } from "@/i18n/translations";
-import { login, loginGoogle } from "@/Service/Service-Login/authService";
-import { setCredentials } from "@/Store/authSlice";
 import { loginStyles } from "@/Styles/components/Login/loginStyles";
 import { UsersStyles } from "@/Styles/components/Users/UsersStyles";
-import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
@@ -14,11 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useDispatch } from "react-redux";
 import ArrobaIcon from "../assets/Icons/arroba.svg";
-import FacebookIcon from "../assets/Icons/Facebook.svg";
-import GoogleIcon from "../assets/Icons/google.svg";
-import IOSIconfrom from "../assets/Icons/IOS.svg";
 import LlaveIcon from "../assets/Icons/Llave.svg";
 import PuppySvg from "../assets/images/LogoPuppyPo.svg";
 import AuthLayout from "../components/AuthLayout";
@@ -26,111 +20,36 @@ import CustomModal from "./(CustomModal)/CustomModal";
 
 export default function Login() {
   const router = useRouter();
-  const dispatch = useDispatch();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [modalConfig, setModalConfig] = useState({
     title: "",
     message: "",
-    iconName: null as keyof typeof Ionicons.glyphMap | null,
+    iconName: null,
     iconColor: "#00D9C5",
   });
 
-  const validateEmail = (email: string) => {
-    if (!email) return false;
-    const emailTrimmed = email.trim();
-    const emailRegex =
-      /^[A-Za-z0-9._%+-]+@(?:(?!-)[A-Za-z0-9-]{1,63}(?<!-)\.)+[A-Za-z]{2,63}$/;
-    return emailRegex.test(emailTrimmed);
-  };
-
-  const showInfoModal = (message: string, icon: any, titulo: string) => {
-    setModalConfig({
-      title: titulo,
-      message: message,
-      iconName: icon,
-      iconColor: "#00D9C5",
-    });
+  const showModal = (message: string, icon: any, title: string) => {
+    setModalConfig({ title, message, iconName: icon, iconColor: "#00D9C5" });
     setModalVisible(true);
   };
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      showInfoModal(
-        i18n.t("alerts.nodata"),
-        "information-circle",
-        i18n.t("general.Data_missing")
-      );
-      return;
-    }
-    if (!validateEmail(email)) {
-      showInfoModal(
-        i18n.t("alerts.alertemailInvalid"),
-        "alert-circle",
-        i18n.t("alerts.emailInvalid")
-      );
-      return;
-    }
-    setLoading(true);
-    try {
-      const response = await login(email, password);
-      if (!response.flag) {
-        showInfoModal(
-          "Usuario no encontrado",
-          //i18n.t("alerts.error"),
-          "alert-circle",
-          i18n.t("login.errorlogin")
-        );
-        return;
-      } else {
-        dispatch(
-          setCredentials({
-            token: response.data.access_token,
-            user: response.data.user,
-          })
-        );
-        router.replace("/(tabs)/HomeScreen");
-      }
-    } catch (error: any) {
-      showInfoModal(
-        i18n.t("alerts.error"),
-        "alert-circle",
-        i18n.t("login.errorlogin")
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { loading, handleLogin, handleGoogleLogin } = useLogin(showModal);
 
   const googleAuth = useGoogleAuth(async (token: string) => {
-    const data = await loginGoogle(token);
-    console.log("Usuario Google:", data);
-    router.replace("/(tabs)/perfil");
+    await handleGoogleLogin(token);
   });
 
-  const getIcon = () => {
-    return <PuppySvg width={150} height={120} />;
-  };
-
-  // Loading de pantalla completa
   if (loading) {
     return (
       <AuthLayout contentStyle={UsersStyles.container}>
         <View style={loginStyles.fullScreenLoading}>
-          <View style={loginStyles.loadingCard}>
-            {getIcon()}
-            <ActivityIndicator
-              size="large"
-              color="#F6C3CC"
-              style={loginStyles.spinner}
-            />
-            <Text style={loginStyles.loadingText}>Cargando información...</Text>
-            <Text style={loginStyles.loadingSubtext}>
-              Estamos preparando el formulario
-            </Text>
-          </View>
+          <PuppySvg width={150} height={120} />
+          <ActivityIndicator size="large" color="#F6C3CC" />
+          <Text>Cargando información...</Text>
         </View>
       </AuthLayout>
     );
@@ -139,18 +58,17 @@ export default function Login() {
   return (
     <AuthLayout contentStyle={loginStyles.container}>
       <View style={loginStyles.inner}>
-        {/* Form */}
+        {/* FORM */}
         <View style={loginStyles.formContainer}>
-          {/* Header */}
           <View style={loginStyles.header}>
             <PuppySvg />
             <Text style={loginStyles.title}>{i18n.t("login.title")}</Text>
           </View>
+
+          {/* Campo Email */}
           <Text style={loginStyles.label}>{i18n.t("login.email")} *</Text>
           <View style={loginStyles.inputContainer}>
-            <Text style={loginStyles.inputIcon}>
-              <ArrobaIcon width={40} height={40} />
-            </Text>
+            <ArrobaIcon width={40} height={40} />
             <TextInput
               placeholder={i18n.t("login.email")}
               value={email}
@@ -158,20 +76,14 @@ export default function Login() {
               style={loginStyles.input}
               keyboardType="email-address"
               autoCapitalize="none"
-              autoCorrect={false}
-              autoComplete="off"
-              textContentType="none"
-              importantForAutofill="no"
-              returnKeyType="next"
               placeholderTextColor="#999"
             />
           </View>
 
+          {/* Campo Password */}
           <Text style={loginStyles.label}>{i18n.t("login.password")} *</Text>
           <View style={loginStyles.inputContainer}>
-            <Text style={loginStyles.inputIcon}>
-              <LlaveIcon width={40} height={40} />
-            </Text>
+            <LlaveIcon width={40} height={40} />
             <TextInput
               placeholder={i18n.t("login.password")}
               value={password}
@@ -179,10 +91,6 @@ export default function Login() {
               secureTextEntry
               style={loginStyles.input}
               autoCapitalize="none"
-              autoCorrect={false}
-              autoComplete="off"
-              textContentType="none"
-              returnKeyType="done"
               placeholderTextColor="#999"
             />
           </View>
@@ -198,52 +106,10 @@ export default function Login() {
 
           <TouchableOpacity
             style={loginStyles.loginButton}
-            disabled={loading}
-            onPress={handleLogin}
+            onPress={() => handleLogin(email, password)}
           >
             <Text style={loginStyles.loginButtonText}>
-              {loading
-                ? i18n.t("general.logging_in") ?? "..."
-                : i18n.t("general.log_in")}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        {/* Social Buttons */}
-        <View style={loginStyles.dividerContainer}>
-          <View style={loginStyles.divider} />
-          <Text style={loginStyles.dividerText}>
-            {" "}
-            {i18n.t("general.continue")}
-          </Text>
-          <View style={loginStyles.divider} />
-        </View>
-        <View style={loginStyles.socialButtonsContainer}>
-          <TouchableOpacity style={loginStyles.socialButton}>
-            <View style={loginStyles.socialIconContainer}>
-              <FacebookIcon width={70} height={70} />
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={loginStyles.socialButton}
-            onPress={() => googleAuth.promptAsync()}
-          >
-            <View style={loginStyles.socialIconContainer}>
-              <GoogleIcon width={70} height={70} />
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={loginStyles.socialButton}>
-            <View style={loginStyles.socialIconContainer}>
-              <IOSIconfrom width={70} height={70} />
-            </View>
-          </TouchableOpacity>
-        </View>
-        <View style={UsersStyles.loginLinkContainer}>
-          <Text style={UsersStyles.loginText}>{i18n.t("login.account")} </Text>
-          <TouchableOpacity onPress={() => router.push("/(Users)/Users")}>
-            <Text style={UsersStyles.loginLink}>
-              {i18n.t("general.register")}
+              {i18n.t("general.log_in")}
             </Text>
           </TouchableOpacity>
         </View>
@@ -253,9 +119,7 @@ export default function Login() {
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         title={modalConfig.title}
-        iconName={
-          modalConfig.iconName as keyof typeof Ionicons.glyphMap | undefined
-        }
+        iconName={modalConfig.iconName as any}
         iconColor={modalConfig.iconColor}
         primaryButton={{
           text: i18n.t("general.understood"),
