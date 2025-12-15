@@ -2,7 +2,7 @@
   "expo": {
     "name": "Puppy Po",
     "slug": "puppy-po",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "orientation": "default",
     "icon": "./assets/images/IconoAplicacion.png",
     "scheme": "petdaycare",
@@ -27,7 +27,7 @@
     },
     "android": {
       "package": "com.puppypo.android",
-      "versionCode": 3,
+      "versionCode": 5,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -69,7 +69,7 @@
       "eas": {
         "projectId": "3bce2738-e5e4-40cf-bfde-3142c8cc9f5f"
       },
-      "apiUrl": "http://puppypo-backend-alb-653500462.us-east-1.elb.amazonaws.com/",
+      "apiUrl": "https://api.puppypo.com/",
       "androidClientId": "195740328135-m86g67bd24toeu4b2dpb913tt9lb1qp0.apps.googleusercontent.com",
       "webClientId": "195740328135-mibbpe3cbvdmefrcmdd548mk0aedsli9.apps.googleusercontent.com",
       "iosClientId": "195740328135-sbu195prmfg68gr7t1k88ugfr0hbo5bf.apps.googleusercontent.com"
